@@ -1,0 +1,11 @@
+[package]
+name = "krpc-bindings-rs"
+version = "0.1.0"
+authors = ["Steven Torance <storance@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+krpc-rs = "^0.3.1"
+protobuf = "^1.7.4"
+uom = "^0.20.1"
+angular-units = "^0.2.4"
