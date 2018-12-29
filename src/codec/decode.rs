@@ -1,27 +1,33 @@
-use crate::{RemoteObject, RemoteEnum, KrpcClient};
+use crate::{KrpcClient};
+use crate::units::{Angle, AngularVelocity, Degrees, DegreesPerSecond, Radians, RadiansPerSecond};
 use super::{CodecError};
 
 use protobuf::{CodedInputStream};
 
-use krpc::schema::{List, Dictionary, Tuple};
+use krpc::schema::{List, Dictionary, Tuple, Set};
 
 use std::rc::{Rc};
 use std::cell::{RefCell};
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{BTreeMap, HashMap, BTreeSet, HashSet};
 use std::hash::{Hash};
 
-use angular_units::{Rad, Deg};
+use core::marker::{PhantomData};
 
-use uom::si::f64::{Length, Velocity, Time, Force, Mass};
-use uom::si::mass::{kilogram};
-use uom::si::length::{meter};
-use uom::si::velocity::{meter_per_second};
-use uom::si::time::{second};
-use uom::si::force::{newton};
+use uom::si;
 
 
 pub trait Decode where Self : Sized {
     fn decode(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError>;
+}
+
+#[doc(hidden)]
+macro_rules! wrapper_decode_impl {
+    (|$value: ident : $value_type: ty| $construct: expr) => {
+        fn decode(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
+            let $value: $value_type = decode(bytes, client)?;
+            Ok($construct)
+        }
+    };
 }
 
 impl Decode for bool {
@@ -114,6 +120,34 @@ impl<K : Decode + Eq + Hash, V : Decode> Decode for HashMap<K, V> {
     }
 }
 
+impl<T : Decode + Eq + Hash> Decode for HashSet<T> {
+    fn decode(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
+        decode_with(bytes, |cis| {
+            let entries: Set = cis.read_message()?;
+            let mut decoded_set = HashSet::with_capacity(entries.items.len());
+
+            for entry in entries.items.iter() {
+                decoded_set.insert(decode(entry, client)?);
+            }
+            Ok(decoded_set)
+        })
+    }
+}
+
+impl<T : Decode + Ord> Decode for BTreeSet<T> {
+    fn decode(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
+        decode_with(bytes, |cis| {
+            let entries: Set = cis.read_message()?;
+            let mut decoded_set = BTreeSet::new();
+
+            for entry in entries.items.iter() {
+                decoded_set.insert(decode(entry, client)?);
+            }
+            Ok(decoded_set)
+        })
+    }
+}
+
 impl<T1 : Decode, T2 : Decode> Decode for (T1, T2) {
     fn decode(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
@@ -162,84 +196,66 @@ impl<T1 : Decode, T2 : Decode, T3 : Decode, T4 : Decode> Decode for (T1, T2, T3,
     }
 }
 
-impl Decode for Deg<f64> {
-    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| Ok(Deg(cis.read_double()?)))
-    }
+impl Decode for Degrees<f32> {
+    wrapper_decode_impl!(|value: f32| Self::new(value));
 }
 
-impl Decode for Deg<f32> {
-    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| Ok(Deg(cis.read_float()?)))
-    }
+impl Decode for Degrees<f64> {
+    wrapper_decode_impl!(|value: f64| Self::new(value));
 }
 
-impl Decode for Rad<f64> {
-    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| Ok(Rad(cis.read_double()?)))
-    }
+impl Decode for Radians<f32> {
+    wrapper_decode_impl!(|value: f32| Self::new(value));
 }
 
-impl Decode for Rad<f32> {
-    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| Ok(Rad(cis.read_float()?)))
-    }
+impl Decode for Radians<f64> {
+    wrapper_decode_impl!(|value: f64| Self::new(value));
 }
 
-impl Decode for Length {
-    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| Ok(Length::new::<meter>(cis.read_double()?)))
-    }
+impl Decode for DegreesPerSecond<f32> {
+    wrapper_decode_impl!(|value: f32| Self::new(value));
 }
 
-impl Decode for Time {
-    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| Ok(Time::new::<second>(cis.read_double()?)))
-    }
+impl Decode for DegreesPerSecond<f64> {
+    wrapper_decode_impl!(|value: f64| Self::new(value));
 }
 
-impl Decode for Velocity {
-    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| Ok(Velocity::new::<meter_per_second>(cis.read_double()?)))
-    }
+impl Decode for RadiansPerSecond<f32> {
+    wrapper_decode_impl!(|value: f32| Self::new(value));
 }
 
-impl Decode for Force {
-    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| Ok(Force::new::<newton>(cis.read_double()?)))
-    }
+impl Decode for RadiansPerSecond<f64> {
+    wrapper_decode_impl!(|value: f64| Self::new(value));
 }
 
-impl Decode for Mass {
-    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| Ok(Mass::new::<kilogram>(cis.read_double()?)))
-    }
+impl<L : uom::typenum::Integer,
+    M : uom::typenum::Integer,
+    T : uom::typenum::Integer,
+    I : uom::typenum::Integer,
+    Th : uom::typenum::Integer,
+    N : uom::typenum::Integer,
+    J : uom::typenum::Integer,
+    K : ?Sized> Decode for si::Quantity<si::Dimension<L = L, M = M, T = T, I = I, Th = Th, N = N, J = J, Kind = K>, si::SI<f32>, f32> {
+    wrapper_decode_impl!(|value: f32| si::Quantity{
+        dimension: PhantomData,
+        units: PhantomData,
+        value: value
+    });
 }
 
-pub fn decode_remote_obj<T: RemoteObject>(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<T, CodecError> {
-    decode_with(bytes, |cis| {
-        match cis.read_uint64()? {
-            0 => Err(CodecError::NullValue),
-            id => Ok(T::new(Rc::clone(client), id))
-        }
-    })
-}
-
-pub fn decode_remote_obj_opt<T: RemoteObject>(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Option<T>, CodecError> {
-    decode_with(bytes, |cis| {
-        match cis.read_uint64()? {
-            0 => Ok(None),
-            id => Ok(Some(T::new(Rc::clone(client), id)))
-        }
-    })
-}
-
-pub fn decode_remote_enum<T: RemoteEnum>(bytes: &Vec<u8>) -> Result<T, CodecError> {
-    decode_with(bytes, |cis| {
-        let value = cis.read_sint64()?;
-        T::from_value(value)
-            .ok_or(CodecError::InvalidEnumValue(value))
-    })
+impl<L : uom::typenum::Integer,
+     M : uom::typenum::Integer,
+     T : uom::typenum::Integer,
+     I : uom::typenum::Integer,
+     Th : uom::typenum::Integer,
+     N : uom::typenum::Integer,
+     J : uom::typenum::Integer,
+     K : ?Sized> Decode for si::Quantity<si::Dimension<L = L, M = M, T = T, I = I, Th = Th, N = N, J = J, Kind = K>, si::SI<f64>, f64> {
+    wrapper_decode_impl!(|value: f64| si::Quantity{
+        dimension: PhantomData,
+        units: PhantomData,
+        value: value
+    });
 }
 
 pub fn decode<T: Decode>(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<T, CodecError> {

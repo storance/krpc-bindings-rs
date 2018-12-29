@@ -1,21 +1,14 @@
-use crate::{RemoteObject, RemoteEnum};
+use crate::units::{Angle, AngularVelocity, Radians, Degrees, DegreesPerSecond, RadiansPerSecond};
 use super::{CodecError};
 
 use protobuf::{CodedOutputStream, RepeatedField};
 
-use krpc::schema::{List, Dictionary, DictionaryEntry, Tuple};
+use krpc::schema::{List, Dictionary, Set, DictionaryEntry, Tuple};
 
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{BTreeMap, HashMap, HashSet, BTreeSet};
 use std::hash::{Hash};
 
-use angular_units::{Angle, Rad, Deg};
-
-use uom::si::f64::{Length, Velocity, Time, Force, Mass};
-use uom::si::mass::{kilogram};
-use uom::si::length::{meter};
-use uom::si::velocity::{meter_per_second};
-use uom::si::time::{second};
-use uom::si::force::{newton};
+use uom::si;
 
 pub trait Encode {
     fn encode(&self) -> Result<Vec<u8>, CodecError>;
@@ -66,60 +59,6 @@ impl Encode for f64 {
 impl Encode for String {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| Ok(cos.write_string_no_tag(self)?))
-    }
-}
-
-impl Encode for Deg<f64> {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_double_no_tag(self.scalar())?))
-    }
-}
-
-impl Encode for Deg<f32> {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_float_no_tag(self.scalar())?))
-    }
-}
-
-impl Encode for Rad<f64> {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_double_no_tag(self.scalar())?))
-    }
-}
-
-impl Encode for Rad<f32> {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_float_no_tag(self.scalar())?))
-    }
-}
-
-impl Encode for Length {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_double_no_tag(self.get::<meter>())?))
-    }
-}
-
-impl Encode for Time {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_double_no_tag(self.get::<second>())?))
-    }
-}
-
-impl Encode for Velocity {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_double_no_tag(self.get::<meter_per_second>())?))
-    }
-}
-
-impl Encode for Force {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_double_no_tag(self.get::<newton>())?))
-    }
-}
-
-impl Encode for Mass {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_double_no_tag(self.get::<kilogram>())?))
     }
 }
 
@@ -182,6 +121,40 @@ impl<K : Encode + Eq + Hash, V : Encode> Encode for HashMap<K, V> {
     }
 }
 
+impl<T : Encode + Eq + Hash> Encode for HashSet<T> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        encode_with(|cos| {
+            let mut encoded_set = Vec::with_capacity(self.len());
+
+            for entry in self {
+                encoded_set.push(entry.encode()?);
+            }
+
+            let mut set = Set::new();
+            set.set_items(RepeatedField::from_vec(encoded_set));
+            cos.write_message_no_tag(&set)?;
+            Ok(())
+        })
+    }
+}
+
+impl<T : Encode + Ord> Encode for BTreeSet<T> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        encode_with(|cos| {
+            let mut encoded_set = Vec::with_capacity(self.len());
+
+            for entry in self {
+                encoded_set.push(entry.encode()?);
+            }
+
+            let mut set = Set::new();
+            set.set_items(RepeatedField::from_vec(encoded_set));
+            cos.write_message_no_tag(&set)?;
+            Ok(())
+        })
+    }
+}
+
 impl<T1 : Encode, T2 : Encode> Encode for (T1, T2) {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| {
@@ -236,6 +209,80 @@ impl<T1 : Encode, T2 : Encode, T3 : Encode, T4 : Encode> Encode for (T1, T2, T3,
     }
 }
 
+impl Encode for Degrees<f64> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        encode_with(|cos| Ok(cos.write_double_no_tag(self.scalar())?))
+    }
+}
+
+impl Encode for Degrees<f32> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        self.scalar().encode()
+    }
+}
+
+impl Encode for Radians<f64> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        self.scalar().encode()
+    }
+}
+
+impl Encode for Radians<f32> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        self.scalar().encode()
+    }
+}
+
+impl Encode for DegreesPerSecond<f64> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        self.scalar().encode()
+    }
+}
+
+impl Encode for DegreesPerSecond<f32> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        self.scalar().encode()
+    }
+}
+
+impl Encode for RadiansPerSecond<f64> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        self.scalar().encode()
+    }
+}
+
+impl Encode for RadiansPerSecond<f32> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        self.scalar().encode()
+    }
+}
+
+impl<L : uom::typenum::Integer,
+    M : uom::typenum::Integer,
+    T : uom::typenum::Integer,
+    I : uom::typenum::Integer,
+    Th : uom::typenum::Integer,
+    N : uom::typenum::Integer,
+    J : uom::typenum::Integer,
+    K : ?Sized> Encode for si::Quantity<si::Dimension<L = L, M = M, T = T, I = I, Th = Th, N = N, J = J, Kind = K>, si::SI<f64>, f64> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        self.value.encode()
+    }
+}
+
+impl<L : uom::typenum::Integer,
+    M : uom::typenum::Integer,
+    T : uom::typenum::Integer,
+    I : uom::typenum::Integer,
+    Th : uom::typenum::Integer,
+    N : uom::typenum::Integer,
+    J : uom::typenum::Integer,
+    K : ?Sized> Encode for si::Quantity<si::Dimension<L = L, M = M, T = T, I = I, Th = Th, N = N, J = J, Kind = K>, si::SI<f32>, f32> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        self.value.encode()
+    }
+}
+
 fn encode_with<F>(encoder: F) -> Result<Vec<u8>, CodecError>
     where F: FnOnce(&mut CodedOutputStream) -> Result<(), CodecError> {
 
@@ -245,22 +292,4 @@ fn encode_with<F>(encoder: F) -> Result<Vec<u8>, CodecError>
     cos.flush()?;
 
     Ok(encoded)
-}
-
-pub fn encode_remote_obj<T: RemoteObject>(obj: &T) -> Result<Vec<u8>, CodecError> {
-    encode_with(|cos| {
-        Ok(cos.write_uint64_no_tag(obj.id())?)
-    })
-}
-
-pub fn encode_remote_obj_opt<T: RemoteObject>(obj: &Option<T>) -> Result<Vec<u8>, CodecError> {
-    encode_with(|cos| {
-        Ok(cos.write_uint64_no_tag(obj.as_ref().map( T::id).unwrap_or(0))?)
-    })
-}
-
-pub fn encode_remote_enum<T: RemoteEnum>(obj: &T) -> Result<Vec<u8>, CodecError> {
-    encode_with(|cos| {
-        Ok(cos.write_sint64_no_tag(obj.value())?)
-    })
 }

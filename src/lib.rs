@@ -1,9 +1,9 @@
 extern crate krpc;
 extern crate protobuf;
 extern crate uom;
-extern crate angular_units;
 
 pub mod spacecenter;
+pub mod units;
 #[macro_use]
 mod macros;
 mod codec;
@@ -19,6 +19,9 @@ use std::cell::{RefCell};
 use std::error::{Error};
 use std::fmt;
 use std::io;
+
+use uom::si;
+use uom::typenum::*;
 
 use crate::codec::{CodecError};
 
@@ -94,5 +97,7 @@ impl From<CodecError> for KrpcError {
 
 pub type Vector3 = (f64, f64, f64);
 pub type Quaternion = (f64, f64, f64, f64);
+pub type GravitationalParameter<V> = si::Quantity<si::ISQ<P3, Z0, N2, Z0, Z0, Z0, Z0>, si::SI<V>, V>;
+pub type GravitationalConstant<V> = si::Quantity<si::ISQ<P3, N1, N2, Z0, Z0, Z0, Z0>, si::SI<V>, V>;
 
 pub type KrpcResult<T> = Result<T, KrpcError>;
