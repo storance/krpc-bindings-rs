@@ -10,12 +10,22 @@ pub mod body;
 pub mod orbit;
 pub mod parts;
 pub mod reference_frame;
+pub mod flight;
+pub mod autopilot;
+pub mod communication;
+pub mod control;
+pub mod resources;
 
 pub use crate::spacecenter::vessel::*;
 pub use crate::spacecenter::body::*;
 pub use crate::spacecenter::orbit::*;
 pub use crate::spacecenter::parts::*;
 pub use crate::spacecenter::reference_frame::*;
+pub use crate::spacecenter::flight::*;
+pub use crate::spacecenter::autopilot::*;
+pub use crate::spacecenter::communication::*;
+pub use crate::spacecenter::control::*;
+pub use crate::spacecenter::resources::*;
 
 /// The VAB (Vehicle Assembly Building) craft directory
 pub const VAB: &'static str = "VAB";
@@ -40,7 +50,7 @@ impl SpaceCenter {
 
     rpc_method!(
     /// Returns the current amount of science.
-    fn get_science(&self) -> f64 {
+    fn science(&self) -> f64 {
         if let Some(value) = SpaceCenter.get_Science() as f64 {
             value
         } else {
@@ -50,7 +60,7 @@ impl SpaceCenter {
 
     rpc_method!(
     /// Returns the current amount of funds.
-    fn get_funds(&self) -> f64 {
+    fn funds(&self) -> f64 {
         if let Some(value) = SpaceCenter.get_Funds() as f64 {
             value
         } else {
@@ -60,7 +70,7 @@ impl SpaceCenter {
 
     rpc_method!(
     /// Returns the current amount of reputation.
-    fn get_reputation(&self) -> f32 {
+    fn reputation(&self) -> f32 {
         if let Some(value) = SpaceCenter.get_Reputation() as f32 {
             value
         } else {
@@ -70,7 +80,7 @@ impl SpaceCenter {
 
     rpc_method!(
     /// Returns the currently active vessel or None if there isn't one.
-    fn get_active_vessel(&self) -> Option<Vessel> {
+    fn active_vessel(&self) -> Option<Vessel> {
         if let Some(value) = SpaceCenter.get_ActiveVessel() as Option<Vessel> {
             value
         } else {
@@ -88,7 +98,7 @@ impl SpaceCenter {
 
     rpc_method!(
     /// Returns a list of all the vessels in the game.
-    fn get_vessels(&self) -> Vec<Vessel> {
+    fn vessels(&self) -> Vec<Vessel> {
         if let Some(value) = SpaceCenter.get_Vessels() as Vec<Vessel> {
             value
         } else {
@@ -99,7 +109,7 @@ impl SpaceCenter {
     rpc_method!(
     /// A map of all celestial bodies (planets, moons, etc.) in the game,
     /// keyed by the name of the body.
-    fn get_bodies(&self) -> BTreeMap<String, CelestialBody> {
+    fn bodies(&self) -> BTreeMap<String, CelestialBody> {
         if let Some(value) = SpaceCenter.get_Bodies() as BTreeMap<String, CelestialBody> {
             value
         } else {
@@ -109,7 +119,7 @@ impl SpaceCenter {
 
     rpc_method!(
     /// Returns the currently targeted celestial body or None if there isn't one.
-    fn get_target_body(&self) -> Option<CelestialBody> {
+    fn target_body(&self) -> Option<CelestialBody> {
         if let Some(value) = SpaceCenter.get_TargetBody() as Option<CelestialBody> {
             value
         } else {
@@ -127,7 +137,7 @@ impl SpaceCenter {
 
     rpc_method!(
     /// Returns the currently targeted vessel or None if there isn't one.
-    fn get_target_vessel(&self) -> Option<Vessel> {
+    fn target_vessel(&self) -> Option<Vessel> {
         if let Some(value) = SpaceCenter.get_TargetVessel() as Option<Vessel> {
             value
         } else {
@@ -145,7 +155,7 @@ impl SpaceCenter {
 
     rpc_method!(
     /// Returns the currently targeted docking port or None if there isn't one.
-    fn get_target_docking_port(&self) -> Option<DockingPort> {
+    fn target_docking_port(&self) -> Option<DockingPort> {
         if let Some(value) = SpaceCenter.get_TargetDockingPort() as Option<DockingPort> {
             value
         } else {

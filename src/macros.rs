@@ -1,14 +1,53 @@
 #[macro_export]
 macro_rules! rpc_method {
+    // RPC Class Method with pass self to rpc method and map decoded value
+    (
+        $(#[$meta:meta])*
+        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
+            $service : tt.$method : tt ( self $(, $method_arg : expr )* )
+                .map(|$value: ident : $value_type : ty| $success_expr: expr)
+                .ok_or($fail_expr: expr)
+        }
+    ) => {
+        rpc_method!(
+            $(#[$meta])*
+            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> $ret {
+                if let Some($value) = $service.$method( self $(, $method_arg )* ) as $value_type {
+                    $success_expr
+                } else {
+                    return Err($fail_expr)
+                }
+            }
+        );
+    };
+
+    // RPC Class Method with map decoded value
+    (
+        $(#[$meta:meta])*
+        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
+            $service : tt.$method : tt ( self $(, $method_arg : expr )* )
+                .map(|$value: ident : $value_type : ty| $success_expr: expr)
+                .ok_or($fail_expr: expr)
+        }
+    ) => {
+        rpc_method!(
+            $(#[$meta])*
+            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> $ret {
+                if let Some($value) = $service.$method( $( $method_arg ),* ) as $value_type {
+                    success_expr
+                } else {
+                    return Err($fail_expr)
+                }
+            }
+        );
+    };
+
     // RPC Class Method with pass self to rpc method and return decoded value as is
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            if let Some(value) = $service : tt.$method : tt ( self $(, $method_arg : expr )* ) {
-                value
-            } else {
-                $fail_expr: expr
-            }
+            $service : tt.$method : tt ( self $(, $method_arg : expr )* )
+                .ok_or($fail_expr: expr)
         }
     ) => {
         rpc_method!(
@@ -17,7 +56,7 @@ macro_rules! rpc_method {
                 if let Some(value) = $service.$method( self $(, $method_arg )* ) as $ret {
                     value
                 } else {
-                    $fail_expr
+                    return Err($fail_expr)
                 }
             }
         );
@@ -27,11 +66,8 @@ macro_rules! rpc_method {
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            if let Some(value) = $service : tt.$method : tt ( self $(, $method_arg : expr )* ) {
-                value
-            } else {
-                $fail_expr: expr
-            }
+            $service : tt.$method : tt ( self $(, $method_arg : expr )* )
+                .ok_or($fail_expr: expr)
         }
     ) => {
         rpc_method!(
@@ -40,7 +76,7 @@ macro_rules! rpc_method {
                 if let Some(value) = $service.$method( $( $method_arg ),* ) as $ret {
                     value
                 } else {
-                    $fail_expr
+                    return Err($fail_expr)
                 }
             }
         );
@@ -128,6 +164,48 @@ macro_rules! rpc_method {
             rpc.invoke(stringify!($service).to_owned(), stringify!($method).to_owned(), args)?;
             Ok(())
         }
+    };
+
+
+    // RPC Static Method with return decoded value as is
+    (
+        $(#[$meta:meta])*
+        fn $func_name: ident ($client: ident : &KrpcClient $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
+            $service : tt.$method : tt ( $( $method_arg : expr ),* )
+                .ok_or($fail_expr: expr)
+        }
+    ) => {
+        rpc_method!(
+            $(#[$meta])*
+            fn $func_name($client: &KrpcClient  $(, $arg_name : $arg_type)* ) -> $ret {
+                if let Some(value) = $service.$method( $( $method_arg ),* ) as $ret {
+                    value
+                } else {
+                    return Err($fail_expr)
+                }
+            }
+        );
+    };
+
+    // RPC Static Method with map decoded value
+    (
+        $(#[$meta:meta])*
+        fn $func_name: ident ($client: ident : &KrpcClient $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
+            $service : tt.$method : tt ( $( $method_arg : expr ),* )
+                .map(|$value: ident : $value_type: ident| $success_expr: expr)
+                .ok_or($fail_expr: expr)
+        }
+    ) => {
+        rpc_method!(
+            $(#[$meta])*
+            fn $func_name($client: &KrpcClient  $(, $arg_name : $arg_type)* ) -> $ret {
+                if let Some($value) = $service.$method( $( $method_arg ),* ) as $value_type {
+                    $success_expr
+                } else {
+                    return Err($fail_expr)
+                }
+            }
+        );
     };
 
     // RPC Static Method

@@ -78,6 +78,12 @@ impl Decode for String {
     }
 }
 
+impl Decode for Vec<u8> {
+    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
+        decode_with(bytes, |cis| Ok(cis.read_bytes()?))
+    }
+}
+
 impl<T : Decode> Decode for Vec<T> {
     fn decode(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {

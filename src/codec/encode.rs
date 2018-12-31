@@ -62,6 +62,12 @@ impl Encode for String {
     }
 }
 
+impl Encode for Vec<u8> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        encode_with(|cos| Ok(cos.write_bytes_no_tag(self)?))
+    }
+}
+
 impl<T : Encode> Encode for Vec<T> {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| {

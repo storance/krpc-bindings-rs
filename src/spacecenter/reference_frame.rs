@@ -1,5 +1,6 @@
 use crate::*;
 use crate::codec::*;
+use crate::units::{Quaternion, Vector3};
 
 use std::rc::{Rc};
 use std::cell::{RefCell};
@@ -43,16 +44,12 @@ impl ReferenceFrame {
                            rotation: &Option<Quaternion>,
                            velocity: &Option<Vector3>,
                            angular_velocity: &Option<Vector3>) -> ReferenceFrame {
-        if let Some(value) = SpaceCenter.ReferenceFrame_static_CreateRelative(
+        SpaceCenter.ReferenceFrame_static_CreateRelative(
             reference_frame,
             position.unwrap_or((0.0, 0.0, 0.0)),
             rotation.unwrap_or((0.0, 0.0, 0.0, 1.0)),
             velocity.unwrap_or((0.0, 0.0, 0.0)),
-            angular_velocity.unwrap_or((0.0, 0.0, 0.0))) as ReferenceFrame {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+            angular_velocity.unwrap_or((0.0, 0.0, 0.0))).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -76,13 +73,9 @@ impl ReferenceFrame {
             rotation: &Option<ReferenceFrame>,
             velocity: &Option<ReferenceFrame>,
             angular_velocity: &Option<ReferenceFrame>) -> ReferenceFrame {
-        if let Some(value) = SpaceCenter.ReferenceFrame_static_CreateHybrid(position,
+        SpaceCenter.ReferenceFrame_static_CreateHybrid(position,
             rotation,
             velocity,
-            angular_velocity) as ReferenceFrame {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+            angular_velocity).ok_or(KrpcError::NullResponseValue)
    });
 }

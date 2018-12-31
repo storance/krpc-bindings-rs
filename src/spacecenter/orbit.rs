@@ -1,6 +1,6 @@
 use crate::*;
 use crate::codec::*;
-use crate::units::{Radians};
+use crate::units::{Radians, Vector3};
 use super::{CelestialBody, ReferenceFrame};
 
 use std::rc::{Rc};
@@ -20,12 +20,8 @@ impl Orbit {
     /// Returns the celestial body (e.g. planet or moon) around which the object is orbiting.
     ///
     /// **Game Scenes**: All
-    fn get_body(&self) -> CelestialBody {
-        if let Some(value) = SpaceCenter.Orbit_get_Body(self) as CelestialBody {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn body(&self) -> CelestialBody {
+        SpaceCenter.Orbit_get_Body(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -35,12 +31,8 @@ impl Orbit {
     ///
     /// # Note
     /// For the apoapsis altitude reported on the in-game map view, use `get_apoapsis_altitude`.
-    fn get_apoapsis(&self) -> Length {
-        if let Some(value) = SpaceCenter.Orbit_get_Apoapsis(self) as Length {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn apoapsis(&self) -> Length {
+        SpaceCenter.Orbit_get_Apoapsis(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -50,12 +42,8 @@ impl Orbit {
     ///
     /// # Note
     /// For the periapsis altitude reported on the in-game map view, use `get_periapsis_altitude`.
-    fn get_periapsis(&self) -> Length {
-        if let Some(value) = SpaceCenter.Orbit_get_Periapsis(self) as Length {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn periapsis(&self) -> Length {
+        SpaceCenter.Orbit_get_Periapsis(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -65,12 +53,8 @@ impl Orbit {
     ///
     /// # Note
     /// This is equal to `get_apoapsis` minus the equatorial radius of the body.
-    fn get_apoapsis_altitude(&self) -> Length {
-        if let Some(value) = SpaceCenter.Orbit_get_ApoapsisAltitude(self) as Length {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn apoapsis_altitude(&self) -> Length {
+        SpaceCenter.Orbit_get_ApoapsisAltitude(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -80,36 +64,25 @@ impl Orbit {
     ///
     /// # Note
     /// This is equal to `get_periapsis` minus the equatorial radius of the body.
-    fn get_periapsis_altitude(&self) -> Length {
-        if let Some(value) = SpaceCenter.Orbit_get_PeriapsisAltitude(self) as Length {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn periapsis_altitude(&self) -> Length {
+        SpaceCenter.Orbit_get_PeriapsisAltitude(self)
+            .ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
     /// Returns the semi-major axis of the orbit, in meters.
     ///
     /// **Game Scenes**: All
-    fn get_semi_major_axis(&self) -> Length {
-        if let Some(value) = SpaceCenter.Orbit_get_SemiMajorAxis(self) as Length {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn semi_major_axis(&self) -> Length {
+        SpaceCenter.Orbit_get_SemiMajorAxis(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
     /// Returns the semi-minor axis of the orbit, in meters.
     ///
     /// **Game Scenes**: All
-    fn get_semi_minor_axis(&self) -> Length {
-        if let Some(value) = SpaceCenter.Orbit_get_SemiMinorAxis(self) as Length {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn semi_minor_axis(&self) -> Length {
+        SpaceCenter.Orbit_get_SemiMinorAxis(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -120,12 +93,8 @@ impl Orbit {
     ///
     /// # Note
     /// This value will change over time if the orbit is elliptical.
-    fn get_radius(&self) -> Length {
-        if let Some(value) = SpaceCenter.Orbit_get_Radiansius(self) as Length {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn radius(&self) -> Length {
+        SpaceCenter.Orbit_get_Radius(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -136,11 +105,7 @@ impl Orbit {
     /// # Arguments
     /// * `ut` - The universal time to measure the radius at.
     fn radius_at(&self, ut: Time) -> Length {
-        if let Some(value) = SpaceCenter.Orbit_RadiansiusAt(self, ut) as Length {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_RadiusAt(self, ut).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -152,11 +117,7 @@ impl Orbit {
     /// * `ut` - The universal time to measure the position at.
     /// * `reference_frame` - The reference frame that the returned position vector is in.
     fn position_at(&self, ut: Time, reference_frame: &ReferenceFrame) -> Vector3 {
-        if let Some(value) = SpaceCenter.Orbit_PositionAt(self, ut, reference_frame) as Vector3 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_PositionAt(self, ut, reference_frame).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -166,48 +127,32 @@ impl Orbit {
     ///
     /// # Note
     /// This value will change over time if the orbit is elliptical.
-    fn get_speed(&self) -> Velocity {
-        if let Some(value) = SpaceCenter.Orbit_get_Speed(self) as Velocity {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn speed(&self) -> Velocity {
+        SpaceCenter.Orbit_get_Speed(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
     /// Returns the time until the object reaches apoapsis, in seconds.
     ///
     /// **Game Scenes**: All
-    fn get_time_to_apoapsis(&self) -> Time {
-        if let Some(value) = SpaceCenter.Orbit_get_TimeToApoapsis(self) as Time {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn time_to_apoapsis(&self) -> Time {
+        SpaceCenter.Orbit_get_TimeToApoapsis(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
     /// Returns the time until the object reaches periapsis, in seconds.
     ///
     /// **Game Scenes**: All
-    fn get_time_to_periapsis(&self) -> Time {
-        if let Some(value) = SpaceCenter.Orbit_get_TimeToPeriapsis(self) as Time {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn time_to_periapsis(&self) -> Time {
+        SpaceCenter.Orbit_get_TimeToPeriapsis(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
     /// Returns the [eccentricity](https://en.wikipedia.org/wiki/Orbital_eccentricity) of the orbit.
     ///
     /// **Game Scenes**: All
-    fn get_eccentricity(&self) -> f64 {
-        if let Some(value) = SpaceCenter.Orbit_get_Eccentricity(self) as f64 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn eccentricity(&self) -> f64 {
+        SpaceCenter.Orbit_get_Eccentricity(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -215,12 +160,8 @@ impl Orbit {
     /// in radians.
     ///
     /// **Game Scenes**: All
-    fn get_inclination(&self) -> Radians<f64> {
-        if let Some(value) = SpaceCenter.Orbit_get_Inclination(self) as Radians<f64> {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn inclination(&self) -> Radians<f64> {
+        SpaceCenter.Orbit_get_Inclination(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -228,12 +169,8 @@ impl Orbit {
     /// in radians.
     ///
     /// **Game Scenes**: All
-    fn get_longitude_of_ascending_node(&self) -> Radians<f64> {
-        if let Some(value) = SpaceCenter.Orbit_get_LongitudeOfAscendingNode(self) as Radians<f64> {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn longitude_of_ascending_node(&self) -> Radians<f64> {
+        SpaceCenter.Orbit_get_LongitudeOfAscendingNode(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -241,24 +178,16 @@ impl Orbit {
     /// in radians.
     ///
     /// **Game Scenes**: All
-    fn get_argument_of_periapsis(&self) -> Radians<f64> {
-        if let Some(value) = SpaceCenter.Orbit_get_ArgumentOfPeriapsis(self) as Radians<f64> {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn argument_of_periapsis(&self) -> Radians<f64> {
+        SpaceCenter.Orbit_get_ArgumentOfPeriapsis(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
     /// Returns the [mean anomaly at epoch](https://en.wikipedia.org/wiki/Mean_anomaly).
     ///
     /// **Game Scenes**: All
-    fn get_mean_anomaly_at_epoch(&self) -> f64 {
-        if let Some(value) = SpaceCenter.Orbit_get_MeanAnomalyAtEpoch(self) as f64 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn mean_anomaly_at_epoch(&self) -> f64 {
+        SpaceCenter.Orbit_get_MeanAnomalyAtEpoch(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -266,24 +195,16 @@ impl Orbit {
     /// [mean anomaly at epoch](https://en.wikipedia.org/wiki/Mean_anomaly) was measured), in seconds.
     ///
     /// **Game Scenes**: All
-    fn get_epoch(&self) -> Time {
-        if let Some(value) = SpaceCenter.Orbit_get_Epoch(self) as Time {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn epoch(&self) -> Time {
+        SpaceCenter.Orbit_get_Epoch(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
     /// Returns the [mean anomaly](https://en.wikipedia.org/wiki/Mean_anomaly).
     ///
     /// **Game Scenes**: All
-    fn get_mean_anomaly(&self) -> f64 {
-        if let Some(value) = SpaceCenter.Orbit_get_MeanAnomaly(self) as f64 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn mean_anomaly(&self) -> f64 {
+        SpaceCenter.Orbit_get_MeanAnomaly(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -294,23 +215,15 @@ impl Orbit {
     /// # Arguments
     /// * `ut` - The universal time in seconds.
     fn mean_anomaly_at_ut(&self, ut: Time) -> f64 {
-        if let Some(value) = SpaceCenter.Orbit_MeanAnomalyAtUT(self, ut) as f64 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_MeanAnomalyAtUT(self, ut).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
     /// Returns the [eccentric anomaly](https://en.wikipedia.org/wiki/Eccentric_anomaly).
     ///
     /// **Game Scenes**: All
-    fn get_eccentric_anomaly(&self) -> f64 {
-        if let Some(value) = SpaceCenter.Orbit_get_EccentricAnomaly(self) as f64 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn eccentric_anomaly(&self) -> f64 {
+        SpaceCenter.Orbit_get_EccentricAnomaly(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -321,23 +234,15 @@ impl Orbit {
     /// # Arguments
     /// * `ut` - The universal time in seconds.
     fn eccentric_anomaly_at_ut(&self, ut: Time) -> f64 {
-        if let Some(value) = SpaceCenter.Orbit_EccentricAnomalyAtUT(self, ut) as f64 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_EccentricAnomalyAtUT(self, ut).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
     /// Returns the [true anomaly](https://en.wikipedia.org/wiki/True_anomaly).
     ///
     /// **Game Scenes**: All
-    fn get_true_anomaly(&self) -> f64 {
-        if let Some(value) = SpaceCenter.Orbit_get_TrueAnomaly(self) as f64 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn true_anomaly(&self) -> f64 {
+        SpaceCenter.Orbit_get_TrueAnomaly(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -348,11 +253,7 @@ impl Orbit {
     /// # Arguments
     /// * `ut` - The universal time in seconds.
     fn true_anomaly_at_ut(&self, ut: Time) -> f64 {
-        if let Some(value) = SpaceCenter.Orbit_TrueAnomalyAtUT(self, ut) as f64 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_TrueAnomalyAtUT(self, ut).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -363,11 +264,7 @@ impl Orbit {
     /// # Arguments
     /// * `radius` - The orbital radius in meters.
     fn true_anomaly_at_radius(&self, radius: Length) -> f64 {
-        if let Some(value) = SpaceCenter.Orbit_TrueAnomalyAtRadiansius(self, radius) as f64 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_TrueAnomalyAtRadius(self, radius).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -378,11 +275,7 @@ impl Orbit {
     /// # Arguments
     /// * `true_anomaly` - True anomaly.
     fn ut_at_true_anomaly(&self, true_anomaly: f64) -> Time {
-        if let Some(value) = SpaceCenter.Orbit_UTAtTrueAnomaly(self, true_anomaly) as f64 {
-            Time::new::<second>(value)
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_UTAtTrueAnomaly(self, true_anomaly).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -393,11 +286,8 @@ impl Orbit {
     /// # Arguments
     /// * `true_anomaly` - True anomaly.
     fn radius_at_true_anomaly(&self, true_anomaly: f64) -> Length {
-        if let Some(value) = SpaceCenter.Orbit_RadiansiusAtTrueAnomaly(self, true_anomaly) as f64 {
-            Length::new::<meter>(value)
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_RadiusAtTrueAnomaly(self, true_anomaly)
+            .ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -408,11 +298,7 @@ impl Orbit {
     /// # Arguments
     /// * `target` - Target orbit.
     fn true_anomaly_at_an(&self) -> f64 {
-        if let Some(value) = SpaceCenter.Orbit_TrueAnomalyAtAN(self) as f64 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_TrueAnomalyAtAN(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -423,23 +309,16 @@ impl Orbit {
     /// # Arguments
     /// * `target` - Target orbit.
     fn true_anomaly_at_dn(&self) -> f64 {
-        if let Some(value) = SpaceCenter.Orbit_TrueAnomalyAtDN(self) as f64 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_TrueAnomalyAtDN(self)
+            .ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
     /// Returns the current orbital speed in meters per second.
     ///
     /// **Game Scenes**: All
-    fn get_orbital_speed(&self) -> Velocity {
-        if let Some(value) = SpaceCenter.Orbit_get_OrbitalSpeed(self) as Velocity {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn orbital_speed(&self) -> Velocity {
+        SpaceCenter.Orbit_get_OrbitalSpeed(self).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -450,11 +329,7 @@ impl Orbit {
     /// # Arguments
     /// * `time` - Time from now, in seconds.
     fn orbital_speed_at(&self, time: Time) -> Velocity {
-        if let Some(value) = SpaceCenter.Orbit_OrbitalSpeedAt(self, time) as Velocity {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_OrbitalSpeedAt(self, time).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -465,11 +340,7 @@ impl Orbit {
     /// # Arguments
     /// * `target` - Target orbit.
     fn relative_inclincation(&self, target: &Orbit) -> Radians<f64> {
-        if let Some(value) = SpaceCenter.Orbit_RelativeInclination(self, target) as Radians<f64> {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_RelativeInclination(self, target).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -477,16 +348,15 @@ impl Orbit {
     /// if the object is not going to change sphere of influence.
     ///
     /// **Game Scenes**: All
-    fn get_time_to_soi_change(&self) -> Option<Time> {
-        if let Some(value) = SpaceCenter.Orbit_get_TimeToSOIChange(self) as f64 {
-            if value.is_nan() {
-                None
-            } else {
-                Some(Time::new::<second>(value))
-            }
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+    fn time_to_soi_change(&self) -> Option<Time> {
+        SpaceCenter.Orbit_get_TimeToSOIChange(self)
+            .map(|value: f64| {
+                if value.is_nan() {
+                    None
+                } else {
+                    Some(Time::new::<second>(value))
+                }
+            }).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -497,11 +367,7 @@ impl Orbit {
     /// # Arguments
     /// * `target` - Target orbit.
     fn time_of_closest_approach(&self, target: &Orbit) -> Time {
-        if let Some(value) = SpaceCenter.Orbit_TimeOfClosestApproach(self, target) as Time {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_TimeOfClosestApproach(self, target).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -512,11 +378,8 @@ impl Orbit {
     /// # Arguments
     /// * `target` - Target orbit.
     fn distance_at_closest_approach(&self, target: &Orbit) -> Length {
-        if let Some(value) = SpaceCenter.Orbit_DistanceAtClosestApproach(self, target) as Length {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_DistanceAtClosestApproach(self, target)
+            .ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -533,8 +396,8 @@ impl Orbit {
     /// The first element of the tuple is the universal time at the closest approach, in seconds.
     /// The second element of the tuple is the distance at closest approach, in meters.
     fn list_closest_approaches(&self, target: &Orbit, orbits: i32) -> Vec<(Time, Length)> {
-        if let Some(values) = SpaceCenter.Orbit_ListClosestApproaches(self, target, orbits) as Vec<Vec<f64>> {
-            {
+        SpaceCenter.Orbit_ListClosestApproaches(self, target, orbits)
+            .map(|values: Vec<Vec<f64>>| {
                 if values.len() != 2 {
                     return Err(KrpcError::ResponseHasError("Expected list to have exactly two entries".to_owned()));
                 }
@@ -555,10 +418,7 @@ impl Orbit {
                 }
 
                 time_distances
-            }
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+            }).ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -575,11 +435,8 @@ impl Orbit {
     /// # Return
     /// The direction as a unit vector
     fn reference_plane_normal(client: &KrpcClient, reference_frame: &ReferenceFrame) -> Vector3 {
-        if let Some(value) = SpaceCenter.Orbit_static_ReferencePlaneNormal(reference_frame) as Vector3 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_static_ReferencePlaneNormal(reference_frame)
+            .ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
@@ -595,10 +452,6 @@ impl Orbit {
     /// # Return
     /// The direction as a unit vector
     fn reference_plane_direction(client: &KrpcClient, reference_frame: &ReferenceFrame) -> Vector3 {
-        if let Some(value) = SpaceCenter.Orbit_static_ReferencePlaneDirection(reference_frame) as Vector3 {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
-        }
+        SpaceCenter.Orbit_static_ReferencePlaneDirection(reference_frame).ok_or(KrpcError::NullResponseValue)
     });
 }
