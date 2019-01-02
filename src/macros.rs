@@ -4,7 +4,7 @@ macro_rules! rpc_method {
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            $service : tt.$method : tt ( self $(, $method_arg : expr )* )
+            $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* )
                 .map(|$value: ident : $value_type : ty| $success_expr: expr)
                 .ok_or($fail_expr: expr)
         }
@@ -12,7 +12,7 @@ macro_rules! rpc_method {
         rpc_method!(
             $(#[$meta])*
             fn $func_name(&self $(, $arg_name : $arg_type)* ) -> $ret {
-                if let Some($value) = $service.$method( self $(, $method_arg )* ) as $value_type {
+                if let Some($value) = $service.$( $method ),+( self $(, $method_arg )* ) as $value_type {
                     $success_expr
                 } else {
                     return Err($fail_expr)
@@ -25,7 +25,7 @@ macro_rules! rpc_method {
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            $service : tt.$method : tt ( self $(, $method_arg : expr )* )
+            $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* )
                 .map(|$value: ident : $value_type : ty| $success_expr: expr)
                 .ok_or($fail_expr: expr)
         }
@@ -33,7 +33,7 @@ macro_rules! rpc_method {
         rpc_method!(
             $(#[$meta])*
             fn $func_name(&self $(, $arg_name : $arg_type)* ) -> $ret {
-                if let Some($value) = $service.$method( $( $method_arg ),* ) as $value_type {
+                if let Some($value) = $service.$( $method ),+( $( $method_arg ),* ) as $value_type {
                     success_expr
                 } else {
                     return Err($fail_expr)
@@ -46,14 +46,14 @@ macro_rules! rpc_method {
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            $service : tt.$method : tt ( self $(, $method_arg : expr )* )
+            $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* )
                 .ok_or($fail_expr: expr)
         }
     ) => {
         rpc_method!(
             $(#[$meta])*
             fn $func_name(&self $(, $arg_name : $arg_type)* ) -> $ret {
-                if let Some(value) = $service.$method( self $(, $method_arg )* ) as $ret {
+                if let Some(value) = $service.$( $method ),+( self $(, $method_arg )* ) as $ret {
                     value
                 } else {
                     return Err($fail_expr)
@@ -66,14 +66,14 @@ macro_rules! rpc_method {
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            $service : tt.$method : tt ( self $(, $method_arg : expr )* )
+            $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* )
                 .ok_or($fail_expr: expr)
         }
     ) => {
         rpc_method!(
             $(#[$meta])*
             fn $func_name(&self $(, $arg_name : $arg_type)* ) -> $ret {
-                if let Some(value) = $service.$method( $( $method_arg ),* ) as $ret {
+                if let Some(value) = $service.$( $method ),+( $( $method_arg ),* ) as $ret {
                     value
                 } else {
                     return Err($fail_expr)
@@ -86,7 +86,7 @@ macro_rules! rpc_method {
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            if let Some($value: ident) = $service : tt.$method : tt ( self $(, $method_arg : expr )* ) as $value_type: ty {
+            if let Some($value: ident) = $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* ) as $value_type: ty {
                 $success_expr: expr
             } else {
                 $fail_expr: expr
@@ -98,7 +98,7 @@ macro_rules! rpc_method {
             let rpc = &mut (*self.client).borrow_mut().rpc;
             let args: Vec<Vec<u8>> = vec![self.encode()? $(, $method_arg.encode()?)*];
 
-            Ok(if let Some(response) = rpc.invoke(stringify!($service).to_owned(), stringify!($method).to_owned(), args)? {
+            Ok(if let Some(response) = rpc.invoke(stringify!($service).to_owned(), concat!( $( stringify!($method) ),+).to_owned(), args)? {
                 let $value : $value_type = decode(&response, &self.client)?;
                 $success_expr
             } else {
@@ -111,7 +111,7 @@ macro_rules! rpc_method {
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            if let Some($value: ident) = $service : tt.$method : tt ( $($method_arg : expr ),* ) as $value_type: ty {
+            if let Some($value: ident) = $service : tt.$( $method : tt),+ ( $($method_arg : expr ),* ) as $value_type: ty {
                 $success_expr: expr
             } else {
                 $fail_expr: expr
@@ -123,7 +123,7 @@ macro_rules! rpc_method {
             let rpc = &mut (*self.client).borrow_mut().rpc;
             let args: Vec<Vec<u8>> = vec![$($method_arg.encode()?),*];
 
-            Ok(if let Some(response) = rpc.invoke(stringify!($service).to_owned(), stringify!($method).to_owned(), args)? {
+            Ok(if let Some(response) = rpc.invoke(stringify!($service).to_owned(), concat!( $( stringify!($method) ),+).to_owned(), args)? {
                 let $value : $value_type = decode(&response, &self.client)?;
                 $success_expr
             } else {
@@ -136,7 +136,7 @@ macro_rules! rpc_method {
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) {
-            $service : tt.$method : tt ( self $(, $method_arg : expr )* )
+            $service : tt.$( $method : tt),+( self $(, $method_arg : expr )* )
         }
     ) => {
         $(#[$meta])*
@@ -144,7 +144,7 @@ macro_rules! rpc_method {
             let rpc = &mut (*self.client).borrow_mut().rpc;
             let args: Vec<Vec<u8>> = vec![self.encode()? $(, $method_arg.encode()?)*];
 
-            rpc.invoke(stringify!($service).to_owned(), stringify!($method).to_owned(), args)?;
+            rpc.invoke(stringify!($service).to_owned(), concat!( $( stringify!($method) ),+).to_owned(), args)?;
             Ok(())
         }
     };
@@ -153,7 +153,7 @@ macro_rules! rpc_method {
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) {
-            $service : tt.$method : tt ( $($method_arg : expr ),* )
+            $service : tt.$( $method : tt),+ ( $($method_arg : expr ),* )
         }
     ) => {
         $(#[$meta])*
@@ -161,7 +161,7 @@ macro_rules! rpc_method {
             let rpc = &mut (*self.client).borrow_mut().rpc;
             let args: Vec<Vec<u8>> = vec![$($method_arg.encode()?),*];
 
-            rpc.invoke(stringify!($service).to_owned(), stringify!($method).to_owned(), args)?;
+            rpc.invoke(stringify!($service).to_owned(), concat!( $( stringify!($method) ),+).to_owned(), args)?;
             Ok(())
         }
     };
@@ -248,6 +248,169 @@ macro_rules! rpc_method {
             rpc.invoke(stringify!($service).to_owned(), stringify!($method).to_owned(), args)?;
             Ok(())
         }
+    };
+}
+
+#[macro_export]
+macro_rules! rpc_property {
+    // Class level props
+    (
+        $prop_name: ident : $prop_type: ty {
+            service: $service: tt,
+            class: $class: tt,
+            $(#[$getter_meta:meta])*
+            $getter_name: ident,
+            $(#[$setter_meta:meta])*
+            $setter_name: ident($arg_name: ident)
+        }
+    ) => {
+        rpc_property!(
+            $prop_name: $prop_type {
+                service: $service,
+                class: $class,
+                $(#[$getter_meta])*
+                $getter_name => |value: $prop_type| value,
+                $(#[$setter_meta])*
+                $setter_name($arg_name) => $arg_name
+            }
+        );
+    };
+
+    (
+        $prop_name: ident : $prop_type: ty {
+            service: $service: tt,
+            class: $class: tt,
+            $(#[$getter_meta:meta])*
+            $getter_name: ident => |$value: ident : $value_type: ty| $getter_expr: expr,
+            $(#[$setter_meta:meta])*
+            $setter_name: ident($arg_name: ident) => $setter_expr: expr
+        }
+    ) => {
+        rpc_method!(
+        $( #[$getter_meta] )*
+        fn $getter_name(&self) -> $prop_type {
+            $service.$class,_get_,$prop_name(self)
+                .map(|$value: $value_type| $getter_expr)
+                .ok_or(KrpcError::NullResponseValue)
+        });
+
+        rpc_method!(
+        $(#[$setter_meta])*
+        fn $setter_name(&self, $arg_name: $prop_type) {
+            $service.$class,_set_,$prop_name(self, $setter_expr)
+        });
+    };
+
+    (
+        $prop_name: ident : $prop_type: ty {
+            service: $service: tt,
+            class: $class: tt,
+            $(#[$getter_meta:meta])*
+            $getter_name: ident
+        }
+    ) => {
+        rpc_property!(
+            $prop_name: $prop_type {
+                service: $service,
+                class: $class,
+                $(#[$getter_meta])*
+                $getter_name => |value: $prop_type| value
+            }
+        );
+    };
+
+    (
+        $prop_name: ident : $prop_type: ty {
+            service: $service: tt,
+            class: $class: tt,
+            $(#[$getter_meta:meta])*
+            $getter_name: ident => |$value: ident : $value_type: ty| $getter_expr: expr
+        }
+    ) => {
+        rpc_method!(
+        $( #[$getter_meta] )*
+        fn $getter_name(&self) -> $prop_type {
+            $service.$class,_get_,$prop_name(self)
+                .map(|$value: $value_type| $getter_expr)
+                .ok_or(KrpcError::NullResponseValue)
+        });
+    };
+
+    // Service level props
+    (
+        $prop_name: ident : $prop_type: ty {
+            service: $service: tt,
+            $(#[$getter_meta:meta])*
+            $getter_name: ident,
+            $(#[$setter_meta:meta])*
+            $setter_name: ident($arg_name: ident)
+        }
+    ) => {
+        rpc_property!(
+            $prop_name: $prop_type {
+                service: $service,
+                $(#[$getter_meta])*
+                $getter_name => |value: $prop_type| value,
+                $(#[$setter_meta])*
+                $setter_name($arg_name) => $arg_name
+            }
+        );
+    };
+
+    (
+        $prop_name: ident : $prop_type: ty {
+            service: $service: tt,
+            $(#[$getter_meta:meta])*
+            $getter_name: ident => |$value: ident : $value_type: ty| $getter_expr: expr,
+            $(#[$setter_meta:meta])*
+            $setter_name: ident($arg_name: ident) => $setter_expr: expr
+        }
+    ) => {
+        rpc_method!(
+        $( #[$getter_meta] )*
+        fn $getter_name(&self) -> $prop_type {
+            $service.get_,$prop_name()
+                .map(|$value: $value_type| $getter_expr)
+                .ok_or(KrpcError::NullResponseValue)
+        });
+
+        rpc_method!(
+        $(#[$setter_meta])*
+        fn $setter_name(&self, $arg_name: $prop_type) {
+            $service._set_,$prop_name($setter_expr)
+        });
+    };
+
+    (
+        $prop_name: ident : $prop_type: ty {
+            service: $service: tt,
+            $(#[$getter_meta:meta])*
+            $getter_name: ident
+        }
+    ) => {
+        rpc_property!(
+            $prop_name: $prop_type {
+                service: $service,
+                $(#[$getter_meta])*
+                $getter_name => |value: $prop_type| value
+            }
+        );
+    };
+
+    (
+        $prop_name: ident : $prop_type: ty {
+            service: $service: tt,
+            $(#[$getter_meta:meta])*
+            $getter_name: ident => |$value: ident : $value_type: ty| $getter_expr: expr
+        }
+    ) => {
+        rpc_method!(
+        $( #[$getter_meta] )*
+        fn $getter_name(&self) -> $prop_type {
+            $service.get_,$prop_name()
+                .map(|$value: $value_type| $getter_expr)
+                .ok_or(KrpcError::NullResponseValue)
+        });
     };
 
 }

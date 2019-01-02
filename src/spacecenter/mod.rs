@@ -5,27 +5,30 @@ use std::collections::{BTreeMap};
 use std::rc::{Rc};
 use std::cell::{RefCell};
 
-pub mod vessel;
+pub mod autopilot;
 pub mod body;
+pub mod communication;
+pub mod control;
+pub mod flight;
+pub mod node;
 pub mod orbit;
 pub mod parts;
 pub mod reference_frame;
-pub mod flight;
-pub mod autopilot;
-pub mod communication;
-pub mod control;
 pub mod resources;
+pub mod vessel;
 
-pub use crate::spacecenter::vessel::*;
-pub use crate::spacecenter::body::*;
-pub use crate::spacecenter::orbit::*;
-pub use crate::spacecenter::parts::*;
-pub use crate::spacecenter::reference_frame::*;
-pub use crate::spacecenter::flight::*;
-pub use crate::spacecenter::autopilot::*;
-pub use crate::spacecenter::communication::*;
-pub use crate::spacecenter::control::*;
-pub use crate::spacecenter::resources::*;
+pub use self::autopilot::*;
+pub use self::body::*;
+pub use self::communication::*;
+pub use self::control::*;
+pub use self::flight::*;
+pub use self::node::*;
+pub use self::orbit::*;
+pub use self::parts::*;
+pub use self::reference_frame::*;
+pub use self::resources::*;
+pub use self::vessel::*;
+
 
 /// The VAB (Vehicle Assembly Building) craft directory
 pub const VAB: &'static str = "VAB";

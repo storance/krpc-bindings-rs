@@ -566,121 +566,123 @@ impl Vessel {
 }
 
 remote_type!(
+/// Represents crew in a vessel. Can be obtained using `Vessel::crew()`.
 object CrewMember {}
 );
 
 impl CrewMember {
-    rpc_method!(
-    /// Returns the crew member's name.
-    ///
-    /// **Game Scenes**: All
-    fn name(&self) -> String {
-        SpaceCenter.CrewMember_get_Name(self).ok_or(KrpcError::NullResponseValue)
-    });
+    rpc_property!(
+        Name: String {
+            service: SpaceCenter,
+            class: CrewMember,
+            /// Returns the crew member's name.
+            ///
+            /// **Game Scenes**: All
+            name,
+            /// Sets the crew member's name.
+            ///
+            /// **Game Scenes**: All
+            set_name(name)
+        }
+    );
 
-    rpc_method!(
-    /// Sets the crew member's name.
-    ///
-    /// **Game Scenes**: All
-    fn set_name(&self, name: String){
-        SpaceCenter.CrewMember_set_Name(self, name)
-    });
+    rpc_property!(
+        Type: CrewMemberType {
+            service: SpaceCenter,
+            class: CrewMember,
+            /// Returns the type of the crew member.
+            ///
+            /// **Game Scenes**: All
+            crew_type
+        }
+    );
 
-    rpc_method!(
-    /// Returns the type of the crew member.
-    ///
-    /// **Game Scenes**: All
-    fn crew_type(&self) -> CrewMemberType {
-        SpaceCenter.CrewMember_get_Type(self).ok_or(KrpcError::NullResponseValue)
-    });
+    rpc_property!(
+        OnMission: bool {
+            service: SpaceCenter,
+            class: CrewMember,
+            /// Returns whether the crew member is on a mission.
+            ///
+            /// **Game Scenes**: All
+            is_on_mission
+        }
+    );
 
-    rpc_method!(
-    /// Returns the type of the crew member.
-    ///
-    /// **Game Scenes**: All
-    fn is_on_mission(&self) -> bool {
-        SpaceCenter.CrewMember_get_OnMission(self).ok_or(KrpcError::NullResponseValue)
-    });
+    rpc_property!(
+        Courage: f32 {
+            service: SpaceCenter,
+            class: CrewMember,
+            /// Returns the crew member's courage.
+            ///
+            /// **Game Scenes**: All
+            courage,
+            /// Sets the crew member's courage.
+            ///
+            /// **Game Scenes**: All
+            set_courage(courage)
+        }
+    );
 
-    rpc_method!(
-    /// Returns the crew member's courage.
-    ///
-    /// **Game Scenes**: All
-    fn courage(&self) -> f32 {
-        SpaceCenter.CrewMember_get_Courage(self).ok_or(KrpcError::NullResponseValue)
-    });
 
-    rpc_method!(
-    /// Sets the crew member's courage.
-    ///
-    /// **Game Scenes**: All
-    fn set_courage(&self, courage: f32){
-        SpaceCenter.CrewMember_set_Courage(self, courage)
-    });
+    rpc_property!(
+        Stupidity: f32 {
+            service: SpaceCenter,
+            class: CrewMember,
+            /// Returns the crew member's stupidity.
+            ///
+            /// **Game Scenes**: All
+            stupidity,
+            /// Sets the crew member's stupidity.
+            ///
+            /// **Game Scenes**: All
+            set_stupidity(stupidity)
+        }
+    );
 
-    rpc_method!(
-    /// Returns the crew member's stupidity.
-    ///
-    /// **Game Scenes**: All
-    fn stupidity(&self) -> f32 {
-        SpaceCenter.CrewMember_get_Stupidity(self).ok_or(KrpcError::NullResponseValue)
-    });
+    rpc_property!(
+        Experience: f32 {
+            service: SpaceCenter,
+            class: CrewMember,
+            /// Returns the crew member's experience.
+            ///
+            /// **Game Scenes**: All
+            experience,
+            /// Sets the crew member's experience.
+            ///
+            /// **Game Scenes**: All
+            set_experience(experience)
+        }
+    );
 
-    rpc_method!(
-    /// Sets the crew member's stupidity.
-    ///
-    /// **Game Scenes**: All
-    fn set_stupidity(&self, stupidity: f32){
-        SpaceCenter.CrewMember_set_Stupidity(self, stupidity)
-    });
+    rpc_property!(
+        Badass: bool {
+            service: SpaceCenter,
+            class: CrewMember,
+            /// Returns whether the crew member is a badass.
+            ///
+            /// **Game Scenes**: All
+            is_badass,
+            /// Sets whether the crew member is a badass.
+            ///
+            /// **Game Scenes**: All
+            set_badass(is_badass)
+        }
+    );
 
-    rpc_method!(
-    /// Returns the crew member's experience.
-    ///
-    /// **Game Scenes**: All
-    fn experience(&self) -> f32 {
-        SpaceCenter.CrewMember_get_Experience(self).ok_or(KrpcError::NullResponseValue)
-    });
-
-    rpc_method!(
-    /// Sets the crew member's experience.
-    ///
-    /// **Game Scenes**: All
-    fn set_experience(&self, experience: f32) {
-        SpaceCenter.CrewMember_set_Experience(self, experience)
-    });
-
-    rpc_method!(
-    /// Returns whether the crew member is a badass.
-    ///
-    /// **Game Scenes**: All
-    fn is_badass(&self) -> bool {
-        SpaceCenter.CrewMember_get_Badass(self).ok_or(KrpcError::NullResponseValue)
-    });
-
-    rpc_method!(
-    /// Sets whether the crew member is a badass.
-    ///
-    /// **Game Scenes**: All
-    fn set_badass(&self, is_badass: bool) {
-        SpaceCenter.CrewMember_set_Badass(self, is_badass)
-    });
-
-    rpc_method!(
-    /// Returns whether the crew member is a veteran.
-    ///
-    /// **Game Scenes**: All
-    fn is_veteran(&self) -> bool {
-        SpaceCenter.CrewMember_get_Veteran(self).ok_or(KrpcError::NullResponseValue)
-    });
-
-    rpc_method!(
-    /// Sets whether the crew member is a veteran.
-    ///
-    /// **Game Scenes**: All
-    fn set_veteran(&self, is_veteran: bool) {
-        SpaceCenter.CrewMember_set_Veteran(self, is_veteran)
-    });
+    rpc_property!(
+        veteran: bool {
+            service: SpaceCenter,
+            class: CrewMember,
+            /// Returns whether the crew member is a veteran.
+            ///
+            /// **Game Scenes**: All
+            is_veteran,
+            /// Sets whether the crew member is a veteran.
+            ///
+            /// **Game Scenes**: All
+            set_veteran(is_veteran)
+        }
+    );
 }
 
 remote_type!(
