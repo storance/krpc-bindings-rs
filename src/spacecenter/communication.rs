@@ -5,7 +5,7 @@ use std::rc::{Rc};
 use std::cell::{RefCell};
 
 remote_type!(
-/// Used to interact with CommNet for a given vessel. Obtained by calling `Vessel.getComms()`.
+/// Used to interact with CommNet for a given vessel. Obtained by calling `Vessel::comms()`.
 object Comms {}
 );
 

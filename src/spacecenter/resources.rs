@@ -6,8 +6,8 @@ use std::cell::{RefCell};
 
 remote_type!(
     /// Represents the collection of resources stored in a vessel, stage or part. Created by
-    /// calling `Vessel.get_resources()`, `Vessel.resources_in_decouple_stage(i32, bool)` or
-    /// `Part.getResources()`.
+    /// calling `Vessel::resources()`, `Vessel::resources_in_decouple_stage()` or
+    /// `Part::resources()`.
     object Resources {}
 );
 

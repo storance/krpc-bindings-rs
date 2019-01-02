@@ -10,7 +10,7 @@ use uom::si::quantities::{Time, Velocity};
 remote_type!(
 /// Used to manipulate the controls of a vessel. This includes adjusting the throttle,
 /// enabling/disabling systems such as SAS and RCS, or altering the direction in which the vessel
-/// is pointing. Obtained by calling `Vessel.getControl()`.
+/// is pointing. Obtained by calling `Vessel::control()`.
 ///
 /// # Note
 /// Control inputs (such as pitch, yaw and roll) are zeroed when all clients that have set one or

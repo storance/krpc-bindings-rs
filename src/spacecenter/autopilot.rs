@@ -10,7 +10,7 @@ use std::cell::{RefCell};
 use uom::si::quantities::{Time};
 
 remote_type!(
-/// Provides basic auto-piloting utilities for a vessel. Created by calling `Vessel.getAutoPilot()`.
+/// Provides basic auto-piloting utilities for a vessel. Created by calling `Vessel::auto_pilot()`.
 ///
 /// # Note
 /// If a client engages the auto-pilot and then closes its connection to the server, the
