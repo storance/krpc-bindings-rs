@@ -1,12 +1,10 @@
 use crate::*;
 use crate::codec::*;
-use crate::units::{TorqueTuple, MomentOfInertia, Vector3, Quaternion};
 use super::{ReferenceFrame, Orbit, Parts, Resources, Flight, AutoPilot, Control, Comms};
 
 use std::rc::{Rc};
 use std::cell::{RefCell};
 
-use uom::si::quantities::{Time, Mass, Force};
 
 remote_type!(
 /// These objects are used to interact with vessels in KSP. This includes getting orbital and
@@ -75,7 +73,7 @@ impl Vessel {
     /// Returns the mission elapsed time in seconds.
     ///
     /// **Game Scenes**: All
-    fn met(&self) -> Time<f64> {
+    fn met(&self) -> f64 {
         SpaceCenter.Vessel_get_MET(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -201,7 +199,7 @@ impl Vessel {
     /// Returns the total mass of the vessel, including resources, in kg.
     ///
     /// **Game Scenes**: Flight
-    fn mass(&self) -> Mass<f32> {
+    fn mass(&self) -> f32 {
         SpaceCenter.Vessel_get_Mass(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -209,7 +207,7 @@ impl Vessel {
     /// Returns the dry mass of the vessel, excluding resources, in kg.
     ///
     /// **Game Scenes**: Flight
-    fn dry_mass(&self) -> Mass<f32> {
+    fn dry_mass(&self) -> f32 {
         SpaceCenter.Vessel_get_DryMass(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -218,7 +216,7 @@ impl Vessel {
     /// computed by summing `Engine.get_thrust()` for every engine in the vessel.
     ///
     /// **Game Scenes**: Flight
-    fn thrust(&self) -> Force<f32> {
+    fn thrust(&self) -> f32 {
         SpaceCenter.Vessel_get_Thrust(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -228,7 +226,7 @@ impl Vessel {
     /// engine in the vessel.
     ///
     /// **Game Scenes**: Flight
-    fn available_thrust(&self) -> Force<f32> {
+    fn available_thrust(&self) -> f32 {
         SpaceCenter.Vessel_get_AvailableThrust(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -237,7 +235,7 @@ impl Vessel {
     /// in Newtons. This is computed by summing `Engine.get_max_thrust()` for every active engine.
     ///
     /// **Game Scenes**: Flight
-    fn max_thrust(&self) -> Force<f32> {
+    fn max_thrust(&self) -> f32 {
         SpaceCenter.Vessel_get_MaxThrust(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -247,7 +245,7 @@ impl Vessel {
     /// `Engine.get_max_vacuum_thrust()` for every active engine.
     ///
     /// **Game Scenes**: Flight
-    fn max_vacuum_thrust(&self) -> Force<f32> {
+    fn max_vacuum_thrust(&self) -> f32 {
         SpaceCenter.Vessel_get_MaxVacuumThrust(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -256,7 +254,7 @@ impl Vessel {
     /// the formula [described here](https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines).
     ///
     /// **Game Scenes**: Flight
-    fn specific_impulse(&self) -> Time<f32> {
+    fn specific_impulse(&self) -> f32 {
         SpaceCenter.Vessel_get_SpecificImpulse(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -265,7 +263,7 @@ impl Vessel {
     /// using the formula [described here](https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines).
     ///
     /// **Game Scenes**: Flight
-    fn vacuum_specific_impulse(&self) -> Time<f32> {
+    fn vacuum_specific_impulse(&self) -> f32 {
         SpaceCenter.Vessel_get_VacuumSpecificImpulse(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -275,7 +273,7 @@ impl Vessel {
     /// [described here](https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines).
     ///
     /// **Game Scenes**: Flight
-    fn kerbin_sea_level_specific_impulse(&self) -> Time<f32> {
+    fn kerbin_sea_level_specific_impulse(&self) -> f32 {
         SpaceCenter.Vessel_get_KerbinSeaLevelSpecificImpulse(self)
             .ok_or(KrpcError::NullResponseValue)
     });
@@ -286,7 +284,7 @@ impl Vessel {
     /// This corresponds to the vessels reference frame (`ReferenceFrame`).
     ///
     /// **Game Scenes**: Flight
-    fn moment_of_inertia(&self) -> (MomentOfInertia<f64>, MomentOfInertia<f64>, MomentOfInertia<f64>) {
+    fn moment_of_inertia(&self) -> Vector3 {
         SpaceCenter.Vessel_get_MomentOfIntertia(self)
             .ok_or(KrpcError::NullResponseValue)
     });
@@ -308,7 +306,7 @@ impl Vessel {
     /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
     ///
     /// **Game Scenes**: Flight
-    fn available_torque(&self) -> TorqueTuple<f64> {
+    fn available_torque(&self) -> (Vector3, Vector3) {
         SpaceCenter.Vessel_get_AvailableTorque(self)
             .ok_or(KrpcError::NullResponseValue)
     });
@@ -320,7 +318,7 @@ impl Vessel {
     /// the vessel.
     ///
     /// **Game Scenes**: Flight
-    fn available_reaction_wheel_torque(&self) -> TorqueTuple<f64> {
+    fn available_reaction_wheel_torque(&self) -> (Vector3, Vector3) {
         SpaceCenter.Vessel_get_AvailableReactionWheelTorque(self)
             .ok_or(KrpcError::NullResponseValue)
     });
@@ -332,7 +330,7 @@ impl Vessel {
     /// the vessel.
     ///
     /// **Game Scenes**: Flight
-    fn available_rcs_torque(&self) -> TorqueTuple<f64> {
+    fn available_rcs_torque(&self) -> (Vector3, Vector3) {
         SpaceCenter.Vessel_get_AvailableRCSTorque(self)
             .ok_or(KrpcError::NullResponseValue)
     });
@@ -344,7 +342,7 @@ impl Vessel {
     /// the vessel.
     ///
     /// **Game Scenes**: Flight
-    fn available_engine_torque(&self) -> TorqueTuple<f64> {
+    fn available_engine_torque(&self) -> (Vector3, Vector3) {
         SpaceCenter.Vessel_get_AvailableEngineTorque(self)
             .ok_or(KrpcError::NullResponseValue)
     });
@@ -356,7 +354,7 @@ impl Vessel {
     /// the vessel.
     ///
     /// **Game Scenes**: Flight
-    fn available_control_surface_torque(&self) -> TorqueTuple<f64> {
+    fn available_control_surface_torque(&self) -> (Vector3, Vector3) {
         SpaceCenter.Vessel_get_AvailableControlSurfaceTorque(self)
             .ok_or(KrpcError::NullResponseValue)
     });
@@ -368,7 +366,7 @@ impl Vessel {
     /// pitch, roll and yaw axes of the vessel.
     ///
     /// **Game Scenes**: Flight
-    fn available_other_torque(&self) -> TorqueTuple<f64> {
+    fn available_other_torque(&self) -> (Vector3, Vector3) {
         SpaceCenter.Vessel_get_AvailableOtherTorque(self)
             .ok_or(KrpcError::NullResponseValue)
     });

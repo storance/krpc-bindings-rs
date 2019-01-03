@@ -1,12 +1,9 @@
 use crate::*;
 use crate::codec::*;
-use crate::units::{Degrees, Vector3};
 use super::{ReferenceFrame, SASMode};
 
 use std::rc::{Rc};
 use std::cell::{RefCell};
-
-use uom::si::quantities::{Time};
 
 remote_type!(
 /// Provides basic auto-piloting utilities for a vessel. Created by calling `Vessel::auto_pilot()`.
@@ -45,7 +42,7 @@ impl AutoPilot {
     });
 
     rpc_property!(
-        Error: Degrees<f32> {
+        Error: f32 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the error, in degrees, between the direction the ship has been asked to
@@ -58,7 +55,7 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        PitchError: Degrees<f32> {
+        PitchError: f32 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the error, in degrees, between the vessels current and target pitch. Returns an
@@ -70,7 +67,7 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        HeadingError: Degrees<f32> {
+        HeadingError: f32 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the error, in degrees, between the vessels current and target heading.
@@ -82,7 +79,7 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        RollError: Degrees<f32> {
+        RollError: f32 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the error, in degrees, between the vessels current and target roll.
@@ -114,7 +111,7 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        TargetPitch: Degrees<f32> {
+        TargetPitch: f32 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the target pitch, in degrees, between -90° and +90°.
@@ -129,7 +126,7 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        TargetHeading: Degrees<f32> {
+        TargetHeading: f32 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the target heading, in degrees, between 0° and 360°.
@@ -144,14 +141,14 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        TargetRoll: Option<Degrees<f32>> {
+        TargetRoll: f32 {
             service: SpaceCenter,
             class: AutoPilot,
-            /// Returns the target roll or `None` if no target roll is set.
+            /// Returns the target roll or `NaN` if no target roll is set.
             ///
             /// **Game Scenes**: Flight
             target_roll,
-            /// Sets the target roll or `None` for no target roll.
+            /// Sets the target roll.
             ///
             /// **Game Scenes**: Flight
             set_target_roll(target_roll)
@@ -183,7 +180,7 @@ impl AutoPilot {
     /// # Arguments
     /// * `pitch` - Target pitch angle, in degrees between -90° and +90°.
     /// * `heading` - Target heading angle, in degrees between 0° and 360°.
-    fn target_pitch_and_heading(&self, pitch: &Degrees<f32>, heading: &Degrees<f32>) {
+    fn target_pitch_and_heading(&self, pitch: f32, heading: f32) {
         SpaceCenter.AutoPilot_TargetPitchAndHeading(self, pitch, heading)
     });
 
@@ -221,7 +218,7 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        RollThreshold: Degrees<f32> {
+        RollThreshold: f32 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the threshold at which the autopilot will try to match the target roll angle,
@@ -238,7 +235,7 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        StoppingTime : (Time<f64>, Time<f64>, Time<f64>) {
+        StoppingTime : Vector3 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the maximum amount of time that the vessel should need to come to a
@@ -263,7 +260,7 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        DecelerationTime: (Time<f64>, Time<f64>, Time<f64>) {
+        DecelerationTime: Vector3 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the time the vessel should take to come to a stop pointing in the
@@ -290,7 +287,7 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        AttenuationAngle : (Degrees<f64>, Degrees<f64>, Degrees<f64>) {
+        AttenuationAngle : Vector3 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the angle at which the autopilot considers the vessel to be pointing
@@ -335,7 +332,7 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        TimeToPeak: (Time<f64>, Time<f64>, Time<f64>) {
+        TimeToPeak: Vector3 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the target time to peak used to autotune the PID controllers.
@@ -358,7 +355,7 @@ impl AutoPilot {
     );
 
     rpc_property!(
-        Overshoot: (Degrees<f64>, Degrees<f64>, Degrees<f64>) {
+        Overshoot: Vector3 {
             service: SpaceCenter,
             class: AutoPilot,
             /// Returns the target overshoot percentage used to autotune the PID controllers.

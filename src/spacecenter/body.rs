@@ -1,13 +1,11 @@
 use crate::*;
 use crate::codec::*;
-use crate::units::{Degrees, Radians, RadiansPerSecond, Vector3, Quaternion, GravitationalParameter};
 use super::{Orbit, ReferenceFrame};
 
 use std::rc::{Rc};
 use std::cell::{RefCell};
 use std::collections::HashSet;
 
-use uom::si::quantities::{Length, Mass, Time, Acceleration, Density, Pressure, ThermodynamicTemperature};
 
 remote_type!(
     /// Represents a celestial body (such as a planet or moon).
@@ -43,7 +41,7 @@ impl CelestialBody {
     /// Returns the mass of the body, in kilograms.
     ///
     /// **Game Scenes**: All
-    fn mass(&self) -> Mass<f32> {
+    fn mass(&self) -> f32 {
         SpaceCenter.CelestialBody_get_Mass(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -52,7 +50,7 @@ impl CelestialBody {
     /// of the body in m<sup>3</sup>/s<sup>2</sup>.
     ///
     /// **Game Scenes**: All
-    fn gravitational_parameter(&self) -> GravitationalParameter<f32> {
+    fn gravitational_parameter(&self) -> f32 {
         SpaceCenter.CelestialBody_get_GravitationalParameter(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -61,7 +59,7 @@ impl CelestialBody {
     /// in m/s<sup>2</sup>.
     ///
     /// **Game Scenes**: All
-    fn surface_gravity(&self) -> Acceleration<f32> {
+    fn surface_gravity(&self) -> f32 {
         SpaceCenter.CelestialBody_get_Mass(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -69,7 +67,7 @@ impl CelestialBody {
     /// Returns the sidereal rotational period of the body, in seconds.
     ///
     /// **Game Scenes**: All
-    fn rotational_period(&self) -> Time<f32> {
+    fn rotational_period(&self) -> f32 {
         SpaceCenter.CelestialBody_get_RotationalPeriod(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -77,7 +75,7 @@ impl CelestialBody {
     /// Returns the rotational speed of the body, in radians per second.
     ///
     /// **Game Scenes**: All
-    fn rotational_speed(&self) -> RadiansPerSecond<f32> {
+    fn rotational_speed(&self) -> f32 {
         SpaceCenter.CelestialBody_get_RotationalSpeed(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -85,7 +83,7 @@ impl CelestialBody {
     /// Returns the current rotation angle of the body, in radians.
     ///
     /// **Game Scenes**: All
-    fn rotation_angle(&self) -> Radians<f32> {
+    fn rotation_angle(&self) -> f32 {
         SpaceCenter.CelestialBody_get_RotationAngle(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -93,7 +91,7 @@ impl CelestialBody {
     /// Returns the initial rotation angle of the body (at UT 0), in radians.
     ///
     /// **Game Scenes**: All
-    fn initial_rotation(&self) -> Radians<f32> {
+    fn initial_rotation(&self) -> f32 {
         SpaceCenter.CelestialBody_get_InitialRotation(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -101,7 +99,7 @@ impl CelestialBody {
     /// Returns the equatorial radius of the body, in meters.
     ///
     /// **Game Scenes**: All
-    fn equatorial_radius(&self) -> Length<f32> {
+    fn equatorial_radius(&self) -> f32 {
         SpaceCenter.CelestialBody_get_EquatorialRadius(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -114,7 +112,7 @@ impl CelestialBody {
     /// # Arguments
     /// * `latitude` - Latitude in degrees.
     /// * `longitude` – Longitude in degrees.
-    fn surface_height(&self, latitude: Degrees<f64>, longitude: Degrees<f64>) -> Length<f64> {
+    fn surface_height(&self, latitude: f64, longitude: f64) -> f64 {
         SpaceCenter.CelestialBody_SurfaceHeight(self, latitude, longitude)
             .ok_or(KrpcError::NullResponseValue)
     });
@@ -127,7 +125,7 @@ impl CelestialBody {
     /// # Arguments
     /// * `latitude` - Latitude in degrees.
     /// * `longitude` – Longitude in degrees.
-    fn bedrock_height(&self, latitude: Degrees<f64>, longitude: Degrees<f64>) -> Length<f64> {
+    fn bedrock_height(&self, latitude: f64, longitude: f64) -> f64 {
         SpaceCenter.CelestialBody_BedrockHeight(self, latitude, longitude)
             .ok_or(KrpcError::NullResponseValue)
     });
@@ -142,7 +140,7 @@ impl CelestialBody {
     /// * `latitude` - Latitude in degrees.
     /// * `longitude` - Longitude in degrees.
     /// * `reference_frame` - Reference frame for the returned position vector.
-    fn mean_sea_level_position(&self, latitude: Degrees<f64>, longitude: Degrees<f64>,
+    fn mean_sea_level_position(&self, latitude: f64, longitude: f64,
             reference_frame: &ReferenceFrame) -> Vector3 {
         SpaceCenter.CelestialBody_MSLPosition(self,
             latitude,
@@ -160,7 +158,7 @@ impl CelestialBody {
     /// * `latitude` - Latitude in degrees.
     /// * `longitude` - Longitude in degrees.
     /// * `reference_frame` - Reference frame for the returned position vector.
-    fn surface_position(&self, latitude: Degrees<f64>, longitude: Degrees<f64>,
+    fn surface_position(&self, latitude: f64, longitude: f64,
             reference_frame: &ReferenceFrame) -> Vector3 {
         SpaceCenter.CelestialBody_SurfacePosition(self,
             latitude,
@@ -178,7 +176,7 @@ impl CelestialBody {
     /// * `latitude` - Latitude in degrees.
     /// * `longitude` - Longitude in degrees.
     /// * `reference_frame` - Reference frame for the returned position vector.
-    fn bedrock_position(&self, latitude: Degrees<f64>, longitude: Degrees<f64>,
+    fn bedrock_position(&self, latitude: f64, longitude: f64,
             reference_frame: &ReferenceFrame) -> Vector3 {
         SpaceCenter.CelestialBody_BedrockPosition(self,
             latitude,
@@ -197,8 +195,8 @@ impl CelestialBody {
     /// * `longitude` - Longitude in degrees.
     /// * `altitude` - Altitude in meters above sea level.
     /// * `reference_frame` - Reference frame for the returned position vector.
-    fn position_at_altitude(&self, latitude: Degrees<f64>, longitude: Degrees<f64>,
-            altitude: Length<f64>, reference_frame: &ReferenceFrame) -> Vector3 {
+    fn position_at_altitude(&self, latitude: f64, longitude: f64,
+            altitude: f64, reference_frame: &ReferenceFrame) -> Vector3 {
         SpaceCenter.CelestialBody_PositionAtAltitude(self,
             latitude,
             longitude,
@@ -214,7 +212,7 @@ impl CelestialBody {
     /// # Arguments
     /// * `position` - Position as a vector.
     /// * `reference_frame` - Reference frame for the position vector.
-    fn altitude_at_position(&self, position: Vector3, reference_frame: &ReferenceFrame) -> Length<f64> {
+    fn altitude_at_position(&self, position: Vector3, reference_frame: &ReferenceFrame) -> f64 {
         SpaceCenter.CelestialBody_AltitudeAtPosition(self,
             position,
             reference_frame).ok_or(KrpcError::NullResponseValue)
@@ -228,7 +226,7 @@ impl CelestialBody {
     /// # Arguments
     /// * `position` - Position as a vector.
     /// * `reference_frame` - Reference frame for the position vector.
-    fn latitude_at_position(&self, position: Vector3, reference_frame: &ReferenceFrame) -> Degrees<f64> {
+    fn latitude_at_position(&self, position: Vector3, reference_frame: &ReferenceFrame) -> f64 {
         SpaceCenter.CelestialBody_LatitudeAtPosition(self,
             position,
             reference_frame).ok_or(KrpcError::NullResponseValue)
@@ -242,7 +240,7 @@ impl CelestialBody {
     /// # Arguments
     /// * `position` - Position as a vector.
     /// * `reference_frame` - Reference frame for the position vector.
-    fn longitude_at_position(&self, position: Vector3, reference_frame: &ReferenceFrame) -> Degrees<f64> {
+    fn longitude_at_position(&self, position: Vector3, reference_frame: &ReferenceFrame) -> f64 {
         SpaceCenter.CelestialBody_LongitudeAtPosition(self,
             position,
             reference_frame).ok_or(KrpcError::NullResponseValue)
@@ -252,7 +250,7 @@ impl CelestialBody {
     /// Returns the radius of the sphere of influence of the body, in meters.
     ///
     /// **Game Scenes**: All
-    fn sphere_of_influence(&self) -> Length<f32> {
+    fn sphere_of_influence(&self) -> f32 {
         SpaceCenter.CelestialBody_get_SphereOfInfluence(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -268,7 +266,7 @@ impl CelestialBody {
     /// Returns the depth of the atmosphere, in meters.
     ///
     /// **Game Scenes**: All
-    fn atmosphere_depth(&self) -> Length<f32> {
+    fn atmosphere_depth(&self) -> f32 {
         SpaceCenter.CelestialBody_get_AtmosphereDepth(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -281,7 +279,8 @@ impl CelestialBody {
     /// # Arguments
     /// * `position` - Position as a vector.
     /// * `reference_frame` - Reference frame for the position vector.
-    fn atmospheric_density_at_position(&self, position: Vector3, reference_frame: &ReferenceFrame) -> Density<f64> {
+    fn atmospheric_density_at_position(&self, position: Vector3,
+            reference_frame: &ReferenceFrame) -> f64 {
         SpaceCenter.CelestialBody_AtmosphericDensityAtPosition(self,
             position,
             reference_frame).ok_or(KrpcError::NullResponseValue)
@@ -305,7 +304,7 @@ impl CelestialBody {
     /// # Note
     /// This calculation is performed using the bodies current position, which means that
     /// the value could be wrong if you want to know the temperature in the far future.
-    fn temperature_at(&self, position: Vector3, reference_frame: &ReferenceFrame) -> ThermodynamicTemperature<f64> {
+    fn temperature_at(&self, position: Vector3, reference_frame: &ReferenceFrame) -> f64 {
         SpaceCenter.CelestialBody_TemperatureAt(self,
             position,
             reference_frame).ok_or(KrpcError::NullResponseValue)
@@ -325,7 +324,7 @@ impl CelestialBody {
     /// compute air temperature, require us to know the exact point on the body where the density
     /// is to be computed (knowing the altitude is not enough). However, the difference is small
     /// for high altitudes, so it makes very little difference for trajectory prediction.
-    fn density_at(&self, altitude: Length<f64>) -> Density<f64> {
+    fn density_at(&self, altitude: f64) -> f64 {
         SpaceCenter.CelestialBody_DensityAt(self, altitude).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -336,7 +335,7 @@ impl CelestialBody {
     ///
     /// # Arguments
     /// * `altitude` - The altitude above sea level, in meters.
-    fn pressure_at(&self, altitude: Length<f64>) -> Pressure<f64> {
+    fn pressure_at(&self, altitude: f64) -> f64 {
         SpaceCenter.CelestialBody_PressureAt(self, altitude).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -344,7 +343,7 @@ impl CelestialBody {
     /// Returns the biomes present on this body.
     ///
     /// **Game Scenes**: All
-    fn biomes(&self, altitude: Length<f64>) -> HashSet<String> {
+    fn biomes(&self, altitude: f64) -> HashSet<String> {
         SpaceCenter.CelestialBody_get_Biomes(self, altitude).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -356,7 +355,7 @@ impl CelestialBody {
     /// # Arguments
     /// * `latitude` - Latitude in degrees.
     /// * `longitude` – Longitude in degrees.
-    fn biome_at(&self, latitude: Degrees<f64>, longitude: Degrees<f64>) -> String {
+    fn biome_at(&self, latitude: f64, longitude: f64) -> String {
         SpaceCenter.CelestialBody_BiomeAt(self, latitude, longitude).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -365,7 +364,7 @@ impl CelestialBody {
     /// when doing science.
     ///
     /// **Game Scenes**: All
-    fn flying_high_altitude_threshold(&self) -> Length<f32> {
+    fn flying_high_altitude_threshold(&self) -> f32 {
         SpaceCenter.CelestialBody_get_FlyingHighAltitudeThreshold(self).ok_or(KrpcError::NullResponseValue)
     });
 
@@ -374,7 +373,7 @@ impl CelestialBody {
     /// space when doing science.
     ///
     /// **Game Scenes**: All
-    fn space_high_altitude_threshold(&self) -> Length<f32> {
+    fn space_high_altitude_threshold(&self) -> f32 {
         SpaceCenter.CelestialBody_get_SpaceHighAltitudeThreshold(self).ok_or(KrpcError::NullResponseValue)
     });
 

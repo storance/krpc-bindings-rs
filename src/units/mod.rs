@@ -8,10 +8,6 @@ pub mod angular_velocity;
 pub use crate::units::angle::*;
 pub use crate::units::angular_velocity::*;
 
-/// Type alias for a 3-dimension Vector.
-pub type Vector3 = (f64, f64, f64);
-/// Type alias for a Quaternion.
-pub type Quaternion = (f64, f64, f64, f64);
 
 /// Unit of measure for gravitational parameter (m<sup>3</sup>/s<sup>2</sup>).
 pub type GravitationalParameter<V> = Quantity<ISQ<P3, Z0, N2, Z0, Z0, Z0, Z0>, SI<V>, V>;

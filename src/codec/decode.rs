@@ -1,5 +1,4 @@
 use crate::{KrpcClient};
-use crate::units::{Angle, AngularVelocity, Degrees, DegreesPerSecond, Radians, RadiansPerSecond};
 use super::{CodecError};
 
 use protobuf::{CodedInputStream};
@@ -11,27 +10,8 @@ use std::cell::{RefCell};
 use std::collections::{BTreeMap, HashMap, BTreeSet, HashSet};
 use std::hash::{Hash};
 
-use core::marker::{PhantomData};
-
-use num_traits::{Num, Float};
-
-use uom::Conversion;
-use uom::typenum::{Integer};
-use uom::si::{Quantity, Dimension, SI};
-
-
 pub trait Decode where Self : Sized {
     fn decode(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError>;
-}
-
-#[doc(hidden)]
-macro_rules! wrapper_decode_impl {
-    (|$value: ident : $value_type: ty| $construct: expr) => {
-        fn decode(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-            let $value: $value_type = decode(bytes, client)?;
-            Ok($construct)
-        }
-    };
 }
 
 impl Decode for bool {
@@ -73,33 +53,6 @@ impl Decode for f32 {
 impl Decode for f64 {
     fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| Ok(cis.read_double()?))
-    }
-}
-
-// KRPC tends to encode a null double value as NaN so translate that to Option<f32>
-impl Decode for Option<f32> {
-    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| {
-            let value = cis.read_float()?;
-            Ok(if value.is_nan() {
-                None
-            } else {
-                Some(value)
-            })
-        })
-    }
-}
-
-impl Decode for Option<f64> {
-    fn decode(bytes: &Vec<u8>, _client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| {
-            let value = cis.read_double()?;
-            Ok(if value.is_nan() {
-                None
-            } else {
-                Some(value)
-            })
-        })
     }
 }
 
@@ -231,65 +184,6 @@ impl<T1 : Decode, T2 : Decode, T3 : Decode, T4 : Decode> Decode for (T1, T2, T3,
                 decode(&tuple.get_items()[3], client)?))
         })
     }
-}
-
-impl<T: Float + Decode> Decode for Degrees<T> {
-    wrapper_decode_impl!(|value: T| Self::new(value));
-}
-
-impl<T: Float + Decode> Decode for Option<Degrees<T>>
-    where Option<T> : Decode {
-    wrapper_decode_impl!(|value: Option<T>| value.map(Degrees::new));
-}
-
-impl<T: Float + Decode> Decode for Radians<T> {
-    wrapper_decode_impl!(|value: T| Self::new(value));
-}
-
-impl<T: Float + Decode> Decode for Option<Radians<T>>
-    where Option<T> : Decode {
-    wrapper_decode_impl!(|value: Option<T>| value.map(Radians::new));
-}
-
-impl<T: Float + Decode> Decode for DegreesPerSecond<T> {
-    wrapper_decode_impl!(|value: T| Self::new(value));
-}
-
-impl<T: Float + Decode> Decode for RadiansPerSecond<T> {
-    wrapper_decode_impl!(|value: T| Self::new(value));
-}
-
-impl<L : Integer,
-    M : Integer,
-    T : Integer,
-    I : Integer,
-    Th : Integer,
-    N : Integer,
-    J : Integer,
-    K : ?Sized,
-    V : Conversion<V> + Num + Decode> Decode for Quantity<Dimension<L = L, M = M, T = T, I = I, Th = Th, N = N, J = J, Kind = K>, SI<V>, V> {
-    wrapper_decode_impl!(|value: V| Quantity {
-        dimension: PhantomData,
-        units: PhantomData,
-        value: value
-    });
-}
-
-impl<L : Integer,
-    M : Integer,
-    T : Integer,
-    I : Integer,
-    Th : Integer,
-    N : Integer,
-    J : Integer,
-    K : ?Sized,
-    V : Conversion<V> + Num + Decode> Decode for Option<Quantity<Dimension<L = L, M = M, T = T, I = I, Th = Th, N = N, J = J, Kind = K>, SI<V>, V>>
-    where Option<V> : Decode {
-    wrapper_decode_impl!(|value: Option<V>| value.map(|v| Quantity {
-        dimension: PhantomData,
-        units: PhantomData,
-        value: v
-    }));
 }
 
 pub fn decode<T: Decode>(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<T, CodecError> {

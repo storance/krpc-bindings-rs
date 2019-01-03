@@ -5,7 +5,6 @@ use super::{Vessel, Node};
 use std::rc::{Rc};
 use std::cell::{RefCell};
 
-use uom::si::quantities::{Time, Velocity};
 
 remote_type!(
 /// Used to manipulate the controls of a vessel. This includes adjusting the throttle,
@@ -584,7 +583,7 @@ impl Control {
     /// * `prograde` – Delta-v in the prograde direction.
     /// * `normal` – Delta-v in the normal direction.
     /// * `radial` – Delta-v in the radial direction.
-    fn add_node(&self, ut: Time<f64>, prograde: Velocity<f32>, normal: Velocity<f32>, radial: Velocity<f32>) -> Node {
+    fn add_node(&self, ut: f64, prograde: f32, normal: f32, radial: f32) -> Node {
         SpaceCenter.Control_AddNode(self, ut, prograde, normal, radial)
             .ok_or(KrpcError::NullResponseValue)
     });

@@ -1,6 +1,5 @@
 use crate::*;
 use crate::codec::*;
-use crate::units::{Quaternion, Vector3};
 
 use std::rc::{Rc};
 use std::cell::{RefCell};

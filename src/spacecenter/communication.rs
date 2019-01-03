@@ -5,9 +5,6 @@ use super::spacecenter::{Vessel};
 use std::rc::{Rc};
 use std::cell::{RefCell};
 
-
-use uom::si::quantities::{Time};
-
 remote_type!(
 /// Used to interact with CommNet for a given vessel. Obtained by calling `Vessel::comms()`.
 object Comms {}
@@ -42,7 +39,7 @@ impl Comms {
     );
 
     rpc_property!(
-        SignalDelay: Time<f64> {
+        SignalDelay: f64 {
             service: SpaceCenter,
             class: Comms,
             /// Returns the signal delay to KSC in seconds.

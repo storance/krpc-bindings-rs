@@ -1,9 +1,7 @@
 extern crate krpc;
 extern crate protobuf;
-extern crate uom;
 
 pub mod spacecenter;
-pub mod units;
 #[macro_use]
 mod macros;
 mod codec;
@@ -93,4 +91,10 @@ impl From<CodecError> for KrpcError {
     }
 }
 
+/// Result type alias for Krpc calls.
 pub type KrpcResult<T> = Result<T, KrpcError>;
+
+/// Type alias for a 3-dimension Vector.
+pub type Vector3 = (f64, f64, f64);
+/// Type alias for a Quaternion.
+pub type Quaternion = (f64, f64, f64, f64);
