@@ -9,3 +9,7 @@ remote_type!(
 /// the information returned by this class is given in the reference frame passed to that method.
 object Flight {}
 );
+
+impl Flight {
+    
+}

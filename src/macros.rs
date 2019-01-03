@@ -1,6 +1,9 @@
 #[macro_export]
 macro_rules! rpc_method {
-    // RPC Class Method with pass self to rpc method and map decoded value
+    // RPC Class Method
+    // Passes self to rpc method
+    // Maps the decoded value
+    // Returns Err on no response
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
@@ -21,11 +24,13 @@ macro_rules! rpc_method {
         );
     };
 
-    // RPC Class Method with map decoded value
+    // RPC Class Method
+    // Maps the decoded value
+    // Returns Err on no response
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* )
+            $service : tt.$( $method : tt),+ ( $( $method_arg : expr ),* )
                 .map(|$value: ident : $value_type : ty| $success_expr: expr)
                 .ok_or($fail_expr: expr)
         }
@@ -34,7 +39,7 @@ macro_rules! rpc_method {
             $(#[$meta])*
             fn $func_name(&self $(, $arg_name : $arg_type)* ) -> $ret {
                 if let Some($value) = $service.$( $method ),+( $( $method_arg ),* ) as $value_type {
-                    success_expr
+                    $success_expr
                 } else {
                     return Err($fail_expr)
                 }
@@ -42,7 +47,98 @@ macro_rules! rpc_method {
         );
     };
 
-    // RPC Class Method with pass self to rpc method and return decoded value as is
+    // RPC Class Method
+    // Passes self to rpc method
+    // Maps the decoded value
+    // Returns None on no response
+    (
+        $(#[$meta:meta])*
+        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> Option<$ret : ty> {
+            $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* )
+                .map(|$value: ident : $value_type : ty| $success_expr: expr)
+        }
+    ) => {
+        rpc_method!(
+            $(#[$meta])*
+            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> Option<$ret> {
+                if let Some($value) = $service.$( $method ),+( self $(, $method_arg )* ) as $value_type {
+                    $success_expr
+                } else {
+                    None
+                }
+            }
+        );
+    };
+
+    // RPC Class Method
+    // Maps the decoded value
+    // Returns None on no response
+    (
+        $(#[$meta:meta])*
+        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> Option<$ret : ty> {
+            $service : tt.$( $method : tt),+ ( $( $method_arg : expr ),* )
+                .map(|$value: ident : $value_type : ty| $success_expr: expr)
+        }
+    ) => {
+        rpc_method!(
+            $(#[$meta])*
+            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> Option<$ret> {
+                if let Some($value) = $service.$( $method ),+( $( $method_arg ),* ) as $value_type {
+                    $success_expr
+                } else {
+                    None
+                }
+            }
+        );
+    };
+
+    // RPC Class Method
+    // Passes self to rpc method
+    // Returns decoded value as is
+    // Returns None on no response
+    (
+        $(#[$meta:meta])*
+        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> Option<$ret : ty> {
+            $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* )
+        }
+    ) => {
+        rpc_method!(
+            $(#[$meta])*
+            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> Option<$ret> {
+                if let Some(value) = $service.$( $method ),+( self $(, $method_arg )* ) as Option<$ret> {
+                    value
+                } else {
+                    None
+                }
+            }
+        );
+    };
+
+    // RPC Class Method
+    // Returns the decoded value as is
+    // Returns None on no response
+    (
+        $(#[$meta:meta])*
+        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> Option<$ret : ty> {
+            $service : tt.$( $method : tt),+ ( $( $method_arg : expr ),* )
+        }
+    ) => {
+        rpc_method!(
+            $(#[$meta])*
+            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> Option<$ret> {
+                if let Some(value) = $service.$( $method ),+( $( $method_arg ),* ) as Option<$ret> {
+                    value
+                } else {
+                    None
+                }
+            }
+        );
+    };
+
+    // RPC Class Method
+    // Passes self to rpc method
+    // Returns the decoded value
+    // Returns Err on no response
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
@@ -62,7 +158,9 @@ macro_rules! rpc_method {
         );
     };
 
-    // RPC Class Method with return decoded value as is
+    // RPC Class Method
+    // Returns the decoded value
+    // Returns Err on no response
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
@@ -82,7 +180,10 @@ macro_rules! rpc_method {
         );
     };
 
-    // RPC Class Method with pass self to rpc method
+    // RPC Class Method
+    // Passes self to rpc method
+    // Custom success case handling
+    // Custom no response case handling
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
@@ -108,6 +209,8 @@ macro_rules! rpc_method {
     };
 
     // RPC Class Method
+    // Custom success case handling
+    // Custom no response case handling
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
@@ -132,7 +235,9 @@ macro_rules! rpc_method {
         }
     };
 
-    // RPC Class Method with pass self to rpc method and Void return
+    // RPC Class Method
+    // Passes self to rpc method
+    // No return
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) {
@@ -149,7 +254,8 @@ macro_rules! rpc_method {
         }
     };
 
-    // RPC Class Method with Void return
+    // RPC Class Method
+    // No return
     (
         $(#[$meta:meta])*
         fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) {
@@ -167,7 +273,9 @@ macro_rules! rpc_method {
     };
 
 
-    // RPC Static Method with return decoded value as is
+    // RPC Static Method
+    // Returns the decoded value as is
+    // Returns Err on no response
     (
         $(#[$meta:meta])*
         fn $func_name: ident ($client: ident : &KrpcClient $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
@@ -187,7 +295,9 @@ macro_rules! rpc_method {
         );
     };
 
-    // RPC Static Method with map decoded value
+    // RPC Static Method
+    // Maps the decoded value
+    // Returns Err on no response
     (
         $(#[$meta:meta])*
         fn $func_name: ident ($client: ident : &KrpcClient $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
@@ -209,6 +319,8 @@ macro_rules! rpc_method {
     };
 
     // RPC Static Method
+    // Custom success case handling
+    // Custom no response case handling
     (
         $(#[$meta:meta])*
         fn $func_name: ident ($client: ident : &KrpcClient $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
@@ -233,7 +345,8 @@ macro_rules! rpc_method {
         }
     };
 
-    // RPC Static Method with Void return
+    // RPC Static Method
+    // No return
     (
         $(#[$meta:meta])*
         fn $func_name: ident ($client: ident : &KrpcClient $(, $arg_name : ident : $arg_type : ty)* ) {
@@ -254,6 +367,44 @@ macro_rules! rpc_method {
 #[macro_export]
 macro_rules! rpc_property {
     // Class level props
+    (
+        $prop_name: ident : Option<$prop_type: ty> {
+            service: $service: tt,
+            class: $class: tt,
+            $(#[$getter_meta:meta])*
+            $getter_name: ident,
+            $(#[$setter_meta:meta])*
+            $setter_name: ident($arg_name: ident)
+        }
+    ) => {
+        rpc_method!(
+        $( #[$getter_meta] )*
+        fn $getter_name(&self) -> Option<$prop_type> {
+            $service.$class,_get_,$prop_name(self)
+        });
+
+        rpc_method!(
+        $(#[$setter_meta])*
+        fn $setter_name(&self, $arg_name: Option<$prop_type>) {
+            $service.$class,_set_,$prop_name(self, $arg_name)
+        });
+    };
+
+    (
+        $prop_name: ident : Option<$prop_type: ty> {
+            service: $service: tt,
+            class: $class: tt,
+            $(#[$getter_meta:meta])*
+            $getter_name: ident
+        }
+    ) => {
+        rpc_method!(
+        $( #[$getter_meta] )*
+        fn $getter_name(&self) -> Option<$prop_type> {
+            $service.$class,_get_,$prop_name(self)
+        });
+    };
+
     (
         $prop_name: ident : $prop_type: ty {
             service: $service: tt,

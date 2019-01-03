@@ -5,10 +5,16 @@ use protobuf::{CodedOutputStream, RepeatedField};
 
 use krpc::schema::{List, Dictionary, Set, DictionaryEntry, Tuple};
 
+use std::f32::NAN as NAN_f32;
+use std::f64::NAN as NAN_f64;
 use std::collections::{BTreeMap, HashMap, HashSet, BTreeSet};
 use std::hash::{Hash};
 
-use uom::si;
+use num_traits::{Num, Float};
+
+use uom::Conversion;
+use uom::typenum::{Integer};
+use uom::si::{Quantity, Dimension, SI};
 
 pub trait Encode {
     fn encode(&self) -> Result<Vec<u8>, CodecError>;
@@ -53,6 +59,18 @@ impl Encode for f32 {
 impl Encode for f64 {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| Ok(cos.write_double_no_tag(*self)?))
+    }
+}
+
+impl Encode for Option<f32> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        encode_with(|cos| Ok(cos.write_float_no_tag(self.unwrap_or(NAN_f32))?))
+    }
+}
+
+impl Encode for Option<f64> {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        encode_with(|cos| Ok(cos.write_double_no_tag(self.unwrap_or(NAN_f64))?))
     }
 }
 
@@ -215,29 +233,32 @@ impl<T1 : Encode, T2 : Encode, T3 : Encode, T4 : Encode> Encode for (T1, T2, T3,
     }
 }
 
-impl Encode for Degrees<f64> {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_double_no_tag(self.scalar())?))
-    }
-}
-
-impl Encode for Degrees<f32> {
+impl<T: Float + Encode> Encode for Degrees<T> {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         self.scalar().encode()
     }
 }
 
-impl Encode for Radians<f64> {
+impl<T: Float + Encode> Encode for Option<Degrees<T>>
+    where Option<T> : Encode {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        self.as_ref().map(Degrees::scalar).encode()
+    }
+}
+
+impl<T: Float + Encode> Encode for Radians<T> {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         self.scalar().encode()
     }
 }
 
-impl Encode for Radians<f32> {
+impl<T: Float + Encode> Encode for Option<Radians<T>>
+    where Option<T> : Encode {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        self.scalar().encode()
+        self.as_ref().map(Radians::scalar).encode()
     }
 }
+
 
 impl Encode for DegreesPerSecond<f64> {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
@@ -263,29 +284,32 @@ impl Encode for RadiansPerSecond<f32> {
     }
 }
 
-impl<L : uom::typenum::Integer,
-    M : uom::typenum::Integer,
-    T : uom::typenum::Integer,
-    I : uom::typenum::Integer,
-    Th : uom::typenum::Integer,
-    N : uom::typenum::Integer,
-    J : uom::typenum::Integer,
-    K : ?Sized> Encode for si::Quantity<si::Dimension<L = L, M = M, T = T, I = I, Th = Th, N = N, J = J, Kind = K>, si::SI<f64>, f64> {
+impl<L : Integer,
+    M : Integer,
+    T : Integer,
+    I : Integer,
+    Th : Integer,
+    N : Integer,
+    J : Integer,
+    K : ?Sized,
+    V : Conversion<V> + Num + Encode> Encode for Quantity<Dimension<L = L, M = M, T = T, I = I, Th = Th, N = N, J = J, Kind = K>, SI<V>, V> {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         self.value.encode()
     }
 }
 
-impl<L : uom::typenum::Integer,
-    M : uom::typenum::Integer,
-    T : uom::typenum::Integer,
-    I : uom::typenum::Integer,
-    Th : uom::typenum::Integer,
-    N : uom::typenum::Integer,
-    J : uom::typenum::Integer,
-    K : ?Sized> Encode for si::Quantity<si::Dimension<L = L, M = M, T = T, I = I, Th = Th, N = N, J = J, Kind = K>, si::SI<f32>, f32> {
+impl<L : Integer,
+    M : Integer,
+    T : Integer,
+    I : Integer,
+    Th : Integer,
+    N : Integer,
+    J : Integer,
+    K : ?Sized,
+    V : Conversion<V> + Num + Encode + Clone> Encode for Option<Quantity<Dimension<L = L, M = M, T = T, I = I, Th = Th, N = N, J = J, Kind = K>, SI<V>, V>>
+    where Option<V> : Encode {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        self.value.encode()
+        self.as_ref().map(|q| q.value.clone()).encode()
     }
 }
 

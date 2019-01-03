@@ -1,9 +1,8 @@
 use crate::*;
 use crate::codec::*;
-use crate::units::{Angle, Degrees, Vector3};
+use crate::units::{Degrees, Vector3};
 use super::{ReferenceFrame, SASMode};
 
-use std::f32::NAN;
 use std::rc::{Rc};
 use std::cell::{RefCell};
 
@@ -151,17 +150,11 @@ impl AutoPilot {
             /// Returns the target roll or `None` if no target roll is set.
             ///
             /// **Game Scenes**: Flight
-            target_roll => |value: f32| {
-                if value.is_nan() {
-                    None
-                } else {
-                    Some(Degrees::new(value))
-                }
-            },
+            target_roll,
             /// Sets the target roll or `None` for no target roll.
             ///
             /// **Game Scenes**: Flight
-            set_target_roll(target_roll) => target_roll.map(|v| v.scalar()).unwrap_or(NAN)
+            set_target_roll(target_roll)
         }
     );
 

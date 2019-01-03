@@ -350,13 +350,7 @@ impl Orbit {
     /// **Game Scenes**: All
     fn time_to_soi_change(&self) -> Option<Time> {
         SpaceCenter.Orbit_get_TimeToSOIChange(self)
-            .map(|value: f64| {
-                if value.is_nan() {
-                    None
-                } else {
-                    Some(Time::new::<second>(value))
-                }
-            }).ok_or(KrpcError::NullResponseValue)
+            .ok_or(KrpcError::NullResponseValue)
     });
 
     rpc_method!(
