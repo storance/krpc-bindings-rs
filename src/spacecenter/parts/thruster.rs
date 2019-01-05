@@ -12,15 +12,13 @@ remote_type!(
 /// # Note
 /// Engines can consist of multiple thrusters. For example, the S3 KS-25x4 “Mammoth” has four
 /// rocket nozzels, and so consists of four thrusters.
-object Thruster {});
-
-impl Thruster {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: Thruster,
+object Thruster {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this thruster.
-            part
+            get: part
         }
-    );
-}
+    }
+});

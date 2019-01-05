@@ -7,15 +7,13 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// An rcs block or thruster. Obtained by calling `Part::rcs().`
-object RCS {});
-
-impl RCS {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: RCS,
+object RCS {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this rcs block or thruster.
-            part
+            get: part
         }
-    );
-}
+    }
+});

@@ -7,161 +7,105 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// Used to interact with CommNet for a given vessel. Obtained by calling `Vessel::comms()`.
-object Comms {}
-);
-
-impl Comms {
-    rpc_property!(
-        CanCommunicate: bool {
-            service: SpaceCenter,
-            class: Comms,
+object Comms {
+    service: SpaceCenter,
+    properties: {
+        {
+            CanCommunicate: bool,
             /// Returns whether the vessel can communicate with KSC.
-            has_uplink
+            get: has_uplink
         }
-    );
-
-    rpc_property!(
-        CanTransmitScience: bool {
-            service: SpaceCenter,
-            class: Comms,
+        {
+            CanTransmitScience: bool,
             /// Returns whether the vessel can transmit science data to KSC.
-            is_science_transmittable
+            get: is_science_transmittable
         }
-    );
-
-    rpc_property!(
-        SignalStrength: f64 {
-            service: SpaceCenter,
-            class: Comms,
+        {
+            SignalStrength: f64,
             /// Returns the signal strength to KSC.
-            signal_strength
+            get: signal_strength
         }
-    );
-
-    rpc_property!(
-        SignalDelay: f64 {
-            service: SpaceCenter,
-            class: Comms,
+        {
+            SignalDelay: f64,
             /// Returns the signal delay to KSC in seconds.
-            signal_delay
+            get: signal_delay
         }
-    );
-
-    rpc_property!(
-        Power: f64 {
-            service: SpaceCenter,
-            class: Comms,
+        {
+            Power: f64,
             /// Returns the combined power of all active antennae on the vessel.
-            power
+            get: power
         }
-    );
-
-    rpc_property!(
-        ControlPath: Vec<CommLink> {
-            service: SpaceCenter,
-            class: Comms,
+        {
+            ControlPath: Vec<CommLink>,
             /// Returns the combined power of all active antennae on the vessel.
-            control_path
+            get: control_path
         }
-    );
-}
+    }
+});
 
 remote_type!(
 /// Represents a communication node in the network. For example, a vessel or the KSC.
-object CommLink {}
-);
-
-impl CommLink {
-    rpc_property!(
-        Type: CommLinkType {
-            service: SpaceCenter,
-            class: CommLink,
+object CommLink {
+    service: SpaceCenter,
+    properties: {
+        {
+            Type: CommLinkType,
             /// Returns the type of link
-            link_type
+            get: link_type
         }
-    );
-
-    rpc_property!(
-        SignalStrength: f64 {
-            service: SpaceCenter,
-            class: CommLink,
+        {
+            SignalStrength: f64,
             /// Returns the signal strength of the link.
-            signal_strength
+            get: signal_strength
         }
-    );
-
-    rpc_property!(
-        Start: CommNode {
-            service: SpaceCenter,
-            class: CommLink,
+        {
+            Start: CommNode,
             /// Returns the start point of the link.
-            start
+            get: start
         }
-    );
-
-    rpc_property!(
-        End: CommNode {
-            service: SpaceCenter,
-            class: CommLink,
+        {
+            End: CommNode,
             /// Returns the end point of the link.
-            end
+            get: end
         }
-    );
-}
+    }
+
+});
 
 remote_type!(
 /// Represents a communication node in the network. For example, a vessel or the KSC.
-object CommNode {}
-);
-
-impl CommNode {
-    rpc_property!(
-        Name: String {
-            service: SpaceCenter,
-            class: CommNode,
+object CommNode {
+    service: SpaceCenter,
+    properties: {
+        {
+            Name: String,
             /// Returns the name of the communication node.
-            name
+            get: name
         }
-    );
-
-    rpc_property!(
-        IsHome: bool {
-            service: SpaceCenter,
-            class: CommNode,
+        {
+            IsHome: bool,
             /// Returns whether the communication node is on Kerbin.
-            is_home
+            get: is_home
         }
-    );
-
-    rpc_property!(
-        IsControlPoint: bool {
-            service: SpaceCenter,
-            class: CommNode,
+        {
+            IsControlPoint: bool,
             /// Returns whether the communication node is a control point, for example
             /// a manned vessel.
-            is_control_point
+            get: is_control_point
         }
-    );
-
-    rpc_property!(
-        IsVessel: bool {
-            service: SpaceCenter,
-            class: CommNode,
+        {
+            IsVessel: bool,
             /// Returns whether the communication node is a vessel.
-            is_vessel
+            get: is_vessel
         }
-    );
-
-    rpc_property!(
-        Vessel: Option<Vessel> {
-            service: SpaceCenter,
-            class: CommNode,
+        {
+            Vessel: Option<Vessel>,
             /// Returns the vessel for this communication node.
-            vessel
+            get: vessel
         }
-    );
-}
+    }
 
+});
 
 remote_type!(
     /// The type of communication link.

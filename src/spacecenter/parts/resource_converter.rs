@@ -7,18 +7,16 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A resource converter. Obtained by calling `Part::resource_converter().`
-object ResourceConverter {});
-
-impl ResourceConverter {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: ResourceConverter,
+object ResourceConverter {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this resource converter.
-            part
+            get: part
         }
-    );
-}
+    }
+});
 
 remote_type!(
 /// The state of a resource converter.

@@ -7,18 +7,16 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A solar panel. Obtained by calling `Part::solar_panel().`
-object SolarPanel {});
-
-impl SolarPanel {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: SolarPanel,
+object SolarPanel {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this solar panel.
-            part
+            get: part
         }
-    );
-}
+    }
+});
 
 remote_type!(
 /// The state of a solar panel.

@@ -7,15 +7,13 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A light. Obtained by calling `Part::light().`
-object Light {});
-
-impl Light {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: Light,
+object Light {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this light.
-            part
+            get: part
         }
-    );
-}
+    }
+});

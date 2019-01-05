@@ -7,15 +7,13 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// An reaction wheel. Obtained by calling `Part::reaction_wheel().`
-object ReactionWheel {});
-
-impl ReactionWheel {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: ReactionWheel,
+object ReactionWheel {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this reaction wheel.
-            part
+            get: part
         }
-    );
-}
+    }
+});

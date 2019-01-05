@@ -7,18 +7,16 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A radiator. Obtained by calling `Part::radiator().`
-object Radiator {});
-
-impl Radiator {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: Radiator,
+object Radiator {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this radiator.
-            part
+            get: part
         }
-    );
-}
+    }
+});
 
 remote_type!(
 /// The state of a radiator.

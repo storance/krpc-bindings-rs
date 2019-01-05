@@ -7,18 +7,16 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// An experiment. Obtained by calling `Part::experiment().`
-object Experiment {});
-
-impl Experiment {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: Experiment,
-            /// The part object for this experiment.
-            part
+object Experiment {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
+            /// The part object for this experiment
+            get: part
         }
-    );
-}
+    }
+});
 
 remote_type!(
 /// Obtained by calling `Experiment::data()`.

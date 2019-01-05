@@ -7,18 +7,16 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A cargo bay. Obtained by calling `Part::cargo_bay().`
-object CargoBay {});
-
-impl CargoBay {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: CargoBay,
+object CargoBay {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this cargo bay.
-            part
+            get: part
         }
-    );
-}
+    }
+});
 
 remote_type!(
 /// The state of a cargo bay. See <see cref="M:SpaceCenter.CargoBay.State" />.

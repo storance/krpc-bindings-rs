@@ -7,15 +7,13 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A decoupler. Obtained by calling `Part::decoupler().`
-object Decoupler {});
-
-impl Decoupler {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: Decoupler,
+object Decoupler {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this decoupler.
-            part
+            get: part
         }
-    );
-}
+    }
+});

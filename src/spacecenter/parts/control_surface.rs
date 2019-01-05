@@ -7,15 +7,13 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A control surface. Obtained by calling `Part::control_surface().`
-object ControlSurface {});
-
-impl ControlSurface {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: ControlSurface,
-            /// The part object for this control surface.
-            part
+object ControlSurface {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
+            /// The part object for this control surface
+            get: part
         }
-    );
-}
+    }
+});

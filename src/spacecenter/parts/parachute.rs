@@ -7,18 +7,16 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A parachute. Obtained by calling `Part::parachute().`
-object Parachute {});
-
-impl Parachute {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: Parachute,
+object Parachute {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this parachute.
-            part
+            get: part
         }
-    );
-}
+    }
+});
 
 remote_type!(
 /// The state of a parachute.

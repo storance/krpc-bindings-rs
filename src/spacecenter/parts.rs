@@ -55,33 +55,36 @@ pub use self::wheel::*;
 remote_type!(
 /// Instances of this class are used to interact with the parts of a vessel. An instance can
 /// be obtained by calling `Vessel::parts()`.
-object Parts {});
-
-impl Parts {
-    rpc_method!(fn all(&self) -> Vec<Part> {
-        if let Some(value) = SpaceCenter.Parts_get_All(self) as Vec<Part> {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
+object Parts {
+    service: SpaceCenter,
+    properties: {
+        {
+            All: Vec<Part>,
+            get: all
         }
-    });
-}
+    }
+});
+
 
 remote_type!(
 /// Represents an individual part. Vessels are made up of multiple parts. Instances of this
 /// class can be obtained by several methods in `Parts`.
-object Part {});
-
-impl Part {
-    rpc_method!(fn name(&self) -> String {
-        if let Some(value) = SpaceCenter.Part_get_Name(self) as String {
-            value
-        } else {
-            return Err(KrpcError::NullResponseValue)
+object Part {
+    service: SpaceCenter,
+    properties: {
+        {
+            Name: String,
+            get: name
         }
-    });
-}
+    }
+});
+
 
 remote_type!(
 /// Obtained by calling `Part::add_force()`.
-object Force {});
+object Force {
+    service: SpaceCenter,
+    properties: {
+
+    }
+});

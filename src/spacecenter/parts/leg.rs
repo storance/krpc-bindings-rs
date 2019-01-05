@@ -7,18 +7,16 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A landing leg. Obtained by calling `Part::leg().`
-object Leg {});
-
-impl Leg {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: Leg,
-            /// The part object for this landing leg.
-            part
+object Leg {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
+            /// The part object for this leg.
+            get: part
         }
-    );
-}
+    }
+});
 
 remote_type!(
 /// The state of a landing leg.

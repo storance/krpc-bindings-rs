@@ -7,18 +7,16 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// An antenna. Obtained by calling `Part::antenna().`
-object Antenna {});
-
-impl Antenna {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: Antenna,
+object Antenna {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this antenna.
-            part
+            get: part
         }
-    );
-}
+    }
+});
 
 remote_type!(
 /// The state of an antenna.

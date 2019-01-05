@@ -7,18 +7,16 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A resource harvester. Obtained by calling `Part::resource_harvester().`
-object ResourceHarvester {});
-
-impl ResourceHarvester {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: ResourceHarvester,
+object ResourceHarvester {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this resource harvester.
-            part
+            get: part
         }
-    );
-}
+    }
+});
 
 remote_type!(
 /// The state of a resource harvester.

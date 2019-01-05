@@ -8,18 +8,16 @@ use std::cell::{RefCell};
 remote_type!(
 /// A wheel. Includes landing gear and rover wheels. Obtained by calling `Part::wheel()`. Can be
 /// used to control the motors, steering and deployment of wheels, among other things.
-object Wheel {});
-
-impl Wheel {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: Wheel,
+object Wheel {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this wheel.
-            part
+            get: part
         }
-    );
-}
+    }
+});
 
 remote_type!(
 /// The state of a wheel. See <see cref="M:SpaceCenter.Wheel.State" />.

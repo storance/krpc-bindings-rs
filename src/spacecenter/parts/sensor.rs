@@ -7,15 +7,13 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A sensor, such as a thermometer. Obtained by calling `Part::sensor().`
-object Sensor {});
-
-impl Sensor {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: Sensor,
+object Sensor {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
             /// The part object for this sensor.
-            part
+            get: part
         }
-    );
-}
+    }
+});

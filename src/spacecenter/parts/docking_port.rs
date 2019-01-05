@@ -7,18 +7,16 @@ use std::cell::{RefCell};
 
 remote_type!(
 /// A docking port. Obtained by calling `Part::docking_port().`
-object DockingPort {});
-
-impl DockingPort {
-    rpc_property!(
-        Part: Part {
-            service: SpaceCenter,
-            class: DockingPort,
-            /// The part object for this docking port.
-            part
+object DockingPort {
+    service: SpaceCenter,
+    properties: {
+        {
+            Part: Part,
+            /// The part object for this docking part.
+            get: part
         }
-    );
-}
+    }
+});
 
 remote_type!(enum DockingPortState {
     Ready => 0,
