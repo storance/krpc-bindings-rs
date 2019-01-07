@@ -8,7 +8,7 @@ mod codec;
 
 use krpc::rpc::{Rpc};
 use krpc::stream::{Stream};
-use krpc::{TransceiverError};
+use krpc::{TransceiverError, ConnectionErr};
 
 use protobuf::{ProtobufError};
 
@@ -17,6 +17,7 @@ use std::cell::{RefCell};
 use std::error::{Error};
 use std::fmt;
 use std::io;
+use std::thread;
 
 
 use crate::codec::{CodecError};
@@ -37,6 +38,15 @@ pub struct KrpcClient {
     pub rpc : Rpc,
     pub stream: Stream
 }
+
+/*impl KrpcClient {
+    fn connect(name: &str, host: &str, rpc_port: u16, stream_port: u16) -> Result<KrpcClient, ConnectionErr> {
+        let rpc = Rpc::new((host, rpc_port), name)?;
+        let stream = Stream::new((host, stream_port), rpc)?;
+
+        Ok(KrpcClient{rpc, stream})
+    }
+}*/
 
 #[derive(Debug)]
 pub enum KrpcError {
