@@ -2,6 +2,7 @@ extern crate krpc;
 extern crate protobuf;
 
 pub mod spacecenter;
+mod streams;
 #[macro_use]
 mod macros;
 mod codec;
