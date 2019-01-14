@@ -1,14 +1,17 @@
-use crate::{Connection};
-use crate::client::{List, Dictionary, Tuple, Set};
-use super::{CodecError};
+use super::CodecError;
+use crate::client::{Dictionary, List, Set, Tuple};
+use crate::Connection;
 
-use protobuf::{CodedInputStream};
+use protobuf::CodedInputStream;
 
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+use std::hash::Hash;
 use std::rc::Rc;
-use std::collections::{BTreeMap, HashMap, BTreeSet, HashSet};
-use std::hash::{Hash};
 
-pub trait Decode where Self : Sized {
+pub trait Decode
+where
+    Self: Sized,
+{
     fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError>;
 }
 
@@ -66,7 +69,7 @@ impl Decode for Vec<u8> {
     }
 }
 
-impl<'a, T : Decode> Decode for Vec<T> {
+impl<'a, T: Decode> Decode for Vec<T> {
     fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let entries: List = cis.read_message()?;
@@ -80,7 +83,7 @@ impl<'a, T : Decode> Decode for Vec<T> {
     }
 }
 
-impl<'a, K : Decode + Ord, V : Decode> Decode for BTreeMap<K, V> {
+impl<'a, K: Decode + Ord, V: Decode> Decode for BTreeMap<K, V> {
     fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let entries: Dictionary = cis.read_message()?;
@@ -89,14 +92,15 @@ impl<'a, K : Decode + Ord, V : Decode> Decode for BTreeMap<K, V> {
             for entry in entries.entries.iter() {
                 decoded_map.insert(
                     decode(&entry.key, connection.clone())?,
-                    decode(&entry.value, connection.clone())?);
+                    decode(&entry.value, connection.clone())?,
+                );
             }
             Ok(decoded_map)
         })
     }
 }
 
-impl<'a, K : Decode + Eq + Hash, V : Decode> Decode for HashMap<K, V> {
+impl<'a, K: Decode + Eq + Hash, V: Decode> Decode for HashMap<K, V> {
     fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let entries: Dictionary = cis.read_message()?;
@@ -105,14 +109,15 @@ impl<'a, K : Decode + Eq + Hash, V : Decode> Decode for HashMap<K, V> {
             for entry in entries.entries.iter() {
                 decoded_map.insert(
                     decode(&entry.key, connection.clone())?,
-                    decode(&entry.value, connection.clone())?);
+                    decode(&entry.value, connection.clone())?,
+                );
             }
             Ok(decoded_map)
         })
     }
 }
 
-impl<'a, T : Decode + Eq + Hash> Decode for HashSet<T> {
+impl<'a, T: Decode + Eq + Hash> Decode for HashSet<T> {
     fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let entries: Set = cis.read_message()?;
@@ -126,7 +131,7 @@ impl<'a, T : Decode + Eq + Hash> Decode for HashSet<T> {
     }
 }
 
-impl<'a, T : Decode + Ord> Decode for BTreeSet<T> {
+impl<'a, T: Decode + Ord> Decode for BTreeSet<T> {
     fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let entries: Set = cis.read_message()?;
@@ -140,50 +145,56 @@ impl<'a, T : Decode + Ord> Decode for BTreeSet<T> {
     }
 }
 
-impl<'a, T1 : Decode, T2 : Decode> Decode for (T1, T2) {
+impl<'a, T1: Decode, T2: Decode> Decode for (T1, T2) {
     fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let tuple: Tuple = cis.read_message()?;
 
             if tuple.items.len() != 2 {
-                return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3))
+                return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3));
             }
 
-            Ok((decode(&tuple.get_items()[0], connection.clone())?,
-                decode(&tuple.get_items()[1], connection.clone())?))
-        })
-    }
-}
-
-impl<'a, T1 : Decode, T2 : Decode, T3 : Decode> Decode for (T1, T2, T3) {
-    fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| {
-            let tuple: Tuple = cis.read_message()?;
-
-            if tuple.items.len() != 3 {
-                return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3))
-            }
-
-            Ok((decode(&tuple.get_items()[0], connection.clone())?,
+            Ok((
+                decode(&tuple.get_items()[0], connection.clone())?,
                 decode(&tuple.get_items()[1], connection.clone())?,
-                decode(&tuple.get_items()[2], connection.clone())?))
+            ))
         })
     }
 }
 
-impl<'a, T1 : Decode, T2 : Decode, T3 : Decode, T4 : Decode> Decode for (T1, T2, T3, T4) {
+impl<'a, T1: Decode, T2: Decode, T3: Decode> Decode for (T1, T2, T3) {
     fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let tuple: Tuple = cis.read_message()?;
 
             if tuple.items.len() != 3 {
-                return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3))
+                return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3));
             }
 
-            Ok((decode(&tuple.get_items()[0], connection.clone())?,
+            Ok((
+                decode(&tuple.get_items()[0], connection.clone())?,
                 decode(&tuple.get_items()[1], connection.clone())?,
                 decode(&tuple.get_items()[2], connection.clone())?,
-                decode(&tuple.get_items()[3], connection.clone())?))
+            ))
+        })
+    }
+}
+
+impl<'a, T1: Decode, T2: Decode, T3: Decode, T4: Decode> Decode for (T1, T2, T3, T4) {
+    fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+        decode_with(bytes, |cis| {
+            let tuple: Tuple = cis.read_message()?;
+
+            if tuple.items.len() != 3 {
+                return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3));
+            }
+
+            Ok((
+                decode(&tuple.get_items()[0], connection.clone())?,
+                decode(&tuple.get_items()[1], connection.clone())?,
+                decode(&tuple.get_items()[2], connection.clone())?,
+                decode(&tuple.get_items()[3], connection.clone())?,
+            ))
         })
     }
 }
@@ -192,8 +203,10 @@ pub fn decode<'a, T: Decode>(bytes: &Vec<u8>, connection: Rc<Connection>) -> Res
     T::decode(bytes, connection)
 }
 
-fn decode_with<T, F>(bytes: &Vec<u8>, decoder : F) -> Result<T, CodecError>
-    where F: FnOnce(&mut CodedInputStream) -> Result<T, CodecError> {
+fn decode_with<T, F>(bytes: &Vec<u8>, decoder: F) -> Result<T, CodecError>
+where
+    F: FnOnce(&mut CodedInputStream) -> Result<T, CodecError>,
+{
     let mut cis = CodedInputStream::from_bytes(bytes);
     decoder(&mut cis)
 }

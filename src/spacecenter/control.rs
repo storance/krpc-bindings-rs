@@ -1,6 +1,6 @@
-use crate::*;
+use super::{Node, Vessel};
 use crate::codec::*;
-use super::{Vessel, Node};
+use crate::*;
 
 use std::rc::Rc;
 

@@ -1,12 +1,12 @@
-mod encode;
 mod decode;
+mod encode;
 
-pub use crate::codec::encode::*;
 pub use crate::codec::decode::*;
+pub use crate::codec::encode::*;
 
-use protobuf::{ProtobufError};
+use protobuf::ProtobufError;
 
-use std::error::{Error};
+use std::error::Error;
 use std::fmt;
 
 #[derive(Debug)]
@@ -14,15 +14,12 @@ pub enum CodecError {
     ProtobufError(ProtobufError),
     InvalidEnumValue(i64),
     NullValue,
-    MismatchedTupleLength {
-        actual: usize,
-        expected: usize
-    }
+    MismatchedTupleLength { actual: usize, expected: usize },
 }
 
 impl CodecError {
     pub fn mismatched_tuple_length(actual: usize, expected: usize) -> CodecError {
-        CodecError::MismatchedTupleLength {actual, expected}
+        CodecError::MismatchedTupleLength { actual, expected }
     }
 }
 
@@ -38,14 +35,16 @@ impl Error for CodecError {
             &CodecError::ProtobufError(ref e) => e.description(),
             &CodecError::InvalidEnumValue(..) => "Invalid enum value",
             &CodecError::NullValue => "Value was unexpectedly null",
-            &CodecError::MismatchedTupleLength{..} => "Actual tuple length does not match the expected tuple length",
+            &CodecError::MismatchedTupleLength { .. } => {
+                "Actual tuple length does not match the expected tuple length"
+            }
         }
     }
 
     fn cause(&self) -> Option<&Error> {
         match self {
             &CodecError::ProtobufError(ref e) => Some(e),
-            _ => None
+            _ => None,
         }
     }
 }

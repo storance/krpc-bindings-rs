@@ -1,26 +1,19 @@
-use super::{ConnectionRequest,
-            ConnectionRequest_Type,
-            ConnectionResponse,
-            ConnectionResponse_Status,
-            Request,
-            ProcedureCall,
-            Argument,
-            Response,
-            RpcError,
-            ConnectionNegotiateError,
-            recv_msg,
-            send_msg};
+use super::{
+    recv_msg, send_msg, Argument, ConnectionNegotiateError, ConnectionRequest,
+    ConnectionRequest_Type, ConnectionResponse, ConnectionResponse_Status, ProcedureCall, Request,
+    Response, RpcError,
+};
 
-use std::sync::Arc;
-use std::net::TcpStream;
 use std::cell::RefCell;
+use std::net::TcpStream;
+use std::sync::Arc;
 
 use failure::Error;
 use protobuf::RepeatedField;
 
 pub struct Rpc {
     id: Vec<u8>,
-    socket: RefCell<TcpStream>
+    socket: RefCell<TcpStream>,
 }
 
 impl Rpc {
@@ -38,24 +31,31 @@ impl Rpc {
         send_msg(&mut rpc_socket, &request)?;
         let response: ConnectionResponse = recv_msg(&mut rpc_socket)?;
 
-        let id  = match response.status {
-            ConnectionResponse_Status::OK =>
-                Vec::from(response.get_client_identifier()),
-            ConnectionResponse_Status::MALFORMED_MESSAGE =>
-                Err(ConnectionNegotiateError::MalformedMessage(response.message))?,
-            ConnectionResponse_Status::TIMEOUT =>
-                Err(ConnectionNegotiateError::Timeout(response.message))?,
-            ConnectionResponse_Status::WRONG_TYPE =>
+        let id = match response.status {
+            ConnectionResponse_Status::OK => Vec::from(response.get_client_identifier()),
+            ConnectionResponse_Status::MALFORMED_MESSAGE => {
+                Err(ConnectionNegotiateError::MalformedMessage(response.message))?
+            }
+            ConnectionResponse_Status::TIMEOUT => {
+                Err(ConnectionNegotiateError::Timeout(response.message))?
+            }
+            ConnectionResponse_Status::WRONG_TYPE => {
                 Err(ConnectionNegotiateError::WrongType(response.message))?
+            }
         };
 
-        Ok(Arc::new(Rpc{
+        Ok(Arc::new(Rpc {
             id,
-            socket: RefCell::new(rpc_socket)
+            socket: RefCell::new(rpc_socket),
         }))
     }
 
-    pub(super) fn invoke(&self, service: &str, procedure: &str, args: &Vec<Vec<u8>>) -> Result<Vec<u8>, Error> {
+    pub(super) fn invoke(
+        &self,
+        service: &str,
+        procedure: &str,
+        args: &Vec<Vec<u8>>,
+    ) -> Result<Vec<u8>, Error> {
         let request = Self::create_request(service, procedure, args);
 
         send_msg(&mut self.socket.borrow_mut(), &request)?;
@@ -76,7 +76,7 @@ impl Rpc {
     }
 
     fn create_request(service: &str, procedure: &str, args: &Vec<Vec<u8>>) -> Request {
-        let mut rpc_args= RepeatedField::new();
+        let mut rpc_args = RepeatedField::new();
 
         for (i, arg) in args.iter().enumerate() {
             let mut rpc_arg = Argument::new();

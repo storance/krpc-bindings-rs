@@ -1,6 +1,6 @@
-use crate::*;
+use super::Part;
 use crate::codec::*;
-use super::{Part};
+use crate::*;
 
 use std::collections::BTreeMap;
 use std::rc::Rc;

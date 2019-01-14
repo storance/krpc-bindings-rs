@@ -1,8 +1,8 @@
-use crate::*;
-use crate::codec::*;
 use super::{CelestialBody, Contract};
+use crate::codec::*;
+use crate::*;
 
-use std::collections::{BTreeMap};
+use std::collections::BTreeMap;
 use std::rc::Rc;
 
 remote_type!(

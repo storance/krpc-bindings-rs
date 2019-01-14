@@ -1,6 +1,6 @@
-use crate::*;
-use crate::codec::*;
 use super::{Orbit, ReferenceFrame};
+use crate::codec::*;
+use crate::*;
 
 use std::collections::HashSet;
 use std::rc::Rc;

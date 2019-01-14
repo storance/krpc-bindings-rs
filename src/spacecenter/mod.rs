@@ -1,7 +1,7 @@
-use crate::*;
 use crate::codec::*;
+use crate::*;
 
-use std::collections::{BTreeMap};
+use std::collections::BTreeMap;
 use std::rc::Rc;
 
 mod autopilot;
@@ -33,7 +33,6 @@ pub use self::reference_frame::*;
 pub use self::resources::*;
 pub use self::vessel::*;
 pub use self::waypoints::*;
-
 
 /// The VAB (Vehicle Assembly Building) craft directory
 pub const VAB: &'static str = "VAB";

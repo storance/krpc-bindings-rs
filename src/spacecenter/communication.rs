@@ -1,6 +1,6 @@
-use crate::*;
+use super::spacecenter::Vessel;
 use crate::codec::*;
-use super::spacecenter::{Vessel};
+use crate::*;
 
 use std::rc::Rc;
 

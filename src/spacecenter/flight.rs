@@ -1,6 +1,6 @@
-use crate::*;
+use super::CelestialBody;
 use crate::codec::*;
-use super::{CelestialBody};
+use crate::*;
 
 use std::rc::Rc;
 

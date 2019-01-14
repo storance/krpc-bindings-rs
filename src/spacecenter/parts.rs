@@ -1,6 +1,6 @@
-use crate::*;
+use super::{ReferenceFrame, Resources, Vessel};
 use crate::codec::*;
-use super::{Resources, ReferenceFrame, Vessel};
+use crate::*;
 
 use std::rc::Rc;
 
@@ -317,7 +317,6 @@ object SpaceCenter.Parts {
         }
     }
 });
-
 
 remote_type!(
 /// Represents an individual part. Vessels are made up of multiple parts. Instances of this
@@ -971,7 +970,6 @@ object SpaceCenter.Part {
         }
     }
 });
-
 
 remote_type!(
 /// Obtained by calling `Part::add_force()`.

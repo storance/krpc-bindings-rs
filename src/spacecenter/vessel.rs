@@ -1,6 +1,6 @@
-use crate::*;
+use super::{AutoPilot, Comms, Control, Flight, Orbit, Parts, ReferenceFrame, Resources};
 use crate::codec::*;
-use super::{ReferenceFrame, Orbit, Parts, Resources, Flight, AutoPilot, Control, Comms};
+use crate::*;
 
 use std::rc::Rc;
 

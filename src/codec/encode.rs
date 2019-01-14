@@ -1,10 +1,10 @@
-use crate::client::{List, Dictionary, Set, DictionaryEntry, Tuple};
-use super::{CodecError};
+use super::CodecError;
+use crate::client::{Dictionary, DictionaryEntry, List, Set, Tuple};
 
 use protobuf::{CodedOutputStream, RepeatedField};
 
-use std::collections::{BTreeMap, HashMap, HashSet, BTreeSet};
-use std::hash::{Hash};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+use std::hash::Hash;
 
 pub trait Encode {
     fn encode(&self) -> Result<Vec<u8>, CodecError>;
@@ -64,7 +64,7 @@ impl Encode for Vec<u8> {
     }
 }
 
-impl<T : Encode> Encode for Vec<T> {
+impl<T: Encode> Encode for Vec<T> {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| {
             let mut list = List::new();
@@ -81,7 +81,7 @@ impl<T : Encode> Encode for Vec<T> {
     }
 }
 
-impl<K : Encode + Ord, V : Encode> Encode for BTreeMap<K, V> {
+impl<K: Encode + Ord, V: Encode> Encode for BTreeMap<K, V> {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| {
             let mut encoded_vec = Vec::with_capacity(self.len());
@@ -102,7 +102,7 @@ impl<K : Encode + Ord, V : Encode> Encode for BTreeMap<K, V> {
     }
 }
 
-impl<K : Encode + Eq + Hash, V : Encode> Encode for HashMap<K, V> {
+impl<K: Encode + Eq + Hash, V: Encode> Encode for HashMap<K, V> {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| {
             let mut encoded_vec = Vec::with_capacity(self.len());
@@ -123,7 +123,7 @@ impl<K : Encode + Eq + Hash, V : Encode> Encode for HashMap<K, V> {
     }
 }
 
-impl<T : Encode + Eq + Hash> Encode for HashSet<T> {
+impl<T: Encode + Eq + Hash> Encode for HashSet<T> {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| {
             let mut encoded_set = Vec::with_capacity(self.len());
@@ -140,7 +140,7 @@ impl<T : Encode + Eq + Hash> Encode for HashSet<T> {
     }
 }
 
-impl<T : Encode + Ord> Encode for BTreeSet<T> {
+impl<T: Encode + Ord> Encode for BTreeSet<T> {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| {
             let mut encoded_set = Vec::with_capacity(self.len());
@@ -157,14 +157,11 @@ impl<T : Encode + Ord> Encode for BTreeSet<T> {
     }
 }
 
-impl<T1 : Encode, T2 : Encode> Encode for (T1, T2) {
+impl<T1: Encode, T2: Encode> Encode for (T1, T2) {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| {
             let (a, b) = self;
-            let entries = vec![
-                a.encode()?,
-                b.encode()?
-            ];
+            let entries = vec![a.encode()?, b.encode()?];
 
             let mut tuple = Tuple::new();
             tuple.set_items(RepeatedField::from_vec(entries));
@@ -174,15 +171,11 @@ impl<T1 : Encode, T2 : Encode> Encode for (T1, T2) {
     }
 }
 
-impl<T1 : Encode, T2 : Encode, T3 : Encode> Encode for (T1, T2, T3) {
+impl<T1: Encode, T2: Encode, T3: Encode> Encode for (T1, T2, T3) {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| {
             let (a, b, c) = self;
-            let entries = vec![
-                a.encode()?,
-                b.encode()?,
-                c.encode()?
-            ];
+            let entries = vec![a.encode()?, b.encode()?, c.encode()?];
 
             let mut tuple = Tuple::new();
             tuple.set_items(RepeatedField::from_vec(entries));
@@ -192,16 +185,11 @@ impl<T1 : Encode, T2 : Encode, T3 : Encode> Encode for (T1, T2, T3) {
     }
 }
 
-impl<T1 : Encode, T2 : Encode, T3 : Encode, T4 : Encode> Encode for (T1, T2, T3, T4) {
+impl<T1: Encode, T2: Encode, T3: Encode, T4: Encode> Encode for (T1, T2, T3, T4) {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| {
             let (a, b, c, d) = self;
-            let entries = vec![
-                a.encode()?,
-                b.encode()?,
-                c.encode()?,
-                d.encode()?
-            ];
+            let entries = vec![a.encode()?, b.encode()?, c.encode()?, d.encode()?];
 
             let mut tuple = Tuple::new();
             tuple.set_items(RepeatedField::from_vec(entries));
@@ -212,9 +200,10 @@ impl<T1 : Encode, T2 : Encode, T3 : Encode, T4 : Encode> Encode for (T1, T2, T3,
 }
 
 fn encode_with<F>(encoder: F) -> Result<Vec<u8>, CodecError>
-    where F: FnOnce(&mut CodedOutputStream) -> Result<(), CodecError> {
-
-    let mut encoded = vec!();
+where
+    F: FnOnce(&mut CodedOutputStream) -> Result<(), CodecError>,
+{
+    let mut encoded = vec![];
     let mut cos = CodedOutputStream::vec(&mut encoded);
     encoder(&mut cos)?;
     cos.flush()?;
