@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// An rcs block or thruster. Obtained by calling `Part::rcs().`
-object RCS {
-    service: SpaceCenter,
+object SpaceCenter.RCS {
     properties: {
         {
             Part: Part,

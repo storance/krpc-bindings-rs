@@ -1,371 +1,4 @@
 #[macro_export]
-macro_rules! rpc_method {
-    // RPC Class Method
-    // Passes self to rpc method
-    // Maps the decoded value
-    // Returns Err on no response
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* )
-                .map(|$value: ident : $value_type : ty| $success_expr: expr)
-                .ok_or($fail_expr: expr)
-        }
-    ) => {
-        rpc_method!(
-            $(#[$meta])*
-            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> $ret {
-                if let Some($value) = $service.$( $method ),+( self $(, $method_arg )* ) as $value_type {
-                    $success_expr
-                } else {
-                    return Err($fail_expr)
-                }
-            }
-        );
-    };
-
-    // RPC Class Method
-    // Maps the decoded value
-    // Returns Err on no response
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            $service : tt.$( $method : tt),+ ( $( $method_arg : expr ),* )
-                .map(|$value: ident : $value_type : ty| $success_expr: expr)
-                .ok_or($fail_expr: expr)
-        }
-    ) => {
-        rpc_method!(
-            $(#[$meta])*
-            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> $ret {
-                if let Some($value) = $service.$( $method ),+( $( $method_arg ),* ) as $value_type {
-                    $success_expr
-                } else {
-                    return Err($fail_expr)
-                }
-            }
-        );
-    };
-
-    // RPC Class Method
-    // Passes self to rpc method
-    // Maps the decoded value
-    // Returns None on no response
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> Option<$ret : ty> {
-            $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* )
-                .map(|$value: ident : $value_type : ty| $success_expr: expr)
-        }
-    ) => {
-        rpc_method!(
-            $(#[$meta])*
-            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> Option<$ret> {
-                if let Some($value) = $service.$( $method ),+( self $(, $method_arg )* ) as $value_type {
-                    $success_expr
-                } else {
-                    None
-                }
-            }
-        );
-    };
-
-    // RPC Class Method
-    // Maps the decoded value
-    // Returns None on no response
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> Option<$ret : ty> {
-            $service : tt.$( $method : tt),+ ( $( $method_arg : expr ),* )
-                .map(|$value: ident : $value_type : ty| $success_expr: expr)
-        }
-    ) => {
-        rpc_method!(
-            $(#[$meta])*
-            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> Option<$ret> {
-                if let Some($value) = $service.$( $method ),+( $( $method_arg ),* ) as $value_type {
-                    $success_expr
-                } else {
-                    None
-                }
-            }
-        );
-    };
-
-    // RPC Class Method
-    // Passes self to rpc method
-    // Returns decoded value as is
-    // Returns None on no response
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> Option<$ret : ty> {
-            $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* )
-        }
-    ) => {
-        rpc_method!(
-            $(#[$meta])*
-            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> Option<$ret> {
-                if let Some(value) = $service.$( $method ),+( self $(, $method_arg )* ) as Option<$ret> {
-                    value
-                } else {
-                    None
-                }
-            }
-        );
-    };
-
-    // RPC Class Method
-    // Returns the decoded value as is
-    // Returns None on no response
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> Option<$ret : ty> {
-            $service : tt.$( $method : tt),+ ( $( $method_arg : expr ),* )
-        }
-    ) => {
-        rpc_method!(
-            $(#[$meta])*
-            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> Option<$ret> {
-                if let Some(value) = $service.$( $method ),+( $( $method_arg ),* ) as Option<$ret> {
-                    value
-                } else {
-                    None
-                }
-            }
-        );
-    };
-
-    // RPC Class Method
-    // Passes self to rpc method
-    // Returns the decoded value
-    // Returns Err on no response
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* )
-                .ok_or($fail_expr: expr)
-        }
-    ) => {
-        rpc_method!(
-            $(#[$meta])*
-            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> $ret {
-                if let Some(value) = $service.$( $method ),+( self $(, $method_arg )* ) as $ret {
-                    value
-                } else {
-                    return Err($fail_expr)
-                }
-            }
-        );
-    };
-
-    // RPC Class Method
-    // Returns the decoded value
-    // Returns Err on no response
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            $service : tt.$( $method : tt),+ ( $( $method_arg : expr ),* )
-                .ok_or($fail_expr: expr)
-        }
-    ) => {
-        rpc_method!(
-            $(#[$meta])*
-            fn $func_name(&self $(, $arg_name : $arg_type)* ) -> $ret {
-                if let Some(value) = $service.$( $method ),+( $( $method_arg ),* ) as $ret {
-                    value
-                } else {
-                    return Err($fail_expr)
-                }
-            }
-        );
-    };
-
-    // RPC Class Method
-    // Passes self to rpc method
-    // Custom success case handling
-    // Custom no response case handling
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            if let Some($value: ident) = $service : tt.$( $method : tt),+ ( self $(, $method_arg : expr )* ) as $value_type: ty {
-                $success_expr: expr
-            } else {
-                $fail_expr: expr
-            }
-        }
-    ) => {
-        $(#[$meta])*
-        pub fn $func_name(&self $(, $arg_name : $arg_type)*) -> KrpcResult<$ret> {
-            let rpc = &mut (*self.client).borrow_mut().rpc;
-            let args: Vec<Vec<u8>> = vec![self.encode()? $(, $method_arg.encode()?)*];
-
-            Ok(if let Some(response) = rpc.invoke(stringify!($service).to_owned(), concat!( $( stringify!($method) ),+).to_owned(), args)? {
-                let $value : $value_type = decode(&response, &self.client)?;
-                $success_expr
-            } else {
-                $fail_expr
-            })
-        }
-    };
-
-    // RPC Class Method
-    // Custom success case handling
-    // Custom no response case handling
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            if let Some($value: ident) = $service : tt.$( $method : tt),+ ( $($method_arg : expr ),* ) as $value_type: ty {
-                $success_expr: expr
-            } else {
-                $fail_expr: expr
-            }
-        }
-    ) => {
-        $(#[$meta])*
-        pub fn $func_name(&self $(, $arg_name : $arg_type)*) -> KrpcResult<$ret> {
-            let rpc = &mut (*self.client).borrow_mut().rpc;
-            let args: Vec<Vec<u8>> = vec![$($method_arg.encode()?),*];
-
-            Ok(if let Some(response) = rpc.invoke(stringify!($service).to_owned(), concat!( $( stringify!($method) ),+).to_owned(), args)? {
-                let $value : $value_type = decode(&response, &self.client)?;
-                $success_expr
-            } else {
-                $fail_expr
-            })
-        }
-    };
-
-    // RPC Class Method
-    // Passes self to rpc method
-    // No return
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) {
-            $service : tt.$( $method : tt),+( self $(, $method_arg : expr )* )
-        }
-    ) => {
-        $(#[$meta])*
-        pub fn $func_name(&self $(, $arg_name : $arg_type)*) -> KrpcResult<()> {
-            let rpc = &mut (*self.client).borrow_mut().rpc;
-            let args: Vec<Vec<u8>> = vec![self.encode()? $(, $method_arg.encode()?)*];
-
-            rpc.invoke(stringify!($service).to_owned(), concat!( $( stringify!($method) ),+).to_owned(), args)?;
-            Ok(())
-        }
-    };
-
-    // RPC Class Method
-    // No return
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident (&self $(, $arg_name : ident : $arg_type : ty)* ) {
-            $service : tt.$( $method : tt),+ ( $($method_arg : expr ),* )
-        }
-    ) => {
-        $(#[$meta])*
-        pub fn $func_name(&self $(, $arg_name : $arg_type)*) -> KrpcResult<()> {
-            let rpc = &mut (*self.client).borrow_mut().rpc;
-            let args: Vec<Vec<u8>> = vec![$($method_arg.encode()?),*];
-
-            rpc.invoke(stringify!($service).to_owned(), concat!( $( stringify!($method) ),+).to_owned(), args)?;
-            Ok(())
-        }
-    };
-
-
-    // RPC Static Method
-    // Returns the decoded value as is
-    // Returns Err on no response
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident ($client: ident : &KrpcClient $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            $service : tt.$( $method : tt),+ ( $( $method_arg : expr ),* )
-                .ok_or($fail_expr: expr)
-        }
-    ) => {
-        rpc_method!(
-            $(#[$meta])*
-            fn $func_name($client: &KrpcClient  $(, $arg_name : $arg_type)* ) -> $ret {
-                if let Some(value) = $service.$( $method),+( $( $method_arg ),* ) as $ret {
-                    value
-                } else {
-                    return Err($fail_expr)
-                }
-            }
-        );
-    };
-
-    // RPC Static Method
-    // Maps the decoded value
-    // Returns Err on no response
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident ($client: ident : &KrpcClient $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            $service : tt.$( $method : tt),+ ( $( $method_arg : expr ),* )
-                .map(|$value: ident : $value_type: ident| $success_expr: expr)
-                .ok_or($fail_expr: expr)
-        }
-    ) => {
-        rpc_method!(
-            $(#[$meta])*
-            fn $func_name($client: &KrpcClient  $(, $arg_name : $arg_type)* ) -> $ret {
-                if let Some($value) = $service.$( $method),+( $( $method_arg ),* ) as $value_type {
-                    $success_expr
-                } else {
-                    return Err($fail_expr)
-                }
-            }
-        );
-    };
-
-    // RPC Static Method
-    // Custom success case handling
-    // Custom no response case handling
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident ($client: ident : &KrpcClient $(, $arg_name : ident : $arg_type : ty)* ) -> $ret : ty {
-            if let Some($value: ident) = $service : tt.$( $method : tt),+ ( $($method_arg : expr ),* ) as $value_type: ty {
-                $success_expr: expr
-            } else {
-                $fail_expr: expr
-            }
-        }
-    ) => {
-        $(#[$meta])*
-        pub fn $func_name($client : &Rc<RefCell<KrpcClient>> $(, $arg_name : $arg_type)*) -> KrpcResult<$ret> {
-            let rpc = &mut (*$client).borrow_mut().rpc;
-            let args: Vec<Vec<u8>> = vec![$($method_arg.encode()?),*];
-
-            Ok(if let Some(response) = rpc.invoke(stringify!($service).to_owned(), concat!( $( stringify!($method) ),+).to_owned(), args)? {
-                let $value : $value_type = decode(&response, $client)?;
-                $success_expr
-            } else {
-                $fail_expr
-            })
-        }
-    };
-
-    // RPC Static Method
-    // No return
-    (
-        $(#[$meta:meta])*
-        fn $func_name: ident ($client: ident : &KrpcClient $(, $arg_name : ident : $arg_type : ty)* ) {
-            $service : tt.$( $method : tt),+ ( $($method_arg : expr ),* )
-        }
-    ) => {
-        $(#[$meta])*
-        pub fn $func_name($client : &Rc<RefCell<KrpcClient>> $(, $arg_name : $arg_type)*) -> KrpcResult<()> {
-            let rpc = &mut (*$client).borrow_mut().rpc;
-            let args: Vec<Vec<u8>> = vec![$($method_arg.encode()?),*];
-
-            rpc.invoke(stringify!($service).to_owned(), concat!( $( stringify!($method) ),+).to_owned(), args)?;
-            Ok(())
-        }
-    };
-}
-
-
-#[macro_export]
 macro_rules! remote_type {
     //
     // Service
@@ -383,13 +16,13 @@ macro_rules! remote_type {
     ) => {
         $(#[$meta])*
         pub struct $service {
-            client : Rc<RefCell<KrpcClient>>
+            connection: Rc<Connection>
         }
 
         impl $service {
             /// Creates a new service using the given `client`.
-            pub fn new(client: Rc<RefCell<KrpcClient>>) -> Self {
-                $service{client}
+            pub fn new(connection: Rc<Connection>) -> Self {
+                $service{connection}
             }
 
             // Properties
@@ -408,39 +41,6 @@ macro_rules! remote_type {
     // Properties
     //
     (
-        @service_property(service=$service:tt) $prop_name: ident : Option<$prop_type: ty> =>
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident
-    ) => {
-        rpc_method!(
-        $( #[$getter_meta] )*
-        fn $getter_name(&self) -> Option<$prop_type> {
-            $service.get_,$prop_name()
-        });
-
-        rpc_method!(
-        $(#[$setter_meta])*
-        fn $setter_name(&self, value: $prop_type) {
-            $service.set_,$prop_name(value)
-        });
-    };
-
-    (
-        @service_property(service=$service:tt)
-            $prop_name: ident : Option<$prop_type: ty>,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident
-    ) => {
-        rpc_method!(
-        $( #[$getter_meta] )*
-        fn $getter_name(&self) -> Option<$prop_type> {
-            $service.get_,$prop_name()
-        });
-    };
-
-    (
         @service_property(service=$service:tt)
             $prop_name: ident : $prop_type: ty,
             $(#[$getter_meta:meta])*
@@ -448,18 +48,38 @@ macro_rules! remote_type {
             $(#[$setter_meta:meta])*
             set: $setter_name: ident
     ) => {
-        rpc_method!(
-        $( #[$getter_meta] )*
-        fn $getter_name(&self) -> $prop_type {
-            $service.get_,$prop_name()
-                .ok_or(KrpcError::NullResponseValue)
-        });
+        remote_type!(@service_method(service=$service, prefix=get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $prop_type {
+                $prop_name()
+            });
 
-        rpc_method!(
-        $(#[$setter_meta])*
-        fn $setter_name(&self, value: $prop_type) {
-            $service.set_,$prop_name(value)
-        });
+        remote_type!(@service_method(service=$service, prefix=set_)
+            $( #[$setter_meta] )*
+            fn $setter_name(value: $prop_type) {
+                $prop_name(value)
+            });
+    };
+
+    (
+        @service_property(service=$service:tt)
+            $prop_name: ident : $set_type: ty => $get_type: ty,
+            $(#[$getter_meta:meta])*
+            get: $getter_name: ident,
+            $(#[$setter_meta:meta])*
+            set: $setter_name: ident
+    ) => {
+        remote_type!(@service_method(service=$service, prefix=get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $get_type {
+                $prop_name()
+            });
+
+        $(remote_type!(@service_method(service=$service, prefix=set_)
+            $( #[$setter_meta] )*
+            fn $setter_name(value: $set_type) {
+                $prop_name(value)
+            }))?;
     };
 
     (
@@ -468,218 +88,102 @@ macro_rules! remote_type {
             $(#[$getter_meta:meta])*
             get: $getter_name: ident
     ) => {
-        rpc_method!(
-        $( #[$getter_meta] )*
-        fn $getter_name(&self) -> $prop_type {
-            $service.get_,$prop_name()
-                .ok_or(KrpcError::NullResponseValue)
-        });
+        remote_type!(@service_method(service=$service, prefix=get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $prop_type {
+                $prop_name()
+            });
     };
 
     //
     // Methods
     //
     (
-        @service_method(service=$service:tt)
-        $(#[$meta:meta])*
-        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> Option<$return_type: ty> {
-            $rpc_name: tt($( $arg_expr: expr ),* )
-        }
-    ) => {
-        rpc_method!(
-        $( #[$meta] )*
-        fn $method_name(&self $(, $arg_name: $arg_type)*) -> Option<$return_type> {
-            $service.$rpc_name($($arg_expr),*)
-        });
-    };
-
-    (
-        @service_method(service=$service:tt)
+        @service_method(service=$service:tt $(, prefix=$prefix:tt)?)
         $(#[$meta:meta])*
         fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
             $rpc_name: tt($( $arg_expr: expr ),* )
         }
     ) => {
-        rpc_method!(
-        $( #[$meta] )*
-        fn $method_name(&self $(, $arg_name: $arg_type)*) -> $return_type {
-            $service.$rpc_name($($arg_expr),*)
-                .ok_or(KrpcError::NullResponseValue)
-        });
+        $(#[$meta])*
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<$return_type> {
+            let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
+
+            let response = self.connection.invoke(stringify!($service),
+                concat!( $( stringify!($prefix), )? stringify!($rpc_name)),
+                &args)?;
+            Ok(decode(&response, self.connection.clone())?)
+        }
     };
 
     (
-        @service_method(service=$service:tt)
+        @service_method(service=$service:tt $(, prefix=$prefix:tt)?)
         $(#[$meta:meta])*
         fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
             $rpc_name: tt($( $arg_expr: expr ),* )
         }
     ) => {
-        rpc_method!(
-        $( #[$meta] )*
-        fn $method_name(&self $(, $arg_name: $arg_type)*) {
-            $service.$rpc_name($($arg_expr),*)
-        });
+        $(#[$meta])*
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<()> {
+            let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
+
+            self.connection.invoke(stringify!($service),
+                concat!( $( stringify!($prefix), )? stringify!($rpc_name)),
+                &args)?;
+            Ok(())
+        }
     };
 
     //
     // Remote Object
     //
     (
-        $(#[$meta:meta])* object $object_name: ident {}
-    ) => {
-        remote_type! {
-            $(#[$meta])*
-            object $object_name {
-                service: Unknown,
-                properties: {},
-                methods: {},
-                static_methods: {}
-            }
-        }
-    };
-
-    (
         $(#[$meta:meta])*
-        object $object_name: ident {
-            service: $service: tt,
-            properties: {
+        object $service: tt.$object_name: ident {
+            $(properties: {
                 $( { $( $property: tt)+ } )*
-            },
-            methods: {
+            })?
+            $(methods: {
                 $( { $( $method: tt)+ } )*
-            }
-        }
-    ) => {
-        remote_type! {
-            $(#[$meta])*
-            object $object_name {
-                service: $service,
-                properties: {
-                    $( { $( $property)+ } )*
-                },
-                methods: {
-                    $( { $( $method)+ } )*
-                },
-                static_methods: {}
-            }
-        }
-    };
-
-    (
-        $(#[$meta:meta])*
-        object $object_name: ident {
-            service: $service: tt,
-            properties: {
-                $( { $( $property: tt)+ } )*
-            }
-        }
-    ) => {
-        remote_type! {
-            $(#[$meta])*
-            object $object_name {
-                service: $service,
-                properties: {
-                    $( { $( $property)+ } )*
-                },
-                methods: {},
-                static_methods: {}
-            }
-        }
-    };
-
-    (
-        $(#[$meta:meta])*
-        object $object_name: ident {
-            service: $service: tt,
-            methods: {
-                $( { $( $method: tt)+ } )*
-            }
-        }
-    ) => {
-        remote_type! {
-            $(#[$meta])*
-            object $object_name {
-                service: $service,
-                properties: {},
-                methods: {
-                    $( { $( $method)+ } )*
-                },
-                static_methods: {}
-            }
-        }
-    };
-
-    (
-        $(#[$meta:meta])*
-        object $object_name: ident {
-            service: $service: tt,
-            static_methods: {
+            })?
+            $(static_methods: {
                 $( { $( $static_method: tt)+ } )*
-            }
-        }
-    ) => {
-        remote_type! {
-            $(#[$meta])*
-            object $object_name {
-                service: $service,
-                properties: {},
-                methods: {},
-                static_methods: {
-                    $( { $( $static_method)+ } )*
-                }
-            }
-        }
-    };
-
-    (
-        $(#[$meta:meta])*
-        object $object_name: ident {
-            service: $service: tt,
-            properties: {
-                $( { $( $property: tt)+ } )*
-            },
-            methods: {
-                $( { $( $method: tt)+ } )*
-            },
-            static_methods: {
-                $( { $( $static_method: tt)+ } )*
-            }
+            })?
         }
      ) => {
         $(#[$meta])*
         pub struct $object_name {
             #[allow(dead_code)]
-            client : Rc<RefCell<KrpcClient>>,
+            connection: Rc<Connection>,
             id: u64
         }
 
         impl RemoteObject for $object_name {
-            fn new(client: Rc<RefCell<KrpcClient>>, id: u64) -> $object_name {
-                $object_name{client, id}
+            fn new(connection: Rc<Connection>, id: u64) -> Self {
+                $object_name{connection, id}
             }
 
             fn id(&self) -> u64 { self.id }
         }
 
         impl Decode for $object_name {
-            fn decode(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-                let id: u64 = decode(bytes, client)?;
+            fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+                let id: u64 = decode(bytes, connection.clone())?;
                 if id == 0 {
                     Err(CodecError::NullValue)
                 } else {
-                    Ok($object_name::new(Rc::clone(client), id))
+                    Ok($object_name::new(connection, id))
                 }
             }
         }
 
         impl Decode for Option<$object_name> {
-            fn decode(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-                let id: u64 = decode(bytes, client)?;
+            fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+                let id: u64 = decode(bytes, connection.clone())?;
                 if id == 0 {
                     Ok(None)
                 } else {
-                    Ok(Some($object_name::new(Rc::clone(client), id)))
+                    Ok(Some($object_name::new(connection, id)))
                 }
             }
         }
@@ -702,18 +206,24 @@ macro_rules! remote_type {
         impl $object_name {
             // Properties
             $(
-                remote_type!(@object_property(service=$service, class=$object_name) $( $property )+ );
-            )*
+                $(
+                    remote_type!(@object_property(service=$service, class=$object_name) $( $property )+ );
+                )*
+            )?
 
             // Methods
             $(
-                remote_type!(@object_method(service=$service, class=$object_name) $( $method )+ );
-            )*
+                $(
+                    remote_type!(@object_method(service=$service, class=$object_name, separator=_) $( $method )+ );
+                )*
+            )?
 
             // Static Methods
             $(
-                remote_type!(@object_static_method(service=$service, class=$object_name) $( $static_method )+ );
-            )*
+                $(
+                    remote_type!(@object_static_method(service=$service, class=$object_name) $( $static_method )+ );
+                )*
+            )?
         }
     };
 
@@ -721,39 +231,6 @@ macro_rules! remote_type {
     // Properties
     //
     (
-        @object_property(service=$service:tt, class=$class:tt) $prop_name: ident : Option<$prop_type: ty> =>
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident
-    ) => {
-        rpc_method!(
-        $( #[$getter_meta] )*
-        fn $getter_name(&self) -> Option<$prop_type> {
-            $service.$class,_get_,$prop_name(self)
-        });
-
-        rpc_method!(
-        $(#[$setter_meta])*
-        fn $setter_name(&self, value: $prop_type) {
-            $service.$class,_set_,$prop_name(self, value)
-        });
-    };
-
-    (
-        @object_property(service=$service:tt, class=$class:tt)
-            $prop_name: ident : Option<$prop_type: ty>,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident
-    ) => {
-        rpc_method!(
-        $( #[$getter_meta] )*
-        fn $getter_name(&self) -> Option<$prop_type> {
-            $service.$class,_get_,$prop_name(self)
-        });
-    };
-
-    (
         @object_property(service=$service:tt, class=$class:tt)
             $prop_name: ident : $prop_type: ty,
             $(#[$getter_meta:meta])*
@@ -761,18 +238,38 @@ macro_rules! remote_type {
             $(#[$setter_meta:meta])*
             set: $setter_name: ident
     ) => {
-        rpc_method!(
-        $( #[$getter_meta] )*
-        fn $getter_name(&self) -> $prop_type {
-            $service.$class,_get_,$prop_name(self)
-                .ok_or(KrpcError::NullResponseValue)
-        });
+        remote_type!(@object_method(service=$service, class=$class, separator=_get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $prop_type {
+                $prop_name()
+            });
 
-        rpc_method!(
-        $(#[$setter_meta])*
-        fn $setter_name(&self, value: $prop_type) {
-            $service.$class,_set_,$prop_name(self, value)
-        });
+        remote_type!(@object_method(service=$service, class=$class, separator=_set_)
+            $( #[$setter_meta] )*
+            fn $setter_name(value: $prop_type) {
+                $prop_name(value)
+            });
+    };
+
+    (
+        @object_property(service=$service:tt, class=$class:tt)
+            $prop_name: ident : $set_type: ty => $get_type: ty,
+            $(#[$getter_meta:meta])*
+            get: $getter_name: ident,
+            $(#[$setter_meta:meta])*
+            set: $setter_name: ident
+    ) => {
+        remote_type!(@object_method(service=$service, class=$class, separator=_get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $get_type {
+                $prop_name()
+            });
+
+        $(remote_type!(@object_method(service=$service, class=$class, separator=_set_)
+            $( #[$setter_meta] )*
+            fn $setter_name(value: $set_type) {
+                $prop_name(value)
+            }))?;
     };
 
     (
@@ -781,58 +278,50 @@ macro_rules! remote_type {
             $(#[$getter_meta:meta])*
             get: $getter_name: ident
     ) => {
-        rpc_method!(
-        $( #[$getter_meta] )*
-        fn $getter_name(&self) -> $prop_type {
-            $service.$class,_get_,$prop_name(self)
-                .ok_or(KrpcError::NullResponseValue)
-        });
+        remote_type!(@object_method(service=$service, class=$class, separator=_get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $prop_type {
+                $prop_name()
+            });
     };
 
     //
     // Methods
     //
     (
-        @object_method(service=$service:tt, class=$class:tt)
-        $(#[$meta:meta])*
-        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> Option<$return_type: ty> {
-            $rpc_name: tt($( $arg_expr: expr ),* )
-        }
-    ) => {
-        rpc_method!(
-        $( #[$meta] )*
-        fn $method_name(&self $(, $arg_name: $arg_type)*) -> Option<$return_type> {
-            $service.$class,_,$rpc_name(self $(, $arg_expr)*)
-        });
-    };
-
-    (
-        @object_method(service=$service:tt, class=$class:tt)
+        @object_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
         $(#[$meta:meta])*
         fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
             $rpc_name: tt($( $arg_expr: expr ),* )
         }
     ) => {
-        rpc_method!(
-        $( #[$meta] )*
-        fn $method_name(&self $(, $arg_name: $arg_type)*) -> $return_type {
-            $service.$class,_,$rpc_name(self $(, $arg_expr)*)
-                .ok_or(KrpcError::NullResponseValue)
-        });
+        $(#[$meta])*
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<$return_type> {
+            let args: Vec<Vec<u8>> = vec![self.encode()? $(, $arg_expr.encode()?)*];
+
+            let response = self.connection.invoke(stringify!($service),
+                concat!( stringify!($class), stringify!($separator), stringify!($rpc_name)),
+                &args)?;
+            Ok(decode(&response, self.connection.clone())?)
+        }
     };
 
     (
-        @object_method(service=$service:tt, class=$class:tt)
+        @object_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
         $(#[$meta:meta])*
         fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
             $rpc_name: tt($( $arg_expr: expr ),* )
         }
     ) => {
-        rpc_method!(
-        $( #[$meta] )*
-        fn $method_name(&self $(, $arg_name: $arg_type)*) {
-            $service.$class,_,$rpc_name(self $(, $arg_expr)*)
-        });
+        $(#[$meta])*
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<()> {
+            let args: Vec<Vec<u8>> = vec![self.encode()? $(, $arg_expr.encode()?)*];
+
+            self.connection.invoke(stringify!($service),
+                concat!( stringify!($class), stringify!($separator), stringify!($rpc_name)),
+                &args)?;
+            Ok(())
+        }
     };
 
     //
@@ -841,44 +330,19 @@ macro_rules! remote_type {
     (
         @object_static_method(service=$service:tt, class=$class:tt)
         $(#[$meta:meta])*
-        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> Option<$return_type: ty> {
-            $rpc_name: tt($( $arg_expr: expr ),* )
-        }
-    ) => {
-        rpc_method!(
-        $( #[$meta] )*
-        fn $method_name(client: &KrpcClient $(, $arg_name: $arg_type)*) -> Option<$return_type> {
-            $service.$class,_static_,$rpc_name($( $arg_expr),*)
-        });
-    };
-
-    (
-        @object_static_method(service=$service:tt, class=$class:tt)
-        $(#[$meta:meta])*
         fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
             $rpc_name: tt($( $arg_expr: expr ),* )
         }
     ) => {
-        rpc_method!(
-        $( #[$meta] )*
-        fn $method_name(client: &KrpcClient $(, $arg_name: $arg_type)*) -> $return_type {
-            $service.$class,_static_,$rpc_name($($arg_expr),*)
-                .ok_or(KrpcError::NullResponseValue)
-        });
-    };
+        $(#[$meta])*
+        pub fn $method_name(connection: Rc<Connection> $(, $arg_name : $arg_type)*) -> RpcResult<$return_type> {
+            let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
-    (
-        @object_static_method(service=$service:tt, class=$class:tt)
-        $(#[$meta:meta])*
-        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
-            $rpc_name: tt($( $arg_expr: expr ),* )
+            let response = connection.invoke(stringify!($service),
+                concat!( stringify!($class), "_static_", stringify!($rpc_name)),
+                &args)?;
+            Ok(decode(&response, connection)?)
         }
-    ) => {
-        rpc_method!(
-        $( #[$meta] )*
-        fn $method_name(client: &KrpcClient $(, $arg_name: $arg_type)*) {
-            $service.$class,_static_,$rpc_name($($arg_expr),*)
-        });
     };
 
     //
@@ -914,8 +378,8 @@ macro_rules! remote_type {
         }
 
         impl Decode for $enum_name {
-            fn decode(bytes: &Vec<u8>, client: &Rc<RefCell<KrpcClient>>) -> Result<Self, CodecError> {
-                let value: i64 = decode(bytes, client)?;
+            fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+                let value: i64 = decode(bytes, connection)?;
                 $enum_name::from_value(value)
                     .ok_or(CodecError::InvalidEnumValue(value))
             }

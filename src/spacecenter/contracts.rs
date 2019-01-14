@@ -1,14 +1,12 @@
 use crate::*;
 use crate::codec::*;
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
 use std::collections::HashSet;
+use std::rc::Rc;
 
 remote_type!(
 /// Contracts manager. Obtained by calling `SpaceCenter::contract_manager()`.
-object ContractManager {
-    service: SpaceCenter,
+object SpaceCenter.ContractManager {
     properties: {
         {
             Types: HashSet<String>,
@@ -57,8 +55,7 @@ object ContractManager {
 
 remote_type!(
 /// A contract.
-object Contract {
-    service: SpaceCenter,
+object SpaceCenter.Contract {
     properties: {
         {
             Type: String,
@@ -200,7 +197,7 @@ object Contract {
             /// **Game Scenes**: All
             get: parameters
         }
-    },
+    }
     methods: {
         {
             /// Accept an offered contract.
@@ -231,8 +228,7 @@ object Contract {
 
 remote_type!(
 /// A contract parameter. See `Contract::parameters()`.
-object ContractParameter {
-    service: SpaceCenter,
+object SpaceCenter.ContractParameter {
     properties: {
         {
             Title: String,

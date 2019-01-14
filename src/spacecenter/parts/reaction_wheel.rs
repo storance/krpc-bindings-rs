@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// An reaction wheel. Obtained by calling `Part::reaction_wheel().`
-object ReactionWheel {
-    service: SpaceCenter,
+object SpaceCenter.ReactionWheel {
     properties: {
         {
             Part: Part,

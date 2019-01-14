@@ -2,14 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{CelestialBody, ReferenceFrame};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
-
+use std::rc::Rc;
 
 remote_type!(
 /// Describes an orbit. For example, the orbit of a vessel or a celestial body.
-object Orbit {
-    service: SpaceCenter,
+object SpaceCenter.Orbit {
     properties: {
         {
             Body: CelestialBody,
@@ -196,7 +193,7 @@ object Orbit {
             /// **Game Scenes**: All
             get: time_to_soi_change
         }
-    },
+    }
     methods: {
         {
             /// The orbital radius, in meters, at the given time.
@@ -370,7 +367,7 @@ object Orbit {
                 ListClosestApproaches(target, orbits)
             }
         }
-    },
+    }
     static_methods: {
         {
             /// Returns the direction that is normal to the orbits reference plane,

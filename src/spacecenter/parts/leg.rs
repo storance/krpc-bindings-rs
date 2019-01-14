@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// A landing leg. Obtained by calling `Part::leg().`
-object Leg {
-    service: SpaceCenter,
+object SpaceCenter.Leg {
     properties: {
         {
             Part: Part,

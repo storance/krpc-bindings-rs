@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// A parachute. Obtained by calling `Part::parachute().`
-object Parachute {
-    service: SpaceCenter,
+object SpaceCenter.Parachute {
     properties: {
         {
             Part: Part,

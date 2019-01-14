@@ -1,8 +1,7 @@
 use crate::*;
 use crate::codec::*;
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// Represents a reference frame for positions, rotations and velocities. Contains:
@@ -15,8 +14,7 @@ remote_type!(
 /// # Note
 /// This struct does not contain any class methods. It is only to be used as a parameter to
 /// other functions.
-object ReferenceFrame {
-    service: SpaceCenter,
+object SpaceCenter.ReferenceFrame {
     static_methods: {
         {
             /// Create a relative reference frame. This is a custom reference frame whose components

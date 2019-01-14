@@ -2,8 +2,7 @@ use crate::*;
 use crate::codec::*;
 use super::{Resources, ReferenceFrame, Vessel};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 mod antenna;
 mod cargo_bay;
@@ -56,8 +55,7 @@ pub use self::wheel::*;
 remote_type!(
 /// Instances of this class are used to interact with the parts of a vessel. An instance can
 /// be obtained by calling `Vessel::parts()`.
-object Parts {
-    service: SpaceCenter,
+object SpaceCenter.Parts {
     properties: {
         {
             All: Vec<Part>,
@@ -236,7 +234,7 @@ object Parts {
             /// **Game Scenes**: All
             get: wheels
         }
-    },
+    }
     methods: {
         {
             /// Returns a list of parts whose `Part::name()` is `name`.
@@ -324,8 +322,7 @@ object Parts {
 remote_type!(
 /// Represents an individual part. Vessels are made up of multiple parts. Instances of this
 /// class can be obtained by several methods in `Parts`.
-object Part {
-    service: SpaceCenter,
+object SpaceCenter.Part {
     properties: {
         {
             Name: String,
@@ -836,7 +833,7 @@ object Part {
             /// `DockingPort::reference_frame()`.
             get: center_of_mass_reference_frame
         }
-    },
+    }
     methods: {
         {
             /// The position of the part in the given reference frame.
@@ -978,8 +975,7 @@ object Part {
 
 remote_type!(
 /// Obtained by calling `Part::add_force()`.
-object Force {
-    service: SpaceCenter,
+object SpaceCenter.Force {
     properties: {
         {
             Part: Part,
@@ -1028,7 +1024,7 @@ object Force {
             /// **Game Scenes**: All
             set: set_reference_frame
         }
-    },
+    }
     methods: {
         {
             /// Remove the force.

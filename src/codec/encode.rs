@@ -1,11 +1,8 @@
+use crate::client::{List, Dictionary, Set, DictionaryEntry, Tuple};
 use super::{CodecError};
 
 use protobuf::{CodedOutputStream, RepeatedField};
 
-use krpc::schema::{List, Dictionary, Set, DictionaryEntry, Tuple};
-
-use std::f32::NAN as NAN_f32;
-use std::f64::NAN as NAN_f64;
 use std::collections::{BTreeMap, HashMap, HashSet, BTreeSet};
 use std::hash::{Hash};
 
@@ -52,18 +49,6 @@ impl Encode for f32 {
 impl Encode for f64 {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| Ok(cos.write_double_no_tag(*self)?))
-    }
-}
-
-impl Encode for Option<f32> {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_float_no_tag(self.unwrap_or(NAN_f32))?))
-    }
-}
-
-impl Encode for Option<f64> {
-    fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_double_no_tag(self.unwrap_or(NAN_f64))?))
     }
 }
 

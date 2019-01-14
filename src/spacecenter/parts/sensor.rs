@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// A sensor, such as a thermometer. Obtained by calling `Part::sensor().`
-object Sensor {
-    service: SpaceCenter,
+object SpaceCenter.Sensor {
     properties: {
         {
             Part: Part,

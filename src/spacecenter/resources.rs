@@ -2,15 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
-
 remote_type!(
     /// Represents the collection of resources stored in a vessel, stage or part. Created by
     /// calling `Vessel::resources()`, `Vessel::resources_in_decouple_stage()` or
     /// `Part::resources()`.
-    object Resources {
-        service: SpaceCenter,
+    object SpaceCenter.Resources {
         properties: {
             {
                 All: Vec<Resource>,
@@ -37,7 +33,7 @@ remote_type!(
                 /// **Game Scenes**: Flight
                 set: set_enabled
             }
-        },
+        }
         methods: {
             {
                 /// Returns all the individual resources with the given name that can be stored.
@@ -83,7 +79,7 @@ remote_type!(
                     Max(name)
                 }
             }
-        },
+        }
         static_methods: {
             {
                 /// Returns the density of a resource, in kg/l.
@@ -113,8 +109,7 @@ remote_type!(
 
 remote_type!(
     /// An individual resource stored within a part. Created using methods in the Resources class.
-    object Resource {
-        service: SpaceCenter,
+    object SpaceCenter.Resource {
         properties: {
             {
                 Name: String,
@@ -175,8 +170,7 @@ remote_type!(
 
 remote_type!(
     /// Transfer resources between parts.
-    object ResourceTransfer {
-        service: SpaceCenter,
+    object SpaceCenter.ResourceTransfer {
         properties: {
             {
                 Amount: f32,
@@ -192,8 +186,7 @@ remote_type!(
                 /// **Game Scenes**: All
                 get: complete
             }
-        },
-        methods: {},
+        }
         static_methods: {
             {
                 /// Start transferring a resource transfer between a pair of parts.

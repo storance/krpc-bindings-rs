@@ -1,30 +1,20 @@
-extern crate krpc;
 extern crate protobuf;
+extern crate failure;
+#[macro_use]
+extern crate failure_derive;
 
 pub mod spacecenter;
-mod streams;
+pub mod client;
 #[macro_use]
 mod macros;
 mod codec;
 
-use krpc::rpc::{Rpc};
-use krpc::stream::{Stream};
-use krpc::{TransceiverError, ConnectionErr};
+use std::rc::Rc;
 
-use protobuf::{ProtobufError};
-
-use std::rc::{Rc};
-use std::cell::{RefCell};
-use std::error::{Error};
-use std::fmt;
-use std::io;
-use std::thread;
-
-
-use crate::codec::{CodecError};
+pub use self::client::{Connection, RpcResult};
 
 pub trait RemoteObject {
-    fn new(client: Rc<RefCell<KrpcClient>>, id: u64) -> Self where Self: Sized;
+    fn new(connection: Rc<Connection>, id: u64) -> Self where Self: Sized;
 
     fn id(&self) -> u64;
 }
@@ -34,76 +24,6 @@ pub trait RemoteEnum {
 
     fn value(&self) -> i64;
 }
-
-pub struct KrpcClient {
-    pub rpc : Rpc,
-    pub stream: Stream
-}
-
-/*impl KrpcClient {
-    fn connect(name: &str, host: &str, rpc_port: u16, stream_port: u16) -> Result<KrpcClient, ConnectionErr> {
-        let rpc = Rpc::new((host, rpc_port), name)?;
-        let stream = Stream::new((host, stream_port), rpc)?;
-
-        Ok(KrpcClient{rpc, stream})
-    }
-}*/
-
-#[derive(Debug)]
-pub enum KrpcError {
-    ProtobufError(ProtobufError),
-    SocketError(io::Error),
-    ResponseHasError(String),
-    CodecError(CodecError),
-    NullResponseValue
-}
-
-impl fmt::Display for KrpcError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Debug::fmt(self, f)
-    }
-}
-
-impl Error for KrpcError {
-    fn description(&self) -> &str {
-        match self {
-            &KrpcError::ProtobufError(ref e) => e.description(),
-            &KrpcError::SocketError(ref e) => e.description(),
-            &KrpcError::ResponseHasError(..) => "RPC call responded with an error",
-            &KrpcError::CodecError(ref e) => e.description(),
-            &KrpcError::NullResponseValue => "Response value was unexpectedly null"
-        }
-    }
-
-    fn cause(&self) -> Option<&Error> {
-        match self {
-            &KrpcError::ProtobufError(ref e) => Some(e),
-            &KrpcError::SocketError(ref e) => Some(e),
-            &KrpcError::ResponseHasError(..) => None,
-            &KrpcError::CodecError(ref e) => Some(e),
-            &KrpcError::NullResponseValue => None
-        }
-    }
-}
-
-impl From<TransceiverError> for KrpcError {
-    fn from(err: TransceiverError) -> Self {
-        match err {
-            TransceiverError::Protobuf(e) => KrpcError::ProtobufError(e),
-            TransceiverError::Socket(e) => KrpcError::SocketError(e),
-            TransceiverError::ResponseHasError(str) => KrpcError::ResponseHasError(str),
-        }
-    }
-}
-
-impl From<CodecError> for KrpcError {
-    fn from(err: CodecError) -> Self {
-        KrpcError::CodecError(err)
-    }
-}
-
-/// Result type alias for Krpc calls.
-pub type KrpcResult<T> = Result<T, KrpcError>;
 
 /// Type alias for a 3-dimension Vector.
 pub type Vector3 = (f64, f64, f64);

@@ -2,15 +2,12 @@ use crate::*;
 use crate::codec::*;
 use super::{ReferenceFrame, Orbit, Parts, Resources, Flight, AutoPilot, Control, Comms};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
-
+use std::rc::Rc;
 
 remote_type!(
 /// These objects are used to interact with vessels in KSP. This includes getting orbital and
 /// flight data, manipulating control inputs and managing resources.
-object Vessel {
-    service: SpaceCenter,
+object SpaceCenter.Vessel {
     properties: {
         {
             Name: String,
@@ -373,7 +370,7 @@ object Vessel {
             /// *Vessel surface velocity reference frame origin and axes*
             get: surface_velocity_reference_frame
         }
-    },
+    }
     methods: {
         {
             /// Recover the vessel.
@@ -510,8 +507,7 @@ object Vessel {
 
 remote_type!(
 /// Represents crew in a vessel. Can be obtained using `Vessel::crew()`.
-object CrewMember {
-    service: SpaceCenter,
+object SpaceCenter.CrewMember {
     properties: {
         {
             Name: String,

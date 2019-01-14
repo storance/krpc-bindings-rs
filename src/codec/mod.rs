@@ -1,5 +1,5 @@
-pub mod encode;
-pub mod decode;
+mod encode;
+mod decode;
 
 pub use crate::codec::encode::*;
 pub use crate::codec::decode::*;

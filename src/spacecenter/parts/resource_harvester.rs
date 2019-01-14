@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// A resource harvester. Obtained by calling `Part::resource_harvester().`
-object ResourceHarvester {
-    service: SpaceCenter,
+object SpaceCenter.ResourceHarvester {
     properties: {
         {
             Part: Part,

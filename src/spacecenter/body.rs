@@ -2,15 +2,12 @@ use crate::*;
 use crate::codec::*;
 use super::{Orbit, ReferenceFrame};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
 use std::collections::HashSet;
-
+use std::rc::Rc;
 
 remote_type!(
     /// Represents a celestial body (such as a planet or moon).
-    object CelestialBody {
-        service: SpaceCenter,
+    object SpaceCenter.CelestialBody {
         properties: {
             {
                 Name: String,
@@ -190,7 +187,7 @@ remote_type!(
                 /// **Game Scenes**: All
                 get: has_atmospheric_oxygen
             }
-        },
+        }
         methods: {
             {
                 /// Returns the height of the surface relative to mean sea level, in meters, at the

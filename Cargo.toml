@@ -5,5 +5,9 @@ authors = ["Steven Torance <storance@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-krpc-rs = "^0.3.1"
-protobuf = "^1.7.4"
+protobuf = "^2.2.2"
+failure = "0.1.5"
+failure_derive = "0.1.5"
+
+[build-dependencies]
+protoc-rust = "^2.2.2"

@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// A solar panel. Obtained by calling `Part::solar_panel().`
-object SolarPanel {
-    service: SpaceCenter,
+object SpaceCenter.SolarPanel {
     properties: {
         {
             Part: Part,

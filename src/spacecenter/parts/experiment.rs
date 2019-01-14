@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// An experiment. Obtained by calling `Part::experiment().`
-object Experiment {
-    service: SpaceCenter,
+object SpaceCenter.Experiment {
     properties: {
         {
             Part: Part,
@@ -20,8 +18,8 @@ object Experiment {
 
 remote_type!(
 /// Obtained by calling `Experiment::data()`.
-object ScienceData {});
+object SpaceCenter.ScienceData {});
 
 remote_type!(
 /// Obtained by calling `Experiment::science_subject()`.
-object ScienceSubject {});
+object SpaceCenter.ScienceSubject {});

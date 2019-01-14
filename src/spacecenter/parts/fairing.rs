@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// A fairing. Obtained by calling `Part::fairing().`
-object Fairing {
-    service: SpaceCenter,
+object SpaceCenter.Fairing {
     properties: {
         {
             Part: Part,

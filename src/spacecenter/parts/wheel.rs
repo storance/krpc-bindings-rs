@@ -2,14 +2,12 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// A wheel. Includes landing gear and rover wheels. Obtained by calling `Part::wheel()`. Can be
 /// used to control the motors, steering and deployment of wheels, among other things.
-object Wheel {
-    service: SpaceCenter,
+object SpaceCenter.Wheel {
     properties: {
         {
             Part: Part,
@@ -20,7 +18,7 @@ object Wheel {
 });
 
 remote_type!(
-/// The state of a wheel. See <see cref="M:SpaceCenter.Wheel.State" />.
+/// The state of a wheel. See `Wheel:state`.
 enum WheelState {
     /// Wheel is fully deployed.
     Deployed => 0,

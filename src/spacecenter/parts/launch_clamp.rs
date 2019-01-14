@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// A launch clamp. Obtained by calling `Part::launch_clamp().`
-object LaunchClamp {
-    service: SpaceCenter,
+object SpaceCenter.LaunchClamp {
     properties: {
         {
             Part: Part,

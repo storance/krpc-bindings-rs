@@ -2,16 +2,14 @@ use crate::*;
 use crate::codec::*;
 use super::{CelestialBody, Contract};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
 use std::collections::{BTreeMap};
+use std::rc::Rc;
 
 remote_type!(
 /// Waypoints are the location markers you can see on the map view showing you where contracts
 /// are targeted for. With this structure, you can obtain coordinate data for the locations of
 /// these waypoints. Obtained by calling `SpaceCenter::waypoint_manager()`.
-object WaypointManager {
-    service: SpaceCenter,
+object SpaceCenter.WaypointManager {
     properties: {
         {
             Waypoints: Vec<Waypoint>,
@@ -35,7 +33,7 @@ object WaypointManager {
             /// **Game Scenes**: All
             get: icons
         }
-    },
+    }
     methods: {
         {
             /// Creates a waypoint at the given position at ground level, and
@@ -75,8 +73,7 @@ object WaypointManager {
 
 remote_type!(
 /// Represents a waypoint. Can be created using `WaypointManager::add_waypoint()`.
-object Waypoint {
-    service: SpaceCenter,
+object SpaceCenter.Waypoint {
     properties: {
         {
             Body: CelestialBody,
@@ -231,13 +228,13 @@ object Waypoint {
             /// **Game Scenes**: Flight
             get: contract
         }
-    },
+    }
     methods: {
         {
             /// Removes the waypoint.
             ///
             /// **Game Scenes**: Flight
-            fn rmeove() {
+            fn remove() {
                 Remove()
             }
         }

@@ -2,9 +2,7 @@ use crate::*;
 use crate::codec::*;
 use super::{Vessel, Node};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
-
+use std::rc::Rc;
 
 remote_type!(
 /// Used to manipulate the controls of a vessel. This includes adjusting the throttle,
@@ -14,8 +12,7 @@ remote_type!(
 /// # Note
 /// Control inputs (such as pitch, yaw and roll) are zeroed when all clients that have set one or
 /// more of these inputs are no longer connected.
-object Control {
-    service: SpaceCenter,
+object SpaceCenter.Control {
     properties: {
         {
             Source: ControlSource,
@@ -393,7 +390,7 @@ object Control {
             /// **Game Scenes**: Flight
             get: nodes
         }
-    },
+    }
     methods: {
         {
             /// Activates the next stage. Equivalent to pressing the space bar in-game.

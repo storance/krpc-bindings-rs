@@ -2,8 +2,7 @@ use crate::*;
 use crate::codec::*;
 use super::{ReferenceFrame, SASMode};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// Provides basic auto-piloting utilities for a vessel. Created by calling `Vessel::auto_pilot()`.
@@ -12,8 +11,7 @@ remote_type!(
 /// If a client engages the auto-pilot and then closes its connection to the server, the
 /// auto-pilot will be disengaged and its target reference frame, direction and roll
 /// reset to default.
-object AutoPilot {
-    service: SpaceCenter,
+object SpaceCenter.AutoPilot {
     properties: {
         {
             Error: f32,
@@ -311,7 +309,7 @@ object AutoPilot {
             /// which will overwrite any manual changes.
             set: set_yaw_pid_gains
         }
-    },
+    }
     methods: {
         {
             /// Engage the auto-pilot.

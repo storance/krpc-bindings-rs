@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// A docking port. Obtained by calling `Part::docking_port().`
-object DockingPort {
-    service: SpaceCenter,
+object SpaceCenter.DockingPort {
     properties: {
         {
             Part: Part,

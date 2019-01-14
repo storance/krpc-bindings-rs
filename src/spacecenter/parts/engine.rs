@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// An engine. Obtained by calling `Part::engine().`
-object Engine {
-    service: SpaceCenter,
+object SpaceCenter.Engine {
     properties: {
         {
             Part: Part,
@@ -20,4 +18,4 @@ object Engine {
 
 remote_type!(
 /// A propellant for an engine. Obtained by calling `Engine::propellants()`.
-object Propellant {});
+object SpaceCenter.Propellant {});

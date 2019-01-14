@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// A light. Obtained by calling `Part::light().`
-object Light {
-    service: SpaceCenter,
+object SpaceCenter.Light {
     properties: {
         {
             Part: Part,

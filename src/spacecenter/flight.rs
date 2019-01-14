@@ -2,8 +2,7 @@ use crate::*;
 use crate::codec::*;
 use super::{CelestialBody};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// Used to get flight telemetry for a vessel, by calling `Vessel::flight()`. All of
@@ -11,8 +10,7 @@ remote_type!(
 ///
 /// # Note
 /// To get orbital information, such as the apoapsis or inclination, see `Orbit`.
-object Flight {
-    service: SpaceCenter,
+object SpaceCenter.Flight {
     properties: {
         {
             GForce: f32,
@@ -440,7 +438,7 @@ object Flight {
             /// Requires Ferram Aerospace Research.
             get: thrust_specific_fuel_consumption
         }
-    },
+    }
     methods: {
         {
             /// Simulate and return the total aerodynamic forces acting on the vessel,

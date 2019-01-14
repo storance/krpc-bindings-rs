@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::spacecenter::{Vessel};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// Used to interact with CommNet for a given vessel. Obtained by calling `Vessel::comms()`.
-object Comms {
-    service: SpaceCenter,
+object SpaceCenter.Comms {
     properties: {
         {
             CanCommunicate: bool,
@@ -45,8 +43,7 @@ object Comms {
 
 remote_type!(
 /// Represents a communication node in the network. For example, a vessel or the KSC.
-object CommLink {
-    service: SpaceCenter,
+object SpaceCenter.CommLink {
     properties: {
         {
             Type: CommLinkType,
@@ -74,8 +71,7 @@ object CommLink {
 
 remote_type!(
 /// Represents a communication node in the network. For example, a vessel or the KSC.
-object CommNode {
-    service: SpaceCenter,
+object SpaceCenter.CommNode {
     properties: {
         {
             Name: String,

@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Part};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// A resource converter. Obtained by calling `Part::resource_converter().`
-object ResourceConverter {
-    service: SpaceCenter,
+object SpaceCenter.ResourceConverter {
     properties: {
         {
             Part: Part,

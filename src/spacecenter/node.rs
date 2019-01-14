@@ -2,13 +2,11 @@ use crate::*;
 use crate::codec::*;
 use super::{Orbit, ReferenceFrame};
 
-use std::rc::{Rc};
-use std::cell::{RefCell};
+use std::rc::Rc;
 
 remote_type!(
 /// Represents a maneuver node.  Can be created using `Control::add_node()`.
-object Node {
-    service: SpaceCenter,
+object SpaceCenter.Node {
     properties: {
         {
             Prograde: f64,
@@ -124,7 +122,7 @@ object Node {
             /// **Game Scenes**: Flight
             get: orbital_reference_frame
         }
-    },
+    }
     methods: {
         {
             /// Returns the burn vector for the maneuver node.
