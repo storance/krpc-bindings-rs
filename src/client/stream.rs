@@ -11,6 +11,7 @@ use std::net::TcpStream;
 use std::rc::Rc;
 use std::sync::{Arc, Condvar, Mutex};
 
+#[derive(Debug)]
 pub struct StreamValue<T: Decode> {
     connection: Rc<Connection>,
     value: Arc<StreamRawValue>,
@@ -65,6 +66,7 @@ impl<T: Decode + Clone> StreamValue<T> {
     }
 }
 
+#[derive(Debug)]
 pub struct StreamRawValue {
     id: u64,
     state: Mutex<StreamState>,
@@ -170,6 +172,7 @@ impl StreamRawValue {
     }
 }
 
+#[derive(Debug)]
 struct StreamState {
     started: bool,
     version: u64,
@@ -188,6 +191,7 @@ impl StreamState {
     }
 }
 
+#[derive(Debug)]
 pub struct StreamManager {
     socket: RefCell<TcpStream>,
     active_streams: Mutex<BTreeMap<u64, Arc<StreamRawValue>>>,

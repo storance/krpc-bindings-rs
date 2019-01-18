@@ -8,6 +8,7 @@ use std::cell::RefCell;
 use std::net::TcpStream;
 use std::rc::Rc;
 
+#[derive(Debug)]
 pub struct Rpc {
     id: Vec<u8>,
     socket: RefCell<TcpStream>,

@@ -15,6 +15,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
+        #[derive(Debug, Clone)]
         pub struct $service {
             connection: Rc<Connection>
         }

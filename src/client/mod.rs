@@ -32,6 +32,7 @@ fn recv_msg<T: protobuf::Message>(socket: &mut TcpStream) -> Result<T, ProtobufE
     cis.read_message()
 }
 
+#[derive(Debug, Clone)]
 pub struct Connection {
     rpc: Rc<rpc::Rpc>,
     stream: Rc<stream::StreamManager>,
@@ -119,8 +120,7 @@ impl Connection {
             &vec![stream.id().encode()?, rate.encode()?],
         )?;
 
-        stream.set_rate(rate);
-        Ok(())
+        stream.set_rate(rate)
     }
 }
 
