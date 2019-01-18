@@ -1,5 +1,5 @@
 use super::CodecError;
-use crate::client::{Dictionary, List, Set, Tuple};
+use crate::client::schema::{Dictionary, List, Set, Tuple};
 use crate::Connection;
 
 use protobuf::CodedInputStream;
@@ -199,8 +199,12 @@ impl<'a, T1: Decode, T2: Decode, T3: Decode, T4: Decode> Decode for (T1, T2, T3,
     }
 }
 
-pub fn decode<'a, T: Decode>(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<T, CodecError> {
+pub fn decode<T: Decode>(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<T, CodecError> {
     T::decode(bytes, connection)
+}
+
+pub fn decode_message<T: protobuf::Message>(bytes: &Vec<u8>) -> Result<T, CodecError> {
+    decode_with(bytes, |cis| Ok(cis.read_message()?))
 }
 
 fn decode_with<T, F>(bytes: &Vec<u8>, decoder: F) -> Result<T, CodecError>

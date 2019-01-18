@@ -1,37 +1,44 @@
 use std::net::TcpStream;
+use std::rc::Rc;
 use std::sync::Arc;
 
-use failure::Error;
-use protobuf::{CodedInputStream, CodedOutputStream};
+use crate::codec::{decode_message, Encode};
+use protobuf::{CodedInputStream, CodedOutputStream, ProtobufError};
 
 mod error;
 mod rpc;
-mod schema;
+pub mod schema;
 mod stream;
 
 pub use self::error::*;
-pub use self::schema::*;
+
+use self::rpc::Rpc;
+use self::schema::Stream;
+use self::stream::StreamRawValue;
 
 pub const DEFAULT_RPC_PORT: u16 = 50000;
 pub const DEFAULT_STREAM_PORT: u16 = 50001;
 
-fn send_msg<T: protobuf::Message>(socket: &mut TcpStream, message: &T) -> Result<(), Error> {
+fn send_msg<T: protobuf::Message>(
+    socket: &mut TcpStream,
+    message: &T,
+) -> Result<(), ProtobufError> {
     let mut cos = CodedOutputStream::new(socket);
-    Ok(cos.write_message_no_tag(message)?)
+    cos.write_message_no_tag(message)
 }
 
-fn recv_msg<T: protobuf::Message>(socket: &mut TcpStream) -> Result<T, Error> {
+fn recv_msg<T: protobuf::Message>(socket: &mut TcpStream) -> Result<T, ProtobufError> {
     let mut cis = CodedInputStream::new(socket);
-    Ok(cis.read_message()?)
+    cis.read_message()
 }
 
 pub struct Connection {
-    rpc: Arc<rpc::Rpc>,
-    stream: Arc<stream::StreamManager>,
+    rpc: Rc<rpc::Rpc>,
+    stream: Rc<stream::StreamManager>,
 }
 
 impl Connection {
-    pub fn connect(name: &str, host: &str) -> Result<Connection, Error> {
+    pub fn connect(name: &str, host: &str) -> Result<Connection, ConnectionError> {
         Self::connect_with_ports(name, host, DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT)
     }
 
@@ -40,15 +47,13 @@ impl Connection {
         host: &str,
         rpc_port: u16,
         stream_port: u16,
-    ) -> Result<Connection, Error> {
+    ) -> Result<Connection, ConnectionError> {
         let rpc = rpc::Rpc::connect(name, host, rpc_port)?;
-        let stream = stream::StreamManager::connect(rpc.clone(), host, stream_port)?;
+        let stream = stream::StreamManager::connect(rpc.id().clone(), host, stream_port)?;
 
         Ok(Connection { rpc, stream })
     }
-}
 
-impl Connection {
     pub fn id(&self) -> Vec<u8> {
         self.rpc.id().clone()
     }
@@ -58,10 +63,68 @@ impl Connection {
         service: &str,
         procedure: &str,
         args: &Vec<Vec<u8>>,
-    ) -> Result<Vec<u8>, Error> {
+    ) -> RpcResult<Vec<u8>> {
         self.rpc.invoke(service, procedure, args)
+    }
+
+    pub fn add_stream(
+        &self,
+        service: &str,
+        procedure: &str,
+        args: &Vec<Vec<u8>>,
+        start: bool,
+    ) -> StreamResult<Arc<StreamRawValue>> {
+        let response = self.rpc.invoke(
+            "KRPC",
+            "AddStream",
+            &vec![
+                Rpc::create_procedure_call(service, procedure, args).encode()?,
+                start.encode()?,
+            ],
+        )?;
+        let stream: Stream = decode_message(&response)?;
+        let id = stream.get_id();
+        let stream_value = Arc::new(StreamRawValue::new(id, start));
+
+        self.stream.register(stream_value.clone());
+
+        Ok(stream_value)
+    }
+
+    pub fn start_stream(&self, stream: &StreamRawValue) -> StreamResult<()> {
+        if stream.started()? {
+            return Ok(());
+        }
+
+        self.rpc
+            .invoke("KRPC", "StartStream", &vec![stream.id().encode()?])?;
+
+        stream.set_started()?;
+        Ok(())
+    }
+
+    pub fn remove_stream(&self, stream: &StreamRawValue) -> StreamResult<()> {
+        self.rpc
+            .invoke("KRPC", "RemoveStream", &vec![stream.id().encode()?])?;
+
+        self.stream.deregister(stream.id());
+
+        Ok(())
+    }
+
+    pub fn set_stream_rate(&self, stream: &StreamRawValue, rate: f32) -> StreamResult<()> {
+        self.rpc.invoke(
+            "KRPC",
+            "SetStreamRate",
+            &vec![stream.id().encode()?, rate.encode()?],
+        )?;
+
+        stream.set_rate(rate);
+        Ok(())
     }
 }
 
-/// Result type alias for Krpc calls.
-pub type RpcResult<T> = Result<T, Error>;
+/// Result type alias for RPC calls.
+pub type RpcResult<T> = Result<T, RpcError>;
+/// Result type alias for stream calls.
+pub type StreamResult<T> = Result<T, StreamError>;
