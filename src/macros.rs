@@ -8,7 +8,7 @@ macro_rules! remote_type {
         service $service: ident {
             properties: {
                 $( { $( $property: tt)+ } )*
-            },
+            }
             methods: {
                 $( { $( $method: tt)+ } )*
             }
@@ -21,7 +21,7 @@ macro_rules! remote_type {
         }
 
         impl $service {
-            /// Creates a new service using the given `client`.
+            /// Creates a new service using the given `connection`.
             pub fn new(connection: Rc<Connection>) -> Self {
                 $service{connection}
             }
@@ -352,14 +352,14 @@ macro_rules! remote_type {
 
     ( $(#[$enum_meta:meta])*
     enum $enum_name: ident {
-        $( $(#[$variant_meta:meta])* $value_name: ident => $value_int : expr),+
+        $( $(#[$variant_meta:meta])* $value_name: ident = $value_int : expr),+ $(,)?
     }) => {
         $(#[$enum_meta])*
-        #[derive(Debug)]
+        #[derive(Debug, Copy, Clone)]
         pub enum $enum_name {
             $(
                 $(#[$variant_meta])*
-                $value_name
+                $value_name = $value_int
             ),+
         }
 
@@ -372,9 +372,7 @@ macro_rules! remote_type {
             }
 
             fn value(&self) -> i64 {
-                match self {
-                    $( $enum_name::$value_name => $value_int),+
-                }
+                *self as i64
             }
         }
 

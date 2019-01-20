@@ -37,14 +37,15 @@ object SpaceCenter.CargoBay {
 });
 
 remote_type!(
-/// The state of a cargo bay. See `CargoBay::state()`.
-enum CargoBayState {
-    /// Cargo bay is fully open.
-    Open => 0,
-    /// Cargo bay closed and locked.
-    Closed => 1,
-    /// Cargo bay is opening.
-    Opening => 2,
-    /// Cargo bay is closing.
-    Closing => 3
-});
+    /// The state of a cargo bay. See `CargoBay::state()`.
+    enum CargoBayState {
+        /// Cargo bay is fully open.
+        Open = 0,
+        /// Cargo bay closed and locked.
+        Closed = 1,
+        /// Cargo bay is opening.
+        Opening = 2,
+        /// Cargo bay is closing.
+        Closing = 3,
+    }
+);

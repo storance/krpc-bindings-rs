@@ -215,14 +215,14 @@ remote_type!(
     /// The way in which a resource flows between parts. See `Resources.flow_mode(String)`.
     enum ResourceFlowMode {
         /// The resource flows to any part in the vessel. For example, electric charge.
-        Vessel => 0,
+        Vessel = 0,
         /// The resource flows from parts in the first stage, followed by the second,
         /// and so on. For example, mono-propellant.
-        Stage => 1,
+        Stage = 1,
         /// The resource flows between adjacent parts within the vessel. For example,
         /// liquid fuel or oxidizer.
-        Adjacent => 2,
+        Adjacent = 2,
         /// The resource does not flow. For example, solid fuel.
-        None => 3
+        None = 3,
     }
 );

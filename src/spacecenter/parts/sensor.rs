@@ -10,8 +10,28 @@ object SpaceCenter.Sensor {
     properties: {
         {
             Part: Part,
-            /// The part object for this sensor.
+            /// Returns the part object for this sensor.
+            ///
+            /// **Game Scenes**: All
             get: part
+        }
+        {
+            Active: bool,
+            /// Returns whether the sensor is active.
+            ///
+            /// **Game Scenes**: All
+            get: is_active,
+            /// Sets whether the sensor is active.
+            ///
+            /// **Game Scenes**: All
+            set: set_active
+        }
+        {
+            Value: String,
+            /// Returns the current value of the sensor.
+            ///
+            /// **Game Scenes**: All
+            get: value
         }
     }
 });

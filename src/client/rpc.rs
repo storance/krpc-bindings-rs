@@ -2,7 +2,9 @@ use super::schema::{
     Argument, ConnectionRequest, ConnectionRequest_Type, ConnectionResponse,
     ConnectionResponse_Status, ProcedureCall, Request, Response,
 };
-use super::{recv_msg, send_msg, ConnectionError, ResponseError, RpcError};
+use super::{
+    convert_procedure_result, recv_msg, send_msg, ConnectionError, ResponseError, RpcError,
+};
 
 use std::cell::RefCell;
 use std::net::TcpStream;
@@ -56,10 +58,8 @@ impl Rpc {
             let results = response.get_results();
             if results.len() == 0 {
                 Err(RpcError::from(ResponseError::MissingResult))
-            } else if results[0].has_error() {
-                Err(RpcError::from(ResponseError::from(results[0].get_error())))
             } else {
-                Ok(Vec::from(results[0].get_value()))
+                Ok(convert_procedure_result(&results[0])?)
             }
         }
     }

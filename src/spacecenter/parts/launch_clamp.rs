@@ -10,8 +10,20 @@ object SpaceCenter.LaunchClamp {
     properties: {
         {
             Part: Part,
-            /// The part object for this launch clamp.
+            /// Returns the part object for this launch clamp.
+            ///
+            /// **Game Scenes**: All
             get: part
+        }
+    }
+    methods: {
+        {
+            /// Releases the docking clamp. Has no effect if the clamp has already been released.
+            ///
+            /// **Game Scenes**: All
+            fn release() {
+                Release()
+            }
         }
     }
 });

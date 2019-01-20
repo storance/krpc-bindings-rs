@@ -274,7 +274,7 @@ remote_type!(
                 /// **Game Scenes**: All
                 get: contract_manager
             }
-        },
+        }
         methods: {
             {
                 /// Clears the current target.
@@ -547,33 +547,35 @@ remote_type!(
 );
 
 remote_type!(
-/// The game mode.
-enum GameMode {
-    /// Sandbox mode.
-    Sandbox => 0,
-    /// Career mode.
-    Career => 1,
-    /// Science career mode.
-    Science => 2,
-    /// Science sandbox mode.
-    ScienceSandbox => 3,
-    /// Mission mode.
-    Mission => 4,
-    /// Mission builder mode.
-    MissionBuilder => 5,
-    /// Scenario mode.
-    Scenario => 6,
-    /// Scenario mode that cannot be resumed.
-    ScenarioNonResumable => 7
-});
+    /// The game mode.
+    enum GameMode {
+        /// Sandbox mode.
+        Sandbox = 0,
+        /// Career mode.
+        Career = 1,
+        /// Science career mode.
+        Science = 2,
+        /// Science sandbox mode.
+        ScienceSandbox = 3,
+        /// Mission mode.
+        Mission = 4,
+        /// Mission builder mode.
+        MissionBuilder = 5,
+        /// Scenario mode.
+        Scenario = 6,
+        /// Scenario mode that cannot be resumed.
+        ScenarioNonResumable = 7,
+    }
+);
 
 remote_type!(
-/// The time warp mode.
-enum WarpMode {
-    /// Time warp is active, and in regular "on-rails" mode.
-    Rails => 0,
-    /// Time warp is active, and in physical time warp mode.
-    Physics => 1,
-    /// Time warp is not active.
-    None => 2
-});
+    /// The time warp mode.
+    enum WarpMode {
+        /// Time warp is active, and in regular "on-rails" mode.
+        Rails = 0,
+        /// Time warp is active, and in physical time warp mode.
+        Physics = 1,
+        /// Time warp is not active.
+        None = 2,
+    }
+);

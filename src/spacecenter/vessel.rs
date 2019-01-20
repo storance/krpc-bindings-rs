@@ -593,49 +593,52 @@ object SpaceCenter.CrewMember {
 });
 
 remote_type!(
-/// The type of a vessel.
-enum VesselType {
-    Base => 0,
-    Debris => 1,
-    Lander => 2,
-    Plane => 3,
-    Probe => 4,
-    Relay => 5,
-    Rover => 6,
-    Ship => 7,
-    Station => 8
-});
+    /// The type of a vessel.
+    enum VesselType {
+        Base = 0,
+        Debris = 1,
+        Lander = 2,
+        Plane = 3,
+        Probe = 4,
+        Relay = 5,
+        Rover = 6,
+        Ship = 7,
+        Station = 8,
+    }
+);
 
 remote_type!(
-/// The type of a vessel.
-enum VesselSituation {
-    /// Vessel is awaiting launch.
-    PreLaunch => 0,
-    /// Vessel is orbiting a body,
-    Orbiting => 1,
-    /// Vessel is on a sub-orbital trajectory.
-    SubOrbital => 2,
-    /// Vessel is escaping it's orbiting body.
-    Escaping => 3,
-    /// Vessel is flying through an atmosphere.
-    Flying => 4,
-    /// Vessel is landed on the surface of a body.
-    Landed => 5,
-    /// Vessel has splashed down in an ocean.
-    Splashed => 6,
-    /// The vessel is docked to another.
-    Docked => 7
-});
+    /// The type of a vessel.
+    enum VesselSituation {
+        /// Vessel is awaiting launch.
+        PreLaunch = 0,
+        /// Vessel is orbiting a body,
+        Orbiting = 1,
+        /// Vessel is on a sub-orbital trajectory.
+        SubOrbital = 2,
+        /// Vessel is escaping it's orbiting body.
+        Escaping = 3,
+        /// Vessel is flying through an atmosphere.
+        Flying = 4,
+        /// Vessel is landed on the surface of a body.
+        Landed = 5,
+        /// Vessel has splashed down in an ocean.
+        Splashed = 6,
+        /// The vessel is docked to another.
+        Docked = 7,
+    }
+);
 
 remote_type!(
-/// The type of a crew member.
-enum CrewMemberType {
-    /// An applicant for crew.
-    Applicant => 0,
-    /// Rocket crew.
-    Crew => 1,
-    /// A tourist.
-    Tourist => 2,
-    /// An unowned crew member.
-    Unowned => 3
-});
+    /// The type of a crew member.
+    enum CrewMemberType {
+        /// An applicant for crew.
+        Applicant = 0,
+        /// Rocket crew.
+        Crew = 1,
+        /// A tourist.
+        Tourist = 2,
+        /// An unowned crew member.
+        Unowned = 3,
+    }
+);

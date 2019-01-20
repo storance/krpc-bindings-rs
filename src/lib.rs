@@ -4,6 +4,7 @@ extern crate protobuf;
 extern crate failure_derive;
 
 pub mod client;
+pub mod krpc;
 pub mod spacecenter;
 #[macro_use]
 mod macros;

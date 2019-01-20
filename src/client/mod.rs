@@ -13,6 +13,7 @@ mod stream;
 pub use self::error::*;
 
 use self::rpc::Rpc;
+use self::schema::ProcedureResult;
 use self::schema::Stream;
 use self::stream::StreamRawValue;
 
@@ -30,6 +31,14 @@ fn send_msg<T: protobuf::Message>(
 fn recv_msg<T: protobuf::Message>(socket: &mut TcpStream) -> Result<T, ProtobufError> {
     let mut cis = CodedInputStream::new(socket);
     cis.read_message()
+}
+
+fn convert_procedure_result(result: &ProcedureResult) -> Result<Vec<u8>, error::ResponseError> {
+    if result.has_error() {
+        Err(error::ResponseError::from(result.get_error()))
+    } else {
+        Ok(Vec::from(result.get_value()))
+    }
 }
 
 #[derive(Debug, Clone)]

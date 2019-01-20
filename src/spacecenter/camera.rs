@@ -138,18 +138,18 @@ remote_type!(
     /// See `Camera::mode()`.
     enum CameraMode {
         /// The camera is showing the active vessel, in "auto" mode.
-        Automatic => 0,
+        Automatic = 0,
         /// The camera is showing the active vessel, in "free" mode.
-        Free => 1,
+        Free = 1,
         /// The camera is showing the active vessel, in "chase" mode.
-        Chase => 2,
+        Chase = 2,
         /// The camera is showing the active vessel, in "locked" mode.
-        Locked => 3,
+        Locked = 3,
         /// The camera is showing the active vessel, in "orbital" mode.
-        Orbital => 4,
+        Orbital = 4,
         /// The Intra-Vehicular Activity view is being shown.
-        IVA => 5,
+        IVA = 5,
         /// The map view is being shown.
-        Map => 6
+        Map = 6,
     }
 );

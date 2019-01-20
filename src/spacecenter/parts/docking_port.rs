@@ -1,7 +1,7 @@
 use super::Part;
 use crate::codec::*;
+use crate::spacecenter::{ReferenceFrame, Vessel};
 use crate::*;
-use crate::spacecenter::{Vessel, ReferenceFrame};
 
 use std::rc::Rc;
 
@@ -147,21 +147,22 @@ object SpaceCenter.DockingPort {
 });
 
 remote_type!(
-/// The state of a docking port. See `DockingPort::state()`.
-enum DockingPortState {
-    /// The docking port is ready to dock to another docking port.
-    Ready => 0,
-    /// The docking port is docked to another docking port, or docked to another part
-    /// (from the VAB/SPH).
-    Docked => 1,
-    /// The docking port is very close to another docking port, but has not docked. It is
-    /// using magnetic force to acquire a solid dock.
-    Docking => 2,
-    /// The docking port has just been undocked from another docking port, and is disabled
-    /// until it moves away by a sufficient distance (`DockingPort::reengage_distance()`).
-    Undocking => 3,
-    /// The docking port has a shield, and the shield is closed.
-    Shielded => 4,
-    /// The docking ports shield is currently opening/closing.
-    Moving => 5
-});
+    /// The state of a docking port. See `DockingPort::state()`.
+    enum DockingPortState {
+        /// The docking port is ready to dock to another docking port.
+        Ready = 0,
+        /// The docking port is docked to another docking port, or docked to another part
+        /// (from the VAB/SPH).
+        Docked = 1,
+        /// The docking port is very close to another docking port, but has not docked. It is
+        /// using magnetic force to acquire a solid dock.
+        Docking = 2,
+        /// The docking port has just been undocked from another docking port, and is disabled
+        /// until it moves away by a sufficient distance (`DockingPort::reengage_distance()`).
+        Undocking = 3,
+        /// The docking port has a shield, and the shield is closed.
+        Shielded = 4,
+        /// The docking ports shield is currently opening/closing.
+        Moving = 5,
+    }
+);

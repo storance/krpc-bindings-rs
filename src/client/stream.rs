@@ -1,15 +1,25 @@
 use super::schema::{
     ConnectionRequest, ConnectionRequest_Type, ConnectionResponse, ConnectionResponse_Status,
+    StreamUpdate,
 };
-use super::{recv_msg, send_msg, Connection, ConnectionError, ResponseError, StreamError};
+use super::{
+    convert_procedure_result, recv_msg, send_msg, Connection, ConnectionError, ResponseError,
+    StreamError,
+};
 use crate::codec::Decode;
 
 use std::cell::RefCell;
 use std::collections::BTreeMap;
+use std::io;
 use std::marker::PhantomData;
 use std::net::TcpStream;
 use std::rc::Rc;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Condvar, Mutex};
+use std::thread;
+use std::time::Duration;
+
+use protobuf::ProtobufError;
 
 #[derive(Debug)]
 pub struct StreamValue<T: Decode> {
@@ -193,8 +203,9 @@ impl StreamState {
 
 #[derive(Debug)]
 pub struct StreamManager {
-    socket: RefCell<TcpStream>,
-    active_streams: Mutex<BTreeMap<u64, Arc<StreamRawValue>>>,
+    active_streams: Arc<Mutex<BTreeMap<u64, Arc<StreamRawValue>>>>,
+    thread_handle: thread::JoinHandle<()>,
+    stop_flag: Arc<AtomicBool>,
 }
 
 impl StreamManager {
@@ -213,12 +224,62 @@ impl StreamManager {
         let response: ConnectionResponse = recv_msg(&mut stream_socket)?;
 
         if response.status == ConnectionResponse_Status::OK {
+            let active_streams = Arc::new(Mutex::new(BTreeMap::new()));
+            let stop_flag = Arc::new(AtomicBool::new(false));
+            let thread_handle =
+                Self::start_updater(stream_socket, active_streams.clone(), stop_flag.clone());
+
             Ok(Rc::new(StreamManager {
-                socket: RefCell::new(stream_socket),
-                active_streams: Mutex::new(BTreeMap::new()),
+                thread_handle,
+                active_streams,
+                stop_flag,
             }))
         } else {
             Err(ConnectionError::ConnectionError(response.message))
+        }
+    }
+
+    fn start_updater(
+        socket: TcpStream,
+        active_streams: Arc<Mutex<BTreeMap<u64, Arc<StreamRawValue>>>>,
+        stop_flag: Arc<AtomicBool>,
+    ) -> thread::JoinHandle<()> {
+        let mut stream_socket = socket;
+
+        thread::spawn(move || {
+            stream_socket
+                .set_read_timeout(Some(Duration::from_secs(1)))
+                .expect("Unable to set read timeout");
+
+            while !(*stop_flag).load(Ordering::Relaxed) {
+                let msg: Result<StreamUpdate, ProtobufError> = recv_msg(&mut stream_socket);
+                if let Some(stream_update) = match msg {
+                    Ok(stream_update) => Some(stream_update),
+                    Err(ref e) if Self::is_timeout_error(e) => None,
+                    Err(ref e) => panic!("Failed to retrieve stream update: {:?}", e),
+                } {
+                    let streams = active_streams.lock().unwrap();
+
+                    for stream_result in stream_update.results.iter() {
+                        if let Some(stream_value) = streams.get(&stream_result.id) {
+                            if stream_result.has_result() {
+                                stream_value.set_value(convert_procedure_result(
+                                    stream_result.get_result(),
+                                ));
+                            }
+                        };
+                    }
+                }
+            }
+        })
+    }
+
+    fn is_timeout_error(err: &ProtobufError) -> bool {
+        match err {
+            &ProtobufError::IoError(ref e) => {
+                e.kind() == io::ErrorKind::TimedOut || e.kind() == io::ErrorKind::WouldBlock
+            }
+            _ => false,
         }
     }
 
@@ -230,5 +291,11 @@ impl StreamManager {
     pub(super) fn deregister(&self, stream_id: u64) {
         let mut active_streams = self.active_streams.lock().unwrap();
         (*active_streams).remove(&stream_id);
+    }
+}
+
+impl Drop for StreamManager {
+    fn drop(&mut self) {
+        self.stop_flag.store(true, Ordering::Relaxed);
     }
 }

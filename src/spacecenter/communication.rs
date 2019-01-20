@@ -107,10 +107,10 @@ remote_type!(
     /// The type of communication link.
     enum CommLinkType {
         /// Link is to a base station on Kerbin.
-        Home => 0,
+        Home = 0,
         /// Link is to a control source, for example a manned spacecraft.
-        Control => 1,
+        Control = 1,
         /// Link is to a relay satellite.
-        Relay => 2
+        Relay = 2,
     }
 );
