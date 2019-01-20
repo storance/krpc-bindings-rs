@@ -4,6 +4,9 @@ version = "0.1.0"
 authors = ["Steven Torance <storance@gmail.com>"]
 edition = "2018"
 
+[lib]
+name = "krpc_bindings"
+
 [dependencies]
 protobuf = "^2.2.2"
 failure = "0.1.5"
