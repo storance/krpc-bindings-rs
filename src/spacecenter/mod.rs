@@ -289,7 +289,7 @@ remote_type!(
                 /// # Arguments
                 /// * `craft_dir` - Name of the directory in the current saves "Ships"
                 /// directory. For example `"VAB"` or `"SPH"`.
-                fn launchable_vessels(craft_dir: String) -> Vec<String> {
+                fn launchable_vessels(craft_dir: &str) -> Vec<String> {
                     LaunchableVessels(craft_dir)
                 }
             }
@@ -310,7 +310,7 @@ remote_type!(
                 ///
                 /// # Errors
                 /// Returns an error if any of the games pre-flight checks fail.
-                fn launch_vessel(craft_dir: String, name: String, launch_site : String, recover: bool) {
+                fn launch_vessel(craft_dir: &str, name: &str, launch_site : &str, recover: bool) {
                     LaunchVessel(craft_dir, name, launch_site, recover)
                 }
             }
@@ -330,7 +330,7 @@ remote_type!(
                 ///
                 /// *Note* This is equivalent to calling `launch_vessel` with the craft directory
                 /// set to `"VAB"` and the launch site set to `"LaunchPad"`.
-                fn launch_vessel_from_vab(name: String, recover: bool) {
+                fn launch_vessel_from_vab(name: &str, recover: bool) {
                     LaunchVesselFromVAB(name, recover)
                 }
             }
@@ -350,7 +350,7 @@ remote_type!(
                 ///
                 /// *Note* This is equivalent to calling `launch_vessel` with the craft directory
                 /// set to `"SPH"` and the launch site set to `"Runway"`.
-                fn launch_vessel_from_sph(name: String, recover: bool) {
+                fn launch_vessel_from_sph(name: &str, recover: bool) {
                     LaunchVesselFromSPH(name, recover)
                 }
             }
@@ -362,7 +362,7 @@ remote_type!(
                 ///
                 /// # Arguments
                 /// * `name` - Name of the save to create.
-                fn save(name: String) {
+                fn save(name: &str) {
                     Save(name)
                 }
             }
@@ -374,7 +374,7 @@ remote_type!(
                 ///
                 /// # Arguments
                 /// * `name` - Name of the save to load.
-                fn load(name: String) {
+                fn load(name: &str) {
                     Load(name)
                 }
             }

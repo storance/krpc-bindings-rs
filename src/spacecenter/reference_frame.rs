@@ -34,10 +34,10 @@ object SpaceCenter.ReferenceFrame {
             /// This vector points in the direction of the axis of rotation, and its magnitude is the
             /// speed of the rotation in radians per second. If `None`, (0,0,0) is used.
             fn create_relative(reference_frame: &ReferenceFrame,
-                               position: &Option<Vector3>,
-                               rotation: &Option<Quaternion>,
-                               velocity: &Option<Vector3>,
-                               angular_velocity: &Option<Vector3>) -> ReferenceFrame {
+                               position: Option<Vector3>,
+                               rotation: Option<Quaternion>,
+                               velocity: Option<Vector3>,
+                               angular_velocity: Option<Vector3>) -> ReferenceFrame {
                 CreateRelative(reference_frame,
                                position.unwrap_or((0.0, 0.0, 0.0)),
                                rotation.unwrap_or((0.0, 0.0, 0.0, 1.0)),
@@ -62,9 +62,9 @@ object SpaceCenter.ReferenceFrame {
             /// * `angular_velocity` - The reference frame providing the angular velocity of the frame.
             /// If `None`, the angular velocity of the `position` frame is used.
             fn create_hybrid(position: &ReferenceFrame,
-                             rotation: &Option<ReferenceFrame>,
-                             velocity: &Option<ReferenceFrame>,
-                             angular_velocity: &Option<ReferenceFrame>) -> ReferenceFrame {
+                             rotation: Option<&ReferenceFrame>,
+                             velocity: Option<&ReferenceFrame>,
+                             angular_velocity: Option<&ReferenceFrame>) -> ReferenceFrame {
                 CreateHybrid(position, rotation, velocity, angular_velocity)
             }
         }

@@ -394,7 +394,7 @@ object SpaceCenter.Vessel {
             /// speeds returned by the flight object will be zero. See the
             /// [reference frames tutorial](https://krpc.github.io/krpc/tutorials/reference-frames.html#tutorial-reference-frames)
             /// for examples of getting [the orbital and surface speeds of a vessel](https://krpc.github.io/krpc/tutorials/reference-frames.html#tutorial-reference-frames-vessel-speed).
-            fn flight(reference_frame: &Option<ReferenceFrame>) -> Flight{
+            fn flight(reference_frame: Option<&ReferenceFrame>) -> Flight{
                 Flight(reference_frame)
             }
         }

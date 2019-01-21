@@ -137,7 +137,7 @@ object SpaceCenter.Node {
             ///
             /// # Note
             /// Does not change when executing the maneuver node.
-            fn burn_vector(reference_frame: Option<ReferenceFrame>) -> Vector3 {
+            fn burn_vector(reference_frame: Option<&ReferenceFrame>) -> Vector3 {
                 BurnVector(reference_frame)
             }
         }
@@ -156,7 +156,7 @@ object SpaceCenter.Node {
             ///
             /// # Note
             /// Changes as the maneuver node is executed.
-            fn remaining_burn_vector(reference_frame: Option<ReferenceFrame>) -> Vector3 {
+            fn remaining_burn_vector(reference_frame: Option<&ReferenceFrame>) -> Vector3 {
                 RemainingBurnVector(reference_frame)
             }
         }
