@@ -2,7 +2,6 @@ use crate::codec::*;
 use crate::*;
 
 use std::collections::HashSet;
-use std::rc::Rc;
 
 remote_type!(
 /// Contracts manager. Obtained by calling `SpaceCenter::contract_manager()`.

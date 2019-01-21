@@ -2,8 +2,6 @@ use super::Part;
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// A landing leg. Obtained by calling `Part::leg().`
 object SpaceCenter.Leg {

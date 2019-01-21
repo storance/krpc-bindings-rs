@@ -1,21 +1,23 @@
-extern crate failure;
-extern crate protobuf;
 #[macro_use]
-extern crate failure_derive;
+extern crate failure;
+extern crate paste;
+extern crate protobuf;
 
-pub mod client;
+mod client;
 pub mod krpc;
 pub mod spacecenter;
 #[macro_use]
 mod macros;
 mod codec;
 
-use std::rc::Rc;
-
-pub use self::client::{Connection, RpcResult};
+pub use self::client::schema::{Services, Status};
+pub use self::client::{
+    Connection, ConnectionError, ResponseError, RpcError, RpcResult, StreamError, StreamResult,
+    StreamValue,
+};
 
 pub trait RemoteObject {
-    fn new(connection: Rc<Connection>, id: u64) -> Self
+    fn new(connection: &Connection, id: u64) -> Self
     where
         Self: Sized;
 

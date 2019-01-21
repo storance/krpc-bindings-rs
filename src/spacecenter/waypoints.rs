@@ -3,7 +3,6 @@ use crate::codec::*;
 use crate::*;
 
 use std::collections::BTreeMap;
-use std::rc::Rc;
 
 remote_type!(
 /// Waypoints are the location markers you can see on the map view showing you where contracts

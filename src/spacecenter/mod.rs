@@ -2,7 +2,6 @@ use crate::codec::*;
 use crate::*;
 
 use std::collections::BTreeMap;
-use std::rc::Rc;
 
 mod autopilot;
 mod body;
@@ -73,11 +72,11 @@ remote_type!(
                 ActiveVessel: Option<Vessel>,
                 /// Returns the currently active vessel or None if there isn't one.
                 ///
-                /// **Game Scenes**: All
+                /// **Game Scenes**: Flight
                 get: active_vessel,
                 /// Sets the active vessel to the given vessel.
                 ///
-                /// **Game Scenes**: All
+                /// **Game Scenes**: Flight
                 ///
                 /// # Arguments
                 /// * `value` - The vessel to make active.
@@ -449,7 +448,7 @@ remote_type!(
                 ///
                 /// # Returns
                 /// The corresponding position, as a vector, in reference frame `to`.
-                fn transform_position(position: Vector3, from: ReferenceFrame, to: ReferenceFrame) -> Vector3 {
+                fn transform_position(position: Vector3, from: &ReferenceFrame, to: &ReferenceFrame) -> Vector3 {
                     TransformPosition(position, from, to)
                 }
             }
@@ -465,7 +464,7 @@ remote_type!(
                 ///
                 /// # Returns
                 /// The corresponding direction, as a vector, in reference frame `to`.
-                fn transform_direction(direction: Vector3, from: ReferenceFrame, to: ReferenceFrame) -> Vector3 {
+                fn transform_direction(direction: Vector3, from: &ReferenceFrame, to: &ReferenceFrame) -> Vector3 {
                     TransformDirection(direction, from, to)
                 }
             }
@@ -483,7 +482,7 @@ remote_type!(
                 /// # Returns
                 /// The corresponding rotation, as a quaternion of the form  (*x*,*y*,*z*,*w*),
                 /// in reference frame `to`.
-                fn transform_rotation(rotation: Quaternion, from: ReferenceFrame, to: ReferenceFrame) -> Quaternion {
+                fn transform_rotation(rotation: Quaternion, from: &ReferenceFrame, to: &ReferenceFrame) -> Quaternion {
                     TransformRotation(rotation, from, to)
                 }
             }
@@ -504,7 +503,7 @@ remote_type!(
                 ///
                 /// # Returns
                 /// The corresponding velocity, as a vector, in reference frame to.
-                fn transform_velocity(position: Vector3, velocity: Vector3, from: ReferenceFrame, to: ReferenceFrame) -> Vector3 {
+                fn transform_velocity(position: Vector3, velocity: Vector3, from: &ReferenceFrame, to: &ReferenceFrame) -> Vector3 {
                     TransformVelocity(position, velocity, from, to)
                 }
             }
@@ -521,7 +520,7 @@ remote_type!(
                 ///
                 /// # Returns
                 /// The distance to the hit, in meters, or infinity if there was no hit.
-                fn raycast_distance(position: Vector3, direction: Vector3, reference_frame: ReferenceFrame) -> f64 {
+                fn raycast_distance(position: Vector3, direction: Vector3, reference_frame: &ReferenceFrame) -> f64 {
                     RaycastDistance(position, direction, reference_frame)
                 }
             }
@@ -538,7 +537,7 @@ remote_type!(
                 ///
                 /// # Returns
                 /// The part that was hit or `None` if there was no hit.
-                fn raycast_part(position: Vector3, direction: Vector3, reference_frame: ReferenceFrame) -> Option<Part> {
+                fn raycast_part(position: Vector3, direction: Vector3, reference_frame: &ReferenceFrame) -> Option<Part> {
                     RaycastPart(position, direction, reference_frame)
                 }
             }

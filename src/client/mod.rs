@@ -11,11 +11,11 @@ pub mod schema;
 mod stream;
 
 pub use self::error::*;
+pub use self::stream::{StreamRawValue, StreamValue};
 
 use self::rpc::Rpc;
 use self::schema::ProcedureResult;
 use self::schema::Stream;
-use self::stream::StreamRawValue;
 
 pub const DEFAULT_RPC_PORT: u16 = 50000;
 pub const DEFAULT_STREAM_PORT: u16 = 50001;
@@ -25,7 +25,8 @@ fn send_msg<T: protobuf::Message>(
     message: &T,
 ) -> Result<(), ProtobufError> {
     let mut cos = CodedOutputStream::new(socket);
-    cos.write_message_no_tag(message)
+    cos.write_message_no_tag(message)?;
+    cos.flush()
 }
 
 fn recv_msg<T: protobuf::Message>(socket: &mut TcpStream) -> Result<T, ProtobufError> {

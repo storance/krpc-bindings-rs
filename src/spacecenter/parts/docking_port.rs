@@ -3,8 +3,6 @@ use crate::codec::*;
 use crate::spacecenter::{ReferenceFrame, Vessel};
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// A docking port. Obtained by calling `Part::docking_port().`
 object SpaceCenter.DockingPort {

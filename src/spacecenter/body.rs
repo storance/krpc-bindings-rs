@@ -3,7 +3,6 @@ use crate::codec::*;
 use crate::*;
 
 use std::collections::HashSet;
-use std::rc::Rc;
 
 remote_type!(
     /// Represents a celestial body (such as a planet or moon).

@@ -2,8 +2,6 @@ use super::{CelestialBody, ReferenceFrame};
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// Describes an orbit. For example, the orbit of a vessel or a celestial body.
 object SpaceCenter.Orbit {

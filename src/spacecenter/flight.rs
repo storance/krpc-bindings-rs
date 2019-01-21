@@ -2,8 +2,6 @@ use super::CelestialBody;
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// Used to get flight telemetry for a vessel, by calling `Vessel::flight()`. All of
 /// the information returned by this class is given in the reference frame passed to that method.

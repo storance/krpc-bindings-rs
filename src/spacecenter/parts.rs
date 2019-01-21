@@ -2,8 +2,6 @@ use super::{ReferenceFrame, Resources, Vessel};
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 mod antenna;
 mod cargo_bay;
 mod control_surface;

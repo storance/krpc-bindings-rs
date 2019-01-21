@@ -2,8 +2,6 @@ use super::Part;
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// A radiator. Obtained by calling `Part::radiator().`
 object SpaceCenter.Radiator {

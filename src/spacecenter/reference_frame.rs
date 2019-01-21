@@ -1,8 +1,6 @@
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// Represents a reference frame for positions, rotations and velocities. Contains:
 ///

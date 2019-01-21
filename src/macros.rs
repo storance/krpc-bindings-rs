@@ -17,13 +17,23 @@ macro_rules! remote_type {
         $(#[$meta])*
         #[derive(Debug, Clone)]
         pub struct $service {
-            connection: Rc<Connection>
+            connection: Connection,
         }
 
         impl $service {
             /// Creates a new service using the given `connection`.
-            pub fn new(connection: Rc<Connection>) -> Self {
-                $service{connection}
+            pub fn new(connection: &Connection) -> Self {
+                Self {
+                    connection: connection.clone(),
+                }
+            }
+
+            paste::item! {
+                /// Get a stream instance that allows access to stream version of the methods
+                /// and properties for this service.
+                pub fn stream(&self) -> [<$service Stream>] {
+                    [<$service Stream>]::new(&self.connection)
+                }
             }
 
             // Properties
@@ -36,11 +46,57 @@ macro_rules! remote_type {
                 remote_type!(@service_method(service=$service) $( $method )+ );
             )*
         }
+
+        paste::item! {
+            #[derive(Debug, Clone)]
+            pub struct [<$service Stream>] {
+                connection: Connection,
+            }
+
+            impl [<$service Stream>] {
+                pub fn new(connection: &Connection) -> Self {
+                    Self {
+                        connection: connection.clone(),
+                    }
+                }
+
+                // Properties
+                $(
+                    remote_type!(@service_stream_property(service=$service) $( $property )+ );
+                )*
+
+                // Methods
+                $(
+                    remote_type!(@service_stream_method(service=$service) $( $method )+ );
+                )*
+            }
+        }
     };
 
     //
     // Properties
     //
+    (
+        @service_property(service=$service:tt)
+            $prop_name: ident : Option<$prop_type: ty>,
+            $(#[$getter_meta:meta])*
+            get: $getter_name: ident,
+            $(#[$setter_meta:meta])*
+            set: $setter_name: ident
+    ) => {
+        remote_type!(@service_method(service=$service, prefix=get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> Option<$prop_type> {
+                $prop_name()
+            });
+
+        remote_type!(@service_method(service=$service, prefix=set_)
+            $( #[$setter_meta] )*
+            fn $setter_name(value: &$prop_type) {
+                $prop_name(value)
+            });
+    };
+
     (
         @service_property(service=$service:tt)
             $prop_name: ident : $prop_type: ty,
@@ -57,30 +113,9 @@ macro_rules! remote_type {
 
         remote_type!(@service_method(service=$service, prefix=set_)
             $( #[$setter_meta] )*
-            fn $setter_name(value: $prop_type) {
+            fn $setter_name(value: &$prop_type) {
                 $prop_name(value)
             });
-    };
-
-    (
-        @service_property(service=$service:tt)
-            $prop_name: ident : $set_type: ty => $get_type: ty,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident
-    ) => {
-        remote_type!(@service_method(service=$service, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> $get_type {
-                $prop_name()
-            });
-
-        $(remote_type!(@service_method(service=$service, prefix=set_)
-            $( #[$setter_meta] )*
-            fn $setter_name(value: $set_type) {
-                $prop_name(value)
-            }))?;
     };
 
     (
@@ -90,6 +125,24 @@ macro_rules! remote_type {
             get: $getter_name: ident
     ) => {
         remote_type!(@service_method(service=$service, prefix=get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $prop_type {
+                $prop_name()
+            });
+    };
+
+    //
+    // Stream Properties
+    //
+    (
+        @service_stream_property(service=$service:tt)
+            $prop_name: ident : $prop_type: ty,
+            $(#[$getter_meta:meta])*
+            get: $getter_name: ident $(,
+            $(#[$setter_meta:meta])*
+            set: $setter_name: ident)?
+    ) => {
+        remote_type!(@service_stream_method(service=$service, prefix=get_)
             $( #[$getter_meta] )*
             fn $getter_name() -> $prop_type {
                 $prop_name()
@@ -113,7 +166,7 @@ macro_rules! remote_type {
             let response = self.connection.invoke(stringify!($service),
                 concat!( $( stringify!($prefix), )? stringify!($rpc_name)),
                 &args)?;
-            Ok(decode(&response, self.connection.clone())?)
+            Ok(decode(&response, &self.connection)?)
         }
     };
 
@@ -136,6 +189,41 @@ macro_rules! remote_type {
     };
 
     //
+    // Stream Methods
+    //
+    (
+        @service_stream_method(service=$service:tt $(, prefix=$prefix:tt)?)
+        $(#[$meta:meta])*
+        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
+            $rpc_name: tt($( $arg_expr: expr ),* )
+        }
+    ) => {
+        $(#[$meta])*
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> StreamResult<StreamValue<$return_type>> {
+            let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
+
+            let stream_raw_value = self.connection.add_stream(
+                stringify!($service),
+                concat!( $( stringify!($prefix), )? stringify!($rpc_name)),
+                &args,
+                false
+            )?;
+
+            Ok(StreamValue::new(&self.connection, stream_raw_value))
+        }
+    };
+
+    (
+        @service_stream_method(service=$service:tt $(, prefix=$prefix:tt)?)
+        $(#[$meta:meta])*
+        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
+            $rpc_name: tt($( $arg_expr: expr ),* )
+        }
+    ) => {
+        // This space intentionally left blank
+    };
+
+    //
     // Remote Object
     //
     (
@@ -153,23 +241,58 @@ macro_rules! remote_type {
         }
      ) => {
         $(#[$meta])*
+        #[derive(Debug, Clone)]
         pub struct $object_name {
             #[allow(dead_code)]
-            connection: Rc<Connection>,
+            connection: Connection,
             id: u64
         }
 
+        paste::item! {
+            #[derive(Debug, Clone)]
+            pub struct [<$object_name Stream>] {
+                connection: Connection,
+                id: u64
+            }
+
+            impl [<$object_name Stream>] {
+                pub fn new(remote_object: &$object_name) -> Self {
+                    Self {
+                        connection: remote_object.connection.clone(),
+                        id: remote_object.id
+                    }
+                }
+
+                // Properties
+                $(
+                    $(
+                        remote_type!(@object_stream_property(service=$service, class=$object_name) $( $property )+ );
+                    )*
+                )?
+
+                // Methods
+                $(
+                    $(
+                        remote_type!(@object_stream_method(service=$service, class=$object_name, separator=_) $( $method )+ );
+                    )*
+                )?
+            }
+        }
+
         impl RemoteObject for $object_name {
-            fn new(connection: Rc<Connection>, id: u64) -> Self {
-                $object_name{connection, id}
+            fn new(connection: &Connection, id: u64) -> Self {
+                Self {
+                    connection: connection.clone(),
+                    id
+                }
             }
 
             fn id(&self) -> u64 { self.id }
         }
 
         impl Decode for $object_name {
-            fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
-                let id: u64 = decode(bytes, connection.clone())?;
+            fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
+                let id: u64 = decode(bytes, connection)?;
                 if id == 0 {
                     Err(CodecError::NullValue)
                 } else {
@@ -179,8 +302,8 @@ macro_rules! remote_type {
         }
 
         impl Decode for Option<$object_name> {
-            fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
-                let id: u64 = decode(bytes, connection.clone())?;
+            fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
+                let id: u64 = decode(bytes, connection)?;
                 if id == 0 {
                     Ok(None)
                 } else {
@@ -205,6 +328,14 @@ macro_rules! remote_type {
         }
 
         impl $object_name {
+            paste::item! {
+                /// Get a stream instance that allows access to stream version of the methods
+                /// and properties for this remote object.
+                pub fn stream(&self) -> [<$object_name Stream>] {
+                    [<$object_name Stream>]::new(self)
+                }
+            }
+
             // Properties
             $(
                 $(
@@ -233,6 +364,27 @@ macro_rules! remote_type {
     //
     (
         @object_property(service=$service:tt, class=$class:tt)
+            $prop_name: ident : Option<$prop_type: ty>,
+            $(#[$getter_meta:meta])*
+            get: $getter_name: ident,
+            $(#[$setter_meta:meta])*
+            set: $setter_name: ident
+    ) => {
+        remote_type!(@object_method(service=$service, class=$class, separator=_get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> Option<$prop_type> {
+                $prop_name()
+            });
+
+        remote_type!(@object_method(service=$service, class=$class, separator=_set_)
+            $( #[$setter_meta] )*
+            fn $setter_name(value: &$prop_type) {
+                $prop_name(value)
+            });
+    };
+
+    (
+        @object_property(service=$service:tt, class=$class:tt)
             $prop_name: ident : $prop_type: ty,
             $(#[$getter_meta:meta])*
             get: $getter_name: ident,
@@ -247,30 +399,9 @@ macro_rules! remote_type {
 
         remote_type!(@object_method(service=$service, class=$class, separator=_set_)
             $( #[$setter_meta] )*
-            fn $setter_name(value: $prop_type) {
+            fn $setter_name(value: &$prop_type) {
                 $prop_name(value)
             });
-    };
-
-    (
-        @object_property(service=$service:tt, class=$class:tt)
-            $prop_name: ident : $set_type: ty => $get_type: ty,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident
-    ) => {
-        remote_type!(@object_method(service=$service, class=$class, separator=_get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> $get_type {
-                $prop_name()
-            });
-
-        $(remote_type!(@object_method(service=$service, class=$class, separator=_set_)
-            $( #[$setter_meta] )*
-            fn $setter_name(value: $set_type) {
-                $prop_name(value)
-            }))?;
     };
 
     (
@@ -280,6 +411,24 @@ macro_rules! remote_type {
             get: $getter_name: ident
     ) => {
         remote_type!(@object_method(service=$service, class=$class, separator=_get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $prop_type {
+                $prop_name()
+            });
+    };
+
+    //
+    // Stream Properties
+    //
+    (
+        @object_stream_property(service=$service:tt, class=$class:tt)
+            $prop_name: ident : $prop_type: ty,
+            $(#[$getter_meta:meta])*
+            get: $getter_name: ident $(,
+            $(#[$setter_meta:meta])*
+            set: $setter_name: ident)?
+    ) => {
+        remote_type!(@object_stream_method(service=$service, class=$class, separator=_get_)
             $( #[$getter_meta] )*
             fn $getter_name() -> $prop_type {
                 $prop_name()
@@ -303,7 +452,7 @@ macro_rules! remote_type {
             let response = self.connection.invoke(stringify!($service),
                 concat!( stringify!($class), stringify!($separator), stringify!($rpc_name)),
                 &args)?;
-            Ok(decode(&response, self.connection.clone())?)
+            Ok(decode(&response, &self.connection)?)
         }
     };
 
@@ -326,6 +475,41 @@ macro_rules! remote_type {
     };
 
     //
+    // Stream Methods
+    //
+    (
+        @object_stream_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
+        $(#[$meta:meta])*
+        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
+            $rpc_name: tt($( $arg_expr: expr ),* )
+        }
+    ) => {
+        $(#[$meta])*
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> StreamResult<StreamValue<$return_type>> {
+            let args: Vec<Vec<u8>> = vec![self.id.encode()? $(, $arg_expr.encode()?)*];
+
+            let stream_raw_value = self.connection.add_stream(
+                stringify!($service),
+                concat!( stringify!($class), stringify!($separator), stringify!($rpc_name)),
+                &args,
+                false
+            )?;
+
+            Ok(StreamValue::new(&self.connection, stream_raw_value))
+        }
+    };
+
+    (
+        @object_stream_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
+        $(#[$meta:meta])*
+        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
+            $rpc_name: tt($( $arg_expr: expr ),* )
+        }
+    ) => {
+        // This space intentionally left blank
+    };
+
+    //
     // Static Methods
     //
     (
@@ -336,7 +520,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(connection: Rc<Connection> $(, $arg_name : $arg_type)*) -> RpcResult<$return_type> {
+        pub fn $method_name(connection: &Connection $(, $arg_name : $arg_type)*) -> RpcResult<$return_type> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
             let response = connection.invoke(stringify!($service),
@@ -355,7 +539,7 @@ macro_rules! remote_type {
         $( $(#[$variant_meta:meta])* $value_name: ident = $value_int : expr),+ $(,)?
     }) => {
         $(#[$enum_meta])*
-        #[derive(Debug, Copy, Clone)]
+        #[derive(Debug, Copy, Clone, PartialEq, PartialOrd)]
         pub enum $enum_name {
             $(
                 $(#[$variant_meta])*
@@ -377,7 +561,7 @@ macro_rules! remote_type {
         }
 
         impl Decode for $enum_name {
-            fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+            fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
                 let value: i64 = decode(bytes, connection)?;
                 $enum_name::from_value(value)
                     .ok_or(CodecError::InvalidEnumValue(value))

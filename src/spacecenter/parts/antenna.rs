@@ -2,8 +2,6 @@ use super::Part;
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// An antenna. Obtained by calling `Part::antenna().`
 object SpaceCenter.Antenna {

@@ -2,8 +2,6 @@ use super::Part;
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// A solar panel. Obtained by calling `Part::solar_panel().`
 object SpaceCenter.SolarPanel {

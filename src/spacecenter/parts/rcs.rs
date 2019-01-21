@@ -4,7 +4,6 @@ use crate::spacecenter::{Propellant, Thruster};
 use crate::*;
 
 use std::collections::BTreeMap;
-use std::rc::Rc;
 
 remote_type!(
 /// An rcs block or thruster. Obtained by calling `Part::rcs().`

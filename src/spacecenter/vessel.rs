@@ -2,8 +2,6 @@ use super::{AutoPilot, Comms, Control, Flight, Orbit, Parts, ReferenceFrame, Res
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// These objects are used to interact with vessels in KSP. This includes getting orbital and
 /// flight data, manipulating control inputs and managing resources.

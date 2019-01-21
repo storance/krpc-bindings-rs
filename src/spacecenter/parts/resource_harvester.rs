@@ -2,8 +2,6 @@ use super::Part;
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// A resource harvester. Obtained by calling `Part::resource_harvester().`
 object SpaceCenter.ResourceHarvester {

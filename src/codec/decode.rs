@@ -2,81 +2,80 @@ use super::CodecError;
 use crate::client::schema::{Dictionary, List, Services, Set, Status, Tuple};
 use crate::Connection;
 
-use protobuf::CodedInputStream;
+use protobuf::{CodedInputStream, Message};
 
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::hash::Hash;
-use std::rc::Rc;
 
 pub trait Decode
 where
     Self: Sized,
 {
-    fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError>;
+    fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError>;
 }
 
 impl Decode for bool {
-    fn decode(bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| Ok(cis.read_bool()?))
     }
 }
 
 impl Decode for i32 {
-    fn decode(bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| Ok(cis.read_sint32()?))
     }
 }
 
 impl Decode for i64 {
-    fn decode(bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| Ok(cis.read_sint64()?))
     }
 }
 
 impl Decode for u32 {
-    fn decode(bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| Ok(cis.read_uint32()?))
     }
 }
 
 impl Decode for u64 {
-    fn decode(bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| Ok(cis.read_uint64()?))
     }
 }
 
 impl Decode for f32 {
-    fn decode(bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| Ok(cis.read_float()?))
     }
 }
 
 impl Decode for f64 {
-    fn decode(bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| Ok(cis.read_double()?))
     }
 }
 
 impl Decode for String {
-    fn decode(bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| Ok(cis.read_string()?))
     }
 }
 
 impl Decode for Vec<u8> {
-    fn decode(bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| Ok(cis.read_bytes()?))
     }
 }
 
 impl<T: Decode> Decode for Vec<T> {
-    fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let entries: List = cis.read_message()?;
             let mut decoded_entries = Vec::with_capacity(entries.items.len());
 
             for entry in entries.items.iter() {
-                decoded_entries.push(decode(entry, connection.clone())?);
+                decoded_entries.push(decode(entry, connection)?);
             }
             Ok(decoded_entries)
         })
@@ -84,15 +83,15 @@ impl<T: Decode> Decode for Vec<T> {
 }
 
 impl<K: Decode + Ord, V: Decode> Decode for BTreeMap<K, V> {
-    fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let entries: Dictionary = cis.read_message()?;
             let mut decoded_map = BTreeMap::new();
 
             for entry in entries.entries.iter() {
                 decoded_map.insert(
-                    decode(&entry.key, connection.clone())?,
-                    decode(&entry.value, connection.clone())?,
+                    decode(&entry.key, connection)?,
+                    decode(&entry.value, connection)?,
                 );
             }
             Ok(decoded_map)
@@ -101,15 +100,15 @@ impl<K: Decode + Ord, V: Decode> Decode for BTreeMap<K, V> {
 }
 
 impl<K: Decode + Eq + Hash, V: Decode> Decode for HashMap<K, V> {
-    fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let entries: Dictionary = cis.read_message()?;
             let mut decoded_map = HashMap::new();
 
             for entry in entries.entries.iter() {
                 decoded_map.insert(
-                    decode(&entry.key, connection.clone())?,
-                    decode(&entry.value, connection.clone())?,
+                    decode(&entry.key, connection)?,
+                    decode(&entry.value, connection)?,
                 );
             }
             Ok(decoded_map)
@@ -118,13 +117,13 @@ impl<K: Decode + Eq + Hash, V: Decode> Decode for HashMap<K, V> {
 }
 
 impl<T: Decode + Eq + Hash> Decode for HashSet<T> {
-    fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let entries: Set = cis.read_message()?;
             let mut decoded_set = HashSet::with_capacity(entries.items.len());
 
             for entry in entries.items.iter() {
-                decoded_set.insert(decode(entry, connection.clone())?);
+                decoded_set.insert(decode(entry, connection)?);
             }
             Ok(decoded_set)
         })
@@ -132,13 +131,13 @@ impl<T: Decode + Eq + Hash> Decode for HashSet<T> {
 }
 
 impl<T: Decode + Ord> Decode for BTreeSet<T> {
-    fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let entries: Set = cis.read_message()?;
             let mut decoded_set = BTreeSet::new();
 
             for entry in entries.items.iter() {
-                decoded_set.insert(decode(entry, connection.clone())?);
+                decoded_set.insert(decode(entry, connection)?);
             }
             Ok(decoded_set)
         })
@@ -146,13 +145,13 @@ impl<T: Decode + Ord> Decode for BTreeSet<T> {
 }
 
 impl Decode for () {
-    fn decode(_bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(_bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
         Ok(())
     }
 }
 
 impl<T1: Decode, T2: Decode> Decode for (T1, T2) {
-    fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let tuple: Tuple = cis.read_message()?;
 
@@ -161,15 +160,15 @@ impl<T1: Decode, T2: Decode> Decode for (T1, T2) {
             }
 
             Ok((
-                decode(&tuple.get_items()[0], connection.clone())?,
-                decode(&tuple.get_items()[1], connection.clone())?,
+                decode(&tuple.get_items()[0], connection)?,
+                decode(&tuple.get_items()[1], connection)?,
             ))
         })
     }
 }
 
 impl<T1: Decode, T2: Decode, T3: Decode> Decode for (T1, T2, T3) {
-    fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let tuple: Tuple = cis.read_message()?;
 
@@ -178,16 +177,16 @@ impl<T1: Decode, T2: Decode, T3: Decode> Decode for (T1, T2, T3) {
             }
 
             Ok((
-                decode(&tuple.get_items()[0], connection.clone())?,
-                decode(&tuple.get_items()[1], connection.clone())?,
-                decode(&tuple.get_items()[2], connection.clone())?,
+                decode(&tuple.get_items()[0], connection)?,
+                decode(&tuple.get_items()[1], connection)?,
+                decode(&tuple.get_items()[2], connection)?,
             ))
         })
     }
 }
 
 impl<T1: Decode, T2: Decode, T3: Decode, T4: Decode> Decode for (T1, T2, T3, T4) {
-    fn decode(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<Self, CodecError> {
+    fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
         decode_with(bytes, |cis| {
             let tuple: Tuple = cis.read_message()?;
 
@@ -196,32 +195,36 @@ impl<T1: Decode, T2: Decode, T3: Decode, T4: Decode> Decode for (T1, T2, T3, T4)
             }
 
             Ok((
-                decode(&tuple.get_items()[0], connection.clone())?,
-                decode(&tuple.get_items()[1], connection.clone())?,
-                decode(&tuple.get_items()[2], connection.clone())?,
-                decode(&tuple.get_items()[3], connection.clone())?,
+                decode(&tuple.get_items()[0], connection)?,
+                decode(&tuple.get_items()[1], connection)?,
+                decode(&tuple.get_items()[2], connection)?,
+                decode(&tuple.get_items()[3], connection)?,
             ))
         })
     }
 }
 
 impl Decode for Services {
-    fn decode(bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
-        decode_message(bytes)
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
+        let mut value = Self::new();
+        value.merge_from_bytes(bytes.as_slice())?;
+        Ok(value)
     }
 }
 
 impl Decode for Status {
-    fn decode(bytes: &Vec<u8>, _connection: Rc<Connection>) -> Result<Self, CodecError> {
-        decode_message(bytes)
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
+        let mut value = Self::new();
+        value.merge_from_bytes(bytes.as_slice())?;
+        Ok(value)
     }
 }
 
-pub fn decode<T: Decode>(bytes: &Vec<u8>, connection: Rc<Connection>) -> Result<T, CodecError> {
+pub fn decode<T: Decode>(bytes: &Vec<u8>, connection: &Connection) -> Result<T, CodecError> {
     T::decode(bytes, connection)
 }
 
-pub fn decode_message<T: protobuf::Message>(bytes: &Vec<u8>) -> Result<T, CodecError> {
+pub fn decode_message<T: Message>(bytes: &Vec<u8>) -> Result<T, CodecError> {
     decode_with(bytes, |cis| Ok(cis.read_message()?))
 }
 

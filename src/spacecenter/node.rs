@@ -2,8 +2,6 @@ use super::{Orbit, ReferenceFrame};
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// Represents a maneuver node.  Can be created using `Control::add_node()`.
 object SpaceCenter.Node {

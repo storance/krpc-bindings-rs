@@ -2,8 +2,6 @@ use super::Part;
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// A parachute. Obtained by calling `Part::parachute().`
 object SpaceCenter.Parachute {

@@ -8,7 +8,6 @@ use super::{
 };
 use crate::codec::Decode;
 
-use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::io;
 use std::marker::PhantomData;
@@ -21,18 +20,18 @@ use std::time::Duration;
 
 use protobuf::ProtobufError;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StreamValue<T: Decode> {
-    connection: Rc<Connection>,
+    connection: Connection,
     value: Arc<StreamRawValue>,
     phantom: PhantomData<T>,
 }
 
 impl<T: Decode + Clone> StreamValue<T> {
-    pub fn new(connection: Rc<Connection>, value: Arc<StreamRawValue>) -> StreamValue<T> {
+    pub fn new(connection: &Connection, value: Arc<StreamRawValue>) -> StreamValue<T> {
         StreamValue {
-            connection,
-            value,
+            connection: connection.clone(),
+            value: value,
             phantom: PhantomData,
         }
     }
@@ -48,7 +47,7 @@ impl<T: Decode + Clone> StreamValue<T> {
         }
 
         self.value
-            .value_map(|bytes| Ok(T::decode(bytes, self.connection.clone())?))
+            .value_map(|bytes| Ok(T::decode(bytes, &self.connection)?))
     }
 
     pub fn started(&self) -> Result<bool, StreamError> {
@@ -110,12 +109,6 @@ impl StreamRawValue {
 
     pub fn id(&self) -> u64 {
         self.id
-    }
-
-    pub(super) fn version(&self) -> Result<u64, StreamError> {
-        let state = self.state.lock().unwrap();
-
-        Ok(state.version)
     }
 
     pub fn value(&self) -> Result<Vec<u8>, StreamError> {
@@ -239,6 +232,7 @@ impl StreamManager {
         }
     }
 
+    #[allow(unused_must_use)]
     fn start_updater(
         socket: TcpStream,
         active_streams: Arc<Mutex<BTreeMap<u64, Arc<StreamRawValue>>>>,

@@ -2,8 +2,6 @@ use super::Part;
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// A wheel. Includes landing gear and rover wheels. Obtained by calling `Part::wheel()`. Can be
 /// used to control the motors, steering and deployment of wheels, among other things.

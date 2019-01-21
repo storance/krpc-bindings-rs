@@ -9,8 +9,9 @@ name = "krpc_bindings"
 
 [dependencies]
 protobuf = "^2.2.2"
-failure = "0.1.5"
-failure_derive = "0.1.5"
+failure = "^0.1.5"
+failure_derive = "^0.1.5"
+paste = "^0.1.4"
 
 [build-dependencies]
 protoc-rust = "^2.2.2"

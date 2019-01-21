@@ -2,8 +2,6 @@ use super::Part;
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// A cargo bay. Obtained by calling `Part::cargo_bay().`
 object SpaceCenter.CargoBay {

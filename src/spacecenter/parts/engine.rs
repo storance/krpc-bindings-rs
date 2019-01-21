@@ -4,7 +4,6 @@ use crate::spacecenter::Thruster;
 use crate::*;
 
 use std::collections::BTreeMap;
-use std::rc::Rc;
 
 remote_type!(
 /// An engine, including ones of various types. For example liquid fuelled gimballed engines,

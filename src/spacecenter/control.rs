@@ -2,8 +2,6 @@ use super::{Node, Vessel};
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// Used to manipulate the controls of a vessel. This includes adjusting the throttle,
 /// enabling/disabling systems such as SAS and RCS, or altering the direction in which the vessel

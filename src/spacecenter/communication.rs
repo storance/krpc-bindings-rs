@@ -2,8 +2,6 @@ use super::spacecenter::Vessel;
 use crate::codec::*;
 use crate::*;
 
-use std::rc::Rc;
-
 remote_type!(
 /// Used to interact with CommNet for a given vessel. Obtained by calling `Vessel::comms()`.
 object SpaceCenter.Comms {
