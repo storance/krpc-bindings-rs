@@ -203,7 +203,7 @@ remote_type!(
                 /// * `to_part` - The part to transfer to.
                 /// * `resource` - The name of the resource to transfer.
                 /// * `max_amount` - The maximum amount of resource to transfer.
-                fn start(from_part: Part, to_part: Part, resource: String, max_amount: f32) -> ResourceTransfer {
+                fn start(from_part: Part, to_part: Part, resource: &str, max_amount: f32) -> ResourceTransfer {
                     Start(from_part, to_part, resource, max_amount)
                 }
             }

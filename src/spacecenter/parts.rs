@@ -241,7 +241,7 @@ object SpaceCenter.Parts {
             ///
             /// # Arguments
             /// * `name` - The name of the parts to find.
-            fn with_name(name: String) -> Vec<Part> {
+            fn with_name(name: &str) -> Vec<Part> {
                 WithName(name)
             }
         }
@@ -252,7 +252,7 @@ object SpaceCenter.Parts {
             ///
             /// # Arguments
             /// * `title` - The title of the parts to find.
-            fn with_title(title: String) -> Vec<Part> {
+            fn with_title(title: &str) -> Vec<Part> {
                 WithTitle(title)
             }
         }
@@ -263,7 +263,7 @@ object SpaceCenter.Parts {
             ///
             /// # Arguments
             /// * `tag` - The tag of the parts to find.
-            fn with_tag(tag: String) -> Vec<Part> {
+            fn with_tag(tag: &str) -> Vec<Part> {
                 WithTag(tag)
             }
         }
@@ -275,7 +275,7 @@ object SpaceCenter.Parts {
             ///
             /// # Arguments
             /// * `module_name` - The name of the module.
-            fn with_module(module_name: String) -> Vec<Part> {
+            fn with_module(module_name: &str) -> Vec<Part> {
                 WithModule(module_name)
             }
         }
@@ -309,7 +309,7 @@ object SpaceCenter.Parts {
             ///
             /// # Arguments
             /// * `module_name` - The name of the module.
-            fn modules_with_name(module_name: String) -> Vec<Module> {
+            fn modules_with_name(module_name: &str) -> Vec<Module> {
                 ModulesWithName(module_name)
             }
         }

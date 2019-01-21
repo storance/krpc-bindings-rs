@@ -178,7 +178,7 @@ object SpaceCenter.Node {
             ///
             /// # Returns
             /// The position as a vector.
-            fn position(reference_frame: ReferenceFrame) -> Vector3 {
+            fn position(reference_frame: &ReferenceFrame) -> Vector3 {
                 Position(reference_frame)
             }
         }
@@ -192,7 +192,7 @@ object SpaceCenter.Node {
             ///
             /// # Returns
             /// The direction as a unit vector.
-            fn direction(reference_frame: ReferenceFrame) -> Vector3 {
+            fn direction(reference_frame: &ReferenceFrame) -> Vector3 {
                 Direction(reference_frame)
             }
         }

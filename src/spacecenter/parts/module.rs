@@ -60,7 +60,7 @@ object SpaceCenter.Module {
             ///
             /// # Arguments
             /// * `name` - Name of the field.
-            fn has_field(name: String) -> bool {
+            fn has_field(name: &str) -> bool {
                 HasField(name)
             }
         }
@@ -71,7 +71,7 @@ object SpaceCenter.Module {
             ///
             /// # Arguments
             /// * `name` - Name of the field.
-            fn get_field(name: String) -> String {
+            fn get_field(name: &str) -> String {
                 GetField(name)
             }
         }
@@ -83,7 +83,7 @@ object SpaceCenter.Module {
             /// # Arguments
             /// * `name` - Name of the field.
             /// * `value` - Value to set.
-            fn set_field_int(name: String, value: i32) {
+            fn set_field_int(name: &str, value: i32) {
                 SetFieldInt(name, value)
             }
         }
@@ -95,7 +95,7 @@ object SpaceCenter.Module {
             /// # Arguments
             /// * `name` - Name of the field.
             /// * `value` - Value to set.
-            fn set_field_float(name: String, value: f32) {
+            fn set_field_float(name: &str, value: f32) {
                 SetFieldFloat(name, value)
             }
         }
@@ -107,7 +107,7 @@ object SpaceCenter.Module {
             /// # Arguments
             /// * `name` - Name of the field.
             /// * `value` - Value to set.
-            fn set_field_string(name: String, value: String) {
+            fn set_field_string(name: &str, value: &str) {
                 SetFieldString(name, value)
             }
         }
@@ -118,7 +118,7 @@ object SpaceCenter.Module {
             ///
             /// # Arguments
             /// * `name` - Name of the field.
-            fn reset_field(name: String) -> String {
+            fn reset_field(name: &str) -> String {
                 ResetField(name)
             }
         }
@@ -129,7 +129,7 @@ object SpaceCenter.Module {
             ///
             /// # Arguments
             /// * `name` - Name of the event.
-            fn has_event(name: String) -> bool {
+            fn has_event(name: &str) -> bool {
                 HasEvent(name)
             }
         }
@@ -141,7 +141,7 @@ object SpaceCenter.Module {
             ///
             /// # Arguments
             /// * `name` - Name of the event.
-            fn trigger_event(name: String) {
+            fn trigger_event(name: &str) {
                 TriggerEvent(name)
             }
         }
@@ -152,7 +152,7 @@ object SpaceCenter.Module {
             ///
             /// # Arguments
             /// * `name` - Name of the event.
-            fn has_action(name: String) -> bool {
+            fn has_action(name: &str) -> bool {
                 HasAction(name)
             }
         }
@@ -164,7 +164,7 @@ object SpaceCenter.Module {
             /// # Arguments
             /// * `name` - Name of the event.
             /// * `value` - Value to set.
-            fn set_action(name: String, value: bool) {
+            fn set_action(name: &str, value: bool) {
                 SetAction(name, value)
             }
         }

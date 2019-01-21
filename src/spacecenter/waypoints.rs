@@ -46,7 +46,7 @@ object SpaceCenter.WaypointManager {
             /// * `body` - Celestial body the waypoint is attached to.
             /// * `name` - Name of the waypoint.
             fn add_waypoint(latitude: f64, longitude: f64, body: &CelestialBody,
-                name: String) -> Waypoint {
+                name: &str) -> Waypoint {
                 AddWaypoint(latitude, longitude, body, name)
             }
         }
@@ -63,7 +63,7 @@ object SpaceCenter.WaypointManager {
             /// * `body` - Celestial body the waypoint is attached to.
             /// * `name` - Name of the waypoint.
             fn add_waypoint_at_altitude(latitude: f64, longitude: f64, altitude: f64,
-                body: &CelestialBody, name: String) -> Waypoint {
+                body: &CelestialBody, name: &str) -> Waypoint {
                 AddWaypointAtAltitude(latitude, longitude, altitude, body, name)
             }
         }
