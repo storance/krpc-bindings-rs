@@ -1,5 +1,5 @@
 use super::CodecError;
-use crate::client::schema::{Dictionary, List, Services, Set, Status, Tuple};
+use crate::client::schema::{Dictionary, List, Services, Set, Status, Tuple, Stream, Event};
 use crate::Connection;
 
 use protobuf::{CodedInputStream, Message};
@@ -70,77 +70,74 @@ impl Decode for Vec<u8> {
 
 impl<T: Decode> Decode for Vec<T> {
     fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| {
-            let entries: List = cis.read_message()?;
-            let mut decoded_entries = Vec::with_capacity(entries.items.len());
+        let mut list = List::new();
+        list.merge_from_bytes(bytes.as_slice())?;
 
-            for entry in entries.items.iter() {
-                decoded_entries.push(decode(entry, connection)?);
-            }
-            Ok(decoded_entries)
-        })
+        let mut decoded_vec = Vec::with_capacity(list.items.len());
+
+        for entry in list.items.iter() {
+            decoded_vec.push(decode(entry, connection)?);
+        }
+
+        Ok(decoded_vec)
     }
 }
 
 impl<K: Decode + Ord, V: Decode> Decode for BTreeMap<K, V> {
     fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| {
-            let entries: Dictionary = cis.read_message()?;
-            let mut decoded_map = BTreeMap::new();
+        let mut dict = Dictionary::new();
+        dict.merge_from_bytes(bytes.as_slice())?;
 
-            for entry in entries.entries.iter() {
-                decoded_map.insert(
-                    decode(&entry.key, connection)?,
-                    decode(&entry.value, connection)?,
-                );
-            }
-            Ok(decoded_map)
-        })
+        let mut decoded_map = BTreeMap::new();
+        for entry in dict.entries.iter() {
+            decoded_map.insert(
+                decode(&entry.key, connection)?,
+                decode(&entry.value, connection)?,
+            );
+        }
+        Ok(decoded_map)
     }
 }
 
 impl<K: Decode + Eq + Hash, V: Decode> Decode for HashMap<K, V> {
     fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| {
-            let entries: Dictionary = cis.read_message()?;
-            let mut decoded_map = HashMap::new();
+        let mut dict = Dictionary::new();
+        dict.merge_from_bytes(bytes.as_slice())?;
 
-            for entry in entries.entries.iter() {
-                decoded_map.insert(
-                    decode(&entry.key, connection)?,
-                    decode(&entry.value, connection)?,
-                );
-            }
-            Ok(decoded_map)
-        })
+        let mut decoded_map = HashMap::with_capacity(dict.entries.len());
+        for entry in dict.entries.iter() {
+            decoded_map.insert(
+                decode(&entry.key, connection)?,
+                decode(&entry.value, connection)?,
+            );
+        }
+        Ok(decoded_map)
     }
 }
 
 impl<T: Decode + Eq + Hash> Decode for HashSet<T> {
     fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| {
-            let entries: Set = cis.read_message()?;
-            let mut decoded_set = HashSet::with_capacity(entries.items.len());
+        let mut set = Set::new();
+        set.merge_from_bytes(bytes.as_slice())?;
 
-            for entry in entries.items.iter() {
-                decoded_set.insert(decode(entry, connection)?);
-            }
-            Ok(decoded_set)
-        })
+        let mut decoded_set = HashSet::with_capacity(set.items.len());
+        for entry in set.items.iter() {
+            decoded_set.insert(decode(entry, connection)?);
+        }
+        Ok(decoded_set)
     }
 }
 
 impl<T: Decode + Ord> Decode for BTreeSet<T> {
     fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| {
-            let entries: Set = cis.read_message()?;
-            let mut decoded_set = BTreeSet::new();
+        let mut set = Set::new();
+        set.merge_from_bytes(bytes.as_slice())?;
 
-            for entry in entries.items.iter() {
-                decoded_set.insert(decode(entry, connection)?);
-            }
-            Ok(decoded_set)
-        })
+        let mut decoded_set = BTreeSet::new();
+        for entry in set.items.iter() {
+            decoded_set.insert(decode(entry, connection)?);
+        }
+        Ok(decoded_set)
     }
 }
 
@@ -150,57 +147,69 @@ impl Decode for () {
     }
 }
 
+impl<T1: Decode> Decode for (T1,) {
+    fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
+        let mut tuple = Tuple::new();
+        tuple.merge_from_bytes(bytes.as_slice())?;
+
+        if tuple.items.len() != 1 {
+            return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3));
+        }
+
+        Ok((
+            decode(&tuple.get_items()[0], connection)?,
+        ))
+    }
+}
+
 impl<T1: Decode, T2: Decode> Decode for (T1, T2) {
     fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| {
-            let tuple: Tuple = cis.read_message()?;
+        let mut tuple = Tuple::new();
+        tuple.merge_from_bytes(bytes.as_slice())?;
 
-            if tuple.items.len() != 2 {
-                return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3));
-            }
+        if tuple.items.len() != 2 {
+            return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3));
+        }
 
-            Ok((
-                decode(&tuple.get_items()[0], connection)?,
-                decode(&tuple.get_items()[1], connection)?,
-            ))
-        })
+        Ok((
+            decode(&tuple.get_items()[0], connection)?,
+            decode(&tuple.get_items()[1], connection)?,
+        ))
     }
 }
 
 impl<T1: Decode, T2: Decode, T3: Decode> Decode for (T1, T2, T3) {
     fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| {
-            let tuple: Tuple = cis.read_message()?;
+        let mut tuple = Tuple::new();
+        tuple.merge_from_bytes(bytes.as_slice())?;
 
-            if tuple.items.len() != 3 {
-                return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3));
-            }
+        if tuple.items.len() != 3 {
+            return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3));
+        }
 
-            Ok((
-                decode(&tuple.get_items()[0], connection)?,
-                decode(&tuple.get_items()[1], connection)?,
-                decode(&tuple.get_items()[2], connection)?,
-            ))
-        })
+        Ok((
+            decode(&tuple.get_items()[0], connection)?,
+            decode(&tuple.get_items()[1], connection)?,
+            decode(&tuple.get_items()[2], connection)?,
+        ))
     }
 }
 
 impl<T1: Decode, T2: Decode, T3: Decode, T4: Decode> Decode for (T1, T2, T3, T4) {
     fn decode(bytes: &Vec<u8>, connection: &Connection) -> Result<Self, CodecError> {
-        decode_with(bytes, |cis| {
-            let tuple: Tuple = cis.read_message()?;
+        let mut tuple = Tuple::new();
+        tuple.merge_from_bytes(bytes.as_slice())?;
 
-            if tuple.items.len() != 3 {
-                return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3));
-            }
+        if tuple.items.len() != 4 {
+            return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3));
+        }
 
-            Ok((
-                decode(&tuple.get_items()[0], connection)?,
-                decode(&tuple.get_items()[1], connection)?,
-                decode(&tuple.get_items()[2], connection)?,
-                decode(&tuple.get_items()[3], connection)?,
-            ))
-        })
+        Ok((
+            decode(&tuple.get_items()[0], connection)?,
+            decode(&tuple.get_items()[1], connection)?,
+            decode(&tuple.get_items()[2], connection)?,
+            decode(&tuple.get_items()[3], connection)?,
+        ))
     }
 }
 
@@ -220,12 +229,23 @@ impl Decode for Status {
     }
 }
 
-pub fn decode<T: Decode>(bytes: &Vec<u8>, connection: &Connection) -> Result<T, CodecError> {
-    T::decode(bytes, connection)
+impl Decode for Stream {
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
+        let mut value = Self::new();
+        value.merge_from_bytes(bytes.as_slice())?;
+        Ok(value)
+    }
+}
+impl Decode for Event {
+    fn decode(bytes: &Vec<u8>, _connection: &Connection) -> Result<Self, CodecError> {
+        let mut value = Self::new();
+        value.merge_from_bytes(bytes.as_slice())?;
+        Ok(value)
+    }
 }
 
-pub fn decode_message<T: Message>(bytes: &Vec<u8>) -> Result<T, CodecError> {
-    decode_with(bytes, |cis| Ok(cis.read_message()?))
+pub fn decode<T: Decode>(bytes: &Vec<u8>, connection: &Connection) -> Result<T, CodecError> {
+    T::decode(bytes, connection)
 }
 
 fn decode_with<T, F>(bytes: &Vec<u8>, decoder: F) -> Result<T, CodecError>

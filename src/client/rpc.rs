@@ -53,11 +53,11 @@ impl Rpc {
         let response: Response = recv_msg(&mut self.socket.borrow_mut())?;
 
         if response.has_error() {
-            Err(RpcError::from(ResponseError::from(response.get_error())))
+            Err(RpcError::ResponseError(ResponseError::from(response.get_error())))
         } else {
             let results = response.get_results();
             if results.len() == 0 {
-                Err(RpcError::from(ResponseError::MissingResult))
+                Err(RpcError::ResponseError(ResponseError::MissingResult))
             } else {
                 Ok(convert_procedure_result(&results[0])?)
             }

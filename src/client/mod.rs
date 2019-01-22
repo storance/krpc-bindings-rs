@@ -2,7 +2,7 @@ use std::net::TcpStream;
 use std::rc::Rc;
 use std::sync::Arc;
 
-use crate::codec::{decode_message, Encode};
+use crate::codec::*;
 use protobuf::{CodedInputStream, CodedOutputStream, ProtobufError};
 
 mod error;
@@ -93,7 +93,8 @@ impl Connection {
                 start.encode()?,
             ],
         )?;
-        let stream: Stream = decode_message(&response)?;
+        println!("AddStream response length {}", response.len());
+        let stream: Stream = decode(&response, self)?;
         let id = stream.get_id();
         let stream_value = Arc::new(StreamRawValue::new(id, start));
 
