@@ -32,8 +32,8 @@ pub enum StreamError {
     RpcError(#[fail(cause)] RpcError),
     #[fail(display = "The stream has not been started.")]
     NotStarted,
-    #[fail(display = "The stream could not be found.")]
-    NotFound,
+    #[fail(display = "The stream has been removed.")]
+    Removed,
 }
 
 impl From<RpcError> for StreamError {

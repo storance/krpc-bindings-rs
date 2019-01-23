@@ -8,7 +8,6 @@ use super::{
 
 use std::cell::RefCell;
 use std::net::TcpStream;
-use std::rc::Rc;
 
 #[derive(Debug)]
 pub struct Rpc {
@@ -17,11 +16,11 @@ pub struct Rpc {
 }
 
 impl Rpc {
-    pub(super) fn id(&self) -> &Vec<u8> {
-        &self.id
+    pub(super) fn id(&self) -> &[u8] {
+        self.id.as_slice()
     }
 
-    pub(super) fn connect(name: &str, host: &str, port: u16) -> Result<Rc<Rpc>, ConnectionError> {
+    pub(super) fn connect(name: &str, host: &str, port: u16) -> Result<Rpc, ConnectionError> {
         let mut rpc_socket = TcpStream::connect((host, port))?;
 
         let mut request = ConnectionRequest::new();
@@ -32,10 +31,10 @@ impl Rpc {
         let response: ConnectionResponse = recv_msg(&mut rpc_socket)?;
 
         if response.status == ConnectionResponse_Status::OK {
-            Ok(Rc::new(Rpc {
+            Ok(Rpc {
                 id: Vec::from(response.get_client_identifier()),
                 socket: RefCell::new(rpc_socket),
-            }))
+            })
         } else {
             Err(ConnectionError::ConnectionError(response.message))
         }

@@ -37,7 +37,7 @@ object SpaceCenter.ReferenceFrame {
                                position: Option<Vector3>,
                                rotation: Option<Quaternion>,
                                velocity: Option<Vector3>,
-                               angular_velocity: Option<Vector3>) -> ReferenceFrame {
+                               angular_velocity: Option<Vector3>) -> ReferenceFrame<'a> {
                 CreateRelative(reference_frame,
                                position.unwrap_or((0.0, 0.0, 0.0)),
                                rotation.unwrap_or((0.0, 0.0, 0.0, 1.0)),
@@ -64,7 +64,7 @@ object SpaceCenter.ReferenceFrame {
             fn create_hybrid(position: &ReferenceFrame,
                              rotation: Option<&ReferenceFrame>,
                              velocity: Option<&ReferenceFrame>,
-                             angular_velocity: Option<&ReferenceFrame>) -> ReferenceFrame {
+                             angular_velocity: Option<&ReferenceFrame>) -> ReferenceFrame<'a> {
                 CreateHybrid(position, rotation, velocity, angular_velocity)
             }
         }

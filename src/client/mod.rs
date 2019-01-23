@@ -1,8 +1,9 @@
+use crate::codec::*;
+use crate::krpc::Expression;
+
 use std::net::TcpStream;
-use std::rc::Rc;
 use std::sync::Arc;
 
-use crate::codec::*;
 use protobuf::{CodedInputStream, CodedOutputStream, ProtobufError};
 
 mod error;
@@ -11,11 +12,10 @@ pub mod schema;
 mod stream;
 
 pub use self::error::*;
-pub use self::stream::{StreamRawValue, StreamValue};
+pub use self::stream::{Stream, Event};
 
 use self::rpc::Rpc;
-use self::schema::ProcedureResult;
-use self::schema::Stream;
+use self::stream::StreamRaw;
 
 pub const DEFAULT_RPC_PORT: u16 = 50000;
 pub const DEFAULT_STREAM_PORT: u16 = 50001;
@@ -34,7 +34,7 @@ fn recv_msg<T: protobuf::Message>(socket: &mut TcpStream) -> Result<T, ProtobufE
     cis.read_message()
 }
 
-fn convert_procedure_result(result: &ProcedureResult) -> Result<Vec<u8>, error::ResponseError> {
+fn convert_procedure_result(result: &schema::ProcedureResult) -> Result<Vec<u8>, error::ResponseError> {
     if result.has_error() {
         Err(error::ResponseError::from(result.get_error()))
     } else {
@@ -42,10 +42,9 @@ fn convert_procedure_result(result: &ProcedureResult) -> Result<Vec<u8>, error::
     }
 }
 
-#[derive(Debug, Clone)]
 pub struct Connection {
-    rpc: Rc<rpc::Rpc>,
-    stream: Rc<stream::StreamManager>,
+    rpc: rpc::Rpc,
+    stream: stream::StreamManager,
 }
 
 impl Connection {
@@ -60,13 +59,13 @@ impl Connection {
         stream_port: u16,
     ) -> Result<Connection, ConnectionError> {
         let rpc = rpc::Rpc::connect(name, host, rpc_port)?;
-        let stream = stream::StreamManager::connect(rpc.id().clone(), host, stream_port)?;
+        let stream = stream::StreamManager::connect(rpc.id(), host, stream_port)?;
 
         Ok(Connection { rpc, stream })
     }
 
-    pub fn id(&self) -> Vec<u8> {
-        self.rpc.id().clone()
+    pub fn id(&self) -> &[u8] {
+        self.rpc.id()
     }
 
     pub fn invoke(
@@ -78,13 +77,31 @@ impl Connection {
         self.rpc.invoke(service, procedure, args)
     }
 
-    pub fn add_stream(
-        &self,
+    pub fn add_event<'a>(&'a self, expr: &Expression) -> StreamResult<Event<'a>> {
+        let response = self.rpc.invoke(
+            "KRPC",
+            "AddEvent",
+            &vec![
+                expr.encode()?
+            ],
+        )?;
+
+        let event: schema::Event = decode(&response, self)?;
+        let id = event.get_stream().get_id();
+        let stream_value = Arc::new(StreamRaw::new(id, false));
+
+        self.stream.register(stream_value.clone());
+
+        Ok(Event::new(Stream::new(self, stream_value)))
+    }
+
+    pub fn add_stream<'a, T: Decode<'a>>(
+        &'a self,
         service: &str,
         procedure: &str,
         args: &Vec<Vec<u8>>,
         start: bool,
-    ) -> StreamResult<Arc<StreamRawValue>> {
+    ) -> StreamResult<Stream<'a, T>> {
         let response = self.rpc.invoke(
             "KRPC",
             "AddStream",
@@ -93,45 +110,18 @@ impl Connection {
                 start.encode()?,
             ],
         )?;
-        println!("AddStream response length {}", response.len());
-        let stream: Stream = decode(&response, self)?;
+
+        let stream: schema::Stream = decode(&response, self)?;
         let id = stream.get_id();
-        let stream_value = Arc::new(StreamRawValue::new(id, start));
+        let stream_value = Arc::new(StreamRaw::new(id, start));
 
         self.stream.register(stream_value.clone());
 
-        Ok(stream_value)
+        Ok(Stream::new(self, stream_value))
     }
 
-    pub fn start_stream(&self, stream: &StreamRawValue) -> StreamResult<()> {
-        if stream.started()? {
-            return Ok(());
-        }
-
-        self.rpc
-            .invoke("KRPC", "StartStream", &vec![stream.id().encode()?])?;
-
-        stream.set_started()?;
-        Ok(())
-    }
-
-    pub fn remove_stream(&self, stream: &StreamRawValue) -> StreamResult<()> {
-        self.rpc
-            .invoke("KRPC", "RemoveStream", &vec![stream.id().encode()?])?;
-
-        self.stream.deregister(stream.id());
-
-        Ok(())
-    }
-
-    pub fn set_stream_rate(&self, stream: &StreamRawValue, rate: f32) -> StreamResult<()> {
-        self.rpc.invoke(
-            "KRPC",
-            "SetStreamRate",
-            &vec![stream.id().encode()?, rate.encode()?],
-        )?;
-
-        stream.set_rate(rate)
+    fn deregister_stream(&self, stream_id: u64) {
+        self.stream.deregister(stream_id);
     }
 }
 

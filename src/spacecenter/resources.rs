@@ -42,7 +42,7 @@ remote_type!(
                 ///
                 /// # Arguments
                 /// * `name` - The name of the resource.
-                fn with_resource(name: String) -> Vec<Resource> {
+                fn with_resource(name: &str) -> Vec<Resource> {
                     WithResource(name)
                 }
             }
@@ -53,7 +53,7 @@ remote_type!(
                 ///
                 /// # Arguments
                 /// * `name` - The name of the resource.
-                fn has_resource(name: String) -> bool {
+                fn has_resource(name: &str) -> bool {
                     HasResource(name)
                 }
             }
@@ -64,7 +64,7 @@ remote_type!(
                 ///
                 /// # Arguments
                 /// * `name` - The name of the resource.
-                fn amount(name: String) -> f32 {
+                fn amount(name: &str) -> f32 {
                     Amount(name)
                 }
             }
@@ -75,7 +75,7 @@ remote_type!(
                 ///
                 /// # Arguments
                 /// * `name` - The name of the resource.
-                fn max(name: String) -> f32 {
+                fn max(name: &str) -> f32 {
                     Max(name)
                 }
             }
@@ -88,7 +88,7 @@ remote_type!(
                 ///
                 /// # Arguments
                 /// * `name` - The name of the resource.
-                fn density(name: String) -> f32 {
+                fn density(name: &str) -> f32 {
                     Density(name)
                 }
             }
@@ -99,7 +99,7 @@ remote_type!(
                 ///
                 /// # Arguments
                 /// * `name` - The name of the resource.
-                fn flow_mode(name: String) -> ResourceFlowMode {
+                fn flow_mode(name: &str) -> ResourceFlowMode {
                     FlowMode(name)
                 }
             }
@@ -203,7 +203,7 @@ remote_type!(
                 /// * `to_part` - The part to transfer to.
                 /// * `resource` - The name of the resource to transfer.
                 /// * `max_amount` - The maximum amount of resource to transfer.
-                fn start(from_part: Part, to_part: Part, resource: &str, max_amount: f32) -> ResourceTransfer {
+                fn start(from_part: &Part, to_part: &Part, resource: &str, max_amount: f32) -> ResourceTransfer<'a> {
                     Start(from_part, to_part, resource, max_amount)
                 }
             }

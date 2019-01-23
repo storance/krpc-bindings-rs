@@ -66,13 +66,19 @@ impl Encode for &str {
 
 impl Encode for Vec<u8> {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
-        encode_with(|cos| Ok(cos.write_bytes_no_tag(self)?))
+        encode_with(|cos| Ok(cos.write_bytes_no_tag(self.as_slice())?))
     }
 }
 
 impl Encode for ProcedureCall {
     fn encode(&self) -> Result<Vec<u8>, CodecError> {
         encode_with(|cos| Ok(self.write_to(cos)?))
+    }
+}
+
+impl Encode for &[u8] {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        encode_with(|cos| Ok(cos.write_bytes_no_tag(self)?))
     }
 }
 
@@ -84,6 +90,20 @@ impl<T: Encode> Encode for Vec<T> {
                 list.items.push(entry.encode()?);
             }
             
+            list.write_to(cos)?;
+            Ok(())
+        })
+    }
+}
+
+impl<T: Encode> Encode for &[T] {
+    fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        encode_with(|cos| {
+            let mut list = List::new();
+            for entry in self.iter() {
+                list.items.push(entry.encode()?);
+            }
+
             list.write_to(cos)?;
             Ok(())
         })

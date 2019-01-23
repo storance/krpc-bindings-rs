@@ -11,13 +11,10 @@ mod macros;
 mod codec;
 
 pub use self::client::schema::{Services, Status};
-pub use self::client::{
-    Connection, ConnectionError, ResponseError, RpcError, RpcResult, StreamError, StreamResult,
-    StreamValue,
-};
+pub use self::client::*;
 
-pub trait RemoteObject {
-    fn new(connection: &Connection, id: u64) -> Self
+pub trait RemoteObject<'a> {
+    fn new(connection: &'a Connection, id: u64) -> Self
     where
         Self: Sized;
 
