@@ -6,7 +6,7 @@ use super::{
     convert_procedure_result, recv_msg, send_msg, Connection, ConnectionError, ResponseError,
     StreamError,
 };
-use crate::codec::{Encode, Decode};
+use crate::codec::{Decode, Encode};
 
 use std::io;
 use std::thread;
@@ -16,7 +16,7 @@ use std::marker::PhantomData;
 use std::net::TcpStream;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Condvar, Mutex};
-use std::time::{Instant, Duration};
+use std::time::{Duration, Instant};
 
 use protobuf::ProtobufError;
 
@@ -35,7 +35,7 @@ impl<'a> Event<'a> {
     }
 
     /// Wait until the event has occurred.
-    pub fn wait(&self) -> Result<(), StreamError>{
+    pub fn wait(&self) -> Result<(), StreamError> {
         if !self.stream.started() {
             self.stream.start()?;
         }
@@ -162,11 +162,7 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
         }
 
         let args = vec![self.value.id().encode()?, rate.encode()?];
-        self.connection.invoke(
-            "KRPC",
-            "SetStreamRate",
-            &args,
-        )?;
+        self.connection.invoke("KRPC", "SetStreamRate", &args)?;
 
         self.value.set_rate(rate);
 
@@ -178,8 +174,7 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
     pub fn remove(&mut self) -> Result<(), StreamError> {
         if !self.removed {
             let args = vec![self.id().encode()?];
-            self.connection
-                .invoke("KRPC", "RemoveStream", &args)?;
+            self.connection.invoke("KRPC", "RemoveStream", &args)?;
 
             self.connection.deregister_stream(self.id());
             self.removed = true;
@@ -219,8 +214,8 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
 
 impl<'a, T: Decode<'a>> Drop for Stream<'a, T> {
     fn drop(&mut self) {
-        use std::thread::panicking;
         use std::io::{stderr, Write};
+        use std::thread::panicking;
 
         if !self.removed {
             if let Err(e) = self.remove() {
@@ -417,7 +412,9 @@ impl StreamManager {
             while !(*stop_flag).load(Ordering::Relaxed) {
                 let msg: Result<StreamUpdate, ProtobufError> = recv_msg(&mut stream_socket);
                 match msg {
-                    Ok(stream_update) => Self::process_stream_update(stream_update, &active_streams),
+                    Ok(stream_update) => {
+                        Self::process_stream_update(stream_update, &active_streams)
+                    }
                     Err(ref e) if Self::is_timeout_error(e) => (),
                     Err(ref e) => panic!("Failed to retrieve stream update: {:?}", e),
                 }
@@ -425,7 +422,10 @@ impl StreamManager {
         });
     }
 
-    fn process_stream_update(stream_update: StreamUpdate, active_streams: &Mutex<BTreeMap<u64, Arc<StreamRaw>>>) {
+    fn process_stream_update(
+        stream_update: StreamUpdate,
+        active_streams: &Mutex<BTreeMap<u64, Arc<StreamRaw>>>,
+    ) {
         let streams = active_streams.lock().unwrap();
 
         for stream_result in stream_update.results.iter() {
@@ -433,7 +433,7 @@ impl StreamManager {
                 if stream_result.has_result() {
                     match convert_procedure_result(stream_result.get_result()) {
                         Ok(bytes) => stream_value.set_value(bytes),
-                        Err(response_err) => stream_value.set_error(response_err)
+                        Err(response_err) => stream_value.set_error(response_err),
                     }
                 }
             }

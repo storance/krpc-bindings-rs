@@ -1,5 +1,5 @@
 use super::CodecError;
-use crate::client::schema::{Dictionary, List, Services, Set, Status, Tuple, Stream, Event};
+use crate::client::schema::{Dictionary, Event, List, Services, Set, Status, Stream, Tuple};
 use crate::Connection;
 
 use protobuf::{CodedInputStream, Message};
@@ -156,9 +156,7 @@ impl<'a, T1: Decode<'a>> Decode<'a> for (T1,) {
             return Err(CodecError::mismatched_tuple_length(tuple.items.len(), 3));
         }
 
-        Ok((
-            decode(&tuple.get_items()[0], connection)?,
-        ))
+        Ok((decode(&tuple.get_items()[0], connection)?,))
     }
 }
 
@@ -195,7 +193,9 @@ impl<'a, T1: Decode<'a>, T2: Decode<'a>, T3: Decode<'a>> Decode<'a> for (T1, T2,
     }
 }
 
-impl<'a, T1: Decode<'a>, T2: Decode<'a>, T3: Decode<'a>, T4: Decode<'a>> Decode<'a> for (T1, T2, T3, T4) {
+impl<'a, T1: Decode<'a>, T2: Decode<'a>, T3: Decode<'a>, T4: Decode<'a>> Decode<'a>
+    for (T1, T2, T3, T4)
+{
     fn decode(bytes: &Vec<u8>, connection: &'a Connection) -> Result<Self, CodecError> {
         let mut tuple = Tuple::new();
         tuple.merge_from_bytes(bytes.as_slice())?;
@@ -244,7 +244,10 @@ impl<'a> Decode<'a> for Event {
     }
 }
 
-pub fn decode<'a, T: Decode<'a>>(bytes: &Vec<u8>, connection: &'a Connection) -> Result<T, CodecError> {
+pub fn decode<'a, T: Decode<'a>>(
+    bytes: &Vec<u8>,
+    connection: &'a Connection,
+) -> Result<T, CodecError> {
     T::decode(bytes, connection)
 }
 

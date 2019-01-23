@@ -89,7 +89,7 @@ impl<T: Encode> Encode for Vec<T> {
             for entry in self.iter() {
                 list.items.push(entry.encode()?);
             }
-            
+
             list.write_to(cos)?;
             Ok(())
         })

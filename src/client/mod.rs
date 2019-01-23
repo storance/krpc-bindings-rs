@@ -12,7 +12,7 @@ pub mod schema;
 mod stream;
 
 pub use self::error::*;
-pub use self::stream::{Stream, Event};
+pub use self::stream::{Event, Stream};
 
 use self::rpc::Rpc;
 use self::stream::StreamRaw;
@@ -34,7 +34,9 @@ fn recv_msg<T: protobuf::Message>(socket: &mut TcpStream) -> Result<T, ProtobufE
     cis.read_message()
 }
 
-fn convert_procedure_result(result: &schema::ProcedureResult) -> Result<Vec<u8>, error::ResponseError> {
+fn convert_procedure_result(
+    result: &schema::ProcedureResult,
+) -> Result<Vec<u8>, error::ResponseError> {
     if result.has_error() {
         Err(error::ResponseError::from(result.get_error()))
     } else {
@@ -78,13 +80,7 @@ impl Connection {
     }
 
     pub fn add_event<'a>(&'a self, expr: &Expression) -> StreamResult<Event<'a>> {
-        let response = self.rpc.invoke(
-            "KRPC",
-            "AddEvent",
-            &vec![
-                expr.encode()?
-            ],
-        )?;
+        let response = self.rpc.invoke("KRPC", "AddEvent", &vec![expr.encode()?])?;
 
         let event: schema::Event = decode(&response, self)?;
         let id = event.get_stream().get_id();
