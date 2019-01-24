@@ -1,6 +1,7 @@
 use super::Part;
 use crate::codec::*;
 use crate::*;
+use crate::krpc::Expression;
 
 remote_type!(
 /// A fairing. Obtained by calling `Part::fairing().`

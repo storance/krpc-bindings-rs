@@ -1,6 +1,7 @@
 use super::{ReferenceFrame, SASMode};
 use crate::codec::*;
 use crate::*;
+use crate::krpc::Expression;
 
 remote_type!(
 /// Provides basic auto-piloting utilities for a vessel. Created by calling `Vessel::auto_pilot()`.

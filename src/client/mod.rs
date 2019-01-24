@@ -16,6 +16,7 @@ pub use self::stream::{Event, Stream};
 
 use self::rpc::Rpc;
 use self::stream::StreamRaw;
+use self::schema::{ProcedureCall};
 
 pub const DEFAULT_RPC_PORT: u16 = 50000;
 pub const DEFAULT_STREAM_PORT: u16 = 50001;
@@ -77,6 +78,15 @@ impl Connection {
         args: &Vec<Vec<u8>>,
     ) -> RpcResult<Vec<u8>> {
         self.rpc.invoke(service, procedure, args)
+    }
+
+    pub fn procedure_call(
+        &self,
+        service: &str,
+        procedure: &str,
+        args: &Vec<Vec<u8>>,
+    ) -> ProcedureCall {
+        Rpc::create_procedure_call(service, procedure, args)
     }
 
     pub fn add_event<'a>(&'a self, expr: &Expression) -> StreamResult<Event<'a>> {

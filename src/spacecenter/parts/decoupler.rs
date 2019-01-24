@@ -1,6 +1,7 @@
 use super::Part;
 use crate::codec::*;
 use crate::spacecenter::Vessel;
+use crate::krpc::Expression;
 use crate::*;
 
 remote_type!(

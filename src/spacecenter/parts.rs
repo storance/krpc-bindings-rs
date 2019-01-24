@@ -1,6 +1,7 @@
 use super::{ReferenceFrame, Resources, Vessel};
 use crate::codec::*;
 use crate::*;
+use crate::krpc::Expression;
 
 mod antenna;
 mod cargo_bay;

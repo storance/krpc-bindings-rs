@@ -1,6 +1,7 @@
 use super::Part;
 use crate::codec::*;
 use crate::*;
+use crate::krpc::Expression;
 
 remote_type!(
 /// A sensor, such as a thermometer. Obtained by calling `Part::sensor().`

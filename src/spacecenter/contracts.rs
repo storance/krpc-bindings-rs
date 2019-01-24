@@ -1,5 +1,6 @@
 use crate::codec::*;
 use crate::*;
+use crate::krpc::Expression;
 
 use std::collections::HashSet;
 

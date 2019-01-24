@@ -1,6 +1,7 @@
 use super::{CelestialBody, Node, Vessel};
 use crate::codec::*;
 use crate::*;
+use crate::krpc::Expression;
 
 remote_type!(
 /// Controls the game’s camera. Obtained by calling `SpaceCenter::camera()`.

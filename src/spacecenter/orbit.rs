@@ -1,6 +1,7 @@
 use super::{CelestialBody, ReferenceFrame};
 use crate::codec::*;
 use crate::*;
+use crate::krpc::Expression;
 
 remote_type!(
 /// Describes an orbit. For example, the orbit of a vessel or a celestial body.

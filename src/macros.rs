@@ -14,48 +14,16 @@ macro_rules! remote_type {
             }
         }
     ) => {
-        remote_type!(
-            $(#[$meta])*
-            service $service<'a> {
-                properties: {
-                    $( { $( $property)+ } )*
-                }
-                methods: {
-                    $( { $( $method)+ } )*
-                }
-            }
-        );
-    };
-
-    (
-        $(#[$meta:meta])*
-        service $service: ident <$lifetime: tt> {
-            properties: {
-                $( { $( $property: tt)+ } )*
-            }
-            methods: {
-                $( { $( $method: tt)+ } )*
-            }
-        }
-    ) => {
         $(#[$meta])*
         #[derive(Clone)]
         pub struct $service<'a> {
             connection: &'a Connection,
         }
 
-        impl<$lifetime> $service<$lifetime> {
+        impl<'a> $service<'a> {
             /// Creates a new service using the given `connection`.
-            pub fn new(connection: &$lifetime Connection) -> Self {
+            pub fn new(connection: &'a Connection) -> Self {
                 Self { connection }
-            }
-
-            paste::item! {
-                /// Get a stream instance that allows access to stream version of the methods
-                /// and properties for this service.
-                pub fn stream(&self) -> [<$service Stream>]<$lifetime> {
-                    [<$service Stream>]::new(self.connection)
-                }
             }
 
             // Properties
@@ -69,28 +37,25 @@ macro_rules! remote_type {
             )*
         }
 
-        paste::item! {
-            #[derive(Clone)]
-            pub struct [<$service Stream>]<'a> {
-                connection: &'a Connection,
+        remote_type!(
+            @stream_service(service=$service)
+            properties: {
+                $( { $( $property)+ } )*
             }
-
-            impl<$lifetime> [<$service Stream>]<$lifetime> {
-                pub fn new(connection: &$lifetime Connection) -> Self {
-                    Self { connection }
-                }
-
-                // Properties
-                $(
-                    remote_type!(@stream_property(service=$service, lifetime=$lifetime) $( $property )+ );
-                )*
-
-                // Methods
-                $(
-                    remote_type!(@stream_method(service=$service, lifetime=$lifetime) $( $method )+ );
-                )*
+            methods: {
+                $( { $( $method)+ } )*
             }
-        }
+        );
+
+        remote_type!(
+            @expr_service(service=$service)
+            properties: {
+                $( { $( $property)+ } )*
+            }
+            methods: {
+                $( { $( $method)+ } )*
+            }
+        );
     };
 
     //
@@ -372,24 +337,6 @@ macro_rules! remote_type {
     };
 
     //
-    // Stream Properties
-    //
-    (
-        @stream_property(service=$service:tt, lifetime=$lifetime: tt)
-            $prop_name: ident : $prop_type: ty,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident $(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@stream_method(service=$service, lifetime=$lifetime, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> $prop_type {
-                $prop_name()
-            });
-    };
-
-    //
     // Methods
     //
     (
@@ -429,17 +376,87 @@ macro_rules! remote_type {
     };
 
     //
+    // Service Stream
+    //
+    (
+        @stream_service(service=$service: ident)
+        properties: {}
+        methods: {}
+    ) => {
+
+    };
+
+    (
+        @stream_service(service=$service: ident)
+        properties: {
+            $( { $( $property: tt)+ } )*
+        }
+        methods: {
+            $( { $( $method: tt)+ } )*
+        }
+    ) => {
+        paste::item! {
+            #[derive(Clone)]
+            pub struct [<$service Stream>]<'a> {
+                connection: &'a Connection,
+            }
+
+            impl<'a> $service<'a> {
+                /// Returns a stream instance that provides streaming versions of the
+                /// property getters and methods with return values.
+                pub fn stream(&self) -> [<$service Stream>]<'a> {
+                    [<$service Stream>]::new(self.connection)
+                }
+            }
+
+            impl<'a> [<$service Stream>]<'a> {
+                pub fn new(connection: &'a Connection) -> Self {
+                    Self { connection }
+                }
+
+                // Properties
+                $(
+                    remote_type!(@stream_property(service=$service) $( $property )+ );
+                )*
+
+                // Methods
+                $(
+                    remote_type!(@stream_method(service=$service) $( $method )+ );
+                )*
+            }
+        }
+    };
+
+    //
+    // Stream Properties
+    //
+    (
+        @stream_property(service=$service:tt)
+            $prop_name: ident : $prop_type: ty,
+            $(#[$getter_meta:meta])*
+            get: $getter_name: ident $(,
+            $(#[$setter_meta:meta])*
+            set: $setter_name: ident)?
+    ) => {
+        remote_type!(@stream_method(service=$service, prefix=get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $prop_type {
+                $prop_name()
+            });
+    };
+
+    //
     // Stream Methods
     //
     (
-        @stream_method(service=$service:tt, lifetime=$lifetime: tt $(, prefix=$prefix:tt)?)
+        @stream_method(service=$service:tt $(, prefix=$prefix:tt)?)
         $(#[$meta:meta])*
         fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
             $rpc_name: tt($( $arg_expr: expr ),* )
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&$lifetime self $(, $arg_name : $arg_type)*) -> StreamResult<Stream<$lifetime, $return_type>> {
+        pub fn $method_name(&'a self $(, $arg_name : $arg_type)*) -> StreamResult<Stream<'a, $return_type>> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
             Ok(self.connection.add_stream(
@@ -452,7 +469,111 @@ macro_rules! remote_type {
     };
 
     (
-        @stream_method(service=$service:tt, lifetime=$lifetime: tt $(, prefix=$prefix:tt)?)
+        @stream_method(service=$service:tt $(, prefix=$prefix:tt)?)
+        $(#[$meta:meta])*
+        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
+            $rpc_name: tt($( $arg_expr: expr ),* )
+        }
+    ) => {
+        // This space intentionally left blank
+    };
+
+    //
+    // Service Expression
+    //
+    (
+        @expr_service(service=$service: ident)
+        properties: {}
+        methods: {}
+    ) => {
+
+    };
+
+    (
+        @expr_service(service=$service: ident)
+        properties: {
+            $( { $( $property: tt)+ } )*
+        }
+        methods: {
+            $( { $( $method: tt)+ } )*
+        }
+    ) => {
+        paste::item! {
+            #[derive(Clone)]
+            pub struct [<$service Expression>]<'a> {
+                connection: &'a Connection,
+            }
+
+            impl<'a> $service<'a> {
+                /// Returns an expression instance that provides versions of the property getters
+                /// and methods with return values as expressions.
+                pub fn expr(&self) -> [<$service Expression>] {
+                    [<$service Expression>]::new(self.connection)
+                }
+            }
+
+            impl<'a> [<$service Expression>]<'a> {
+                pub fn new(connection: &'a Connection) -> Self {
+                    Self { connection }
+                }
+
+                // Properties
+                $(
+                    remote_type!(@expr_property(service=$service) $( $property )+ );
+                )*
+
+                // Methods
+                $(
+                    remote_type!(@expr_method(service=$service) $( $method )+ );
+                )*
+            }
+        }
+    };
+
+    //
+    // Expression Properties
+    //
+    (
+        @expr_property(service=$service:tt)
+            $prop_name: ident : $prop_type: ty,
+            $(#[$getter_meta:meta])*
+            get: $getter_name: ident $(,
+            $(#[$setter_meta:meta])*
+            set: $setter_name: ident)?
+    ) => {
+        remote_type!(@expr_method(service=$service, prefix=get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $prop_type {
+                $prop_name()
+            });
+    };
+
+    //
+    // Expression Methods
+    //
+    (
+        @expr_method(service=$service:tt $(, prefix=$prefix:tt)?)
+        $(#[$meta:meta])*
+        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
+            $rpc_name: tt($( $arg_expr: expr ),* )
+        }
+    ) => {
+        $(#[$meta])*
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<Expression> {
+            let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
+
+            let call = self.connection.procedure_call(
+                stringify!($service),
+                concat!( $( stringify!($prefix), )? stringify!($rpc_name)),
+                &args
+            );
+
+            Expression::call(self.connection, &call)
+        }
+    };
+
+    (
+        @expr_method(service=$service:tt $(, prefix=$prefix:tt)?)
         $(#[$meta:meta])*
         fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
             $rpc_name: tt($( $arg_expr: expr ),* )
@@ -477,34 +598,6 @@ macro_rules! remote_type {
                 $( { $( $static_method: tt)+ } )*
             })?
         }
-    ) => {
-        remote_type!($(#[$meta])*
-        object $service.$object_name<'a> {
-            $(properties: {
-                $( { $( $property)+ } )*
-            })?
-            $(methods: {
-                $( { $( $method)+ } )*
-            })?
-            $(static_methods: {
-                $( { $( $static_method)+ } )*
-            })?
-        });
-    };
-
-    (
-        $(#[$meta:meta])*
-        object $service: tt.$object_name: ident <$lifetime: tt> {
-            $(properties: {
-                $( { $( $property: tt)+ } )*
-            })?
-            $(methods: {
-                $( { $( $method: tt)+ } )*
-            })?
-            $(static_methods: {
-                $( { $( $static_method: tt)+ } )*
-            })?
-        }
      ) => {
         $(#[$meta])*
         #[derive(Clone)]
@@ -512,37 +605,6 @@ macro_rules! remote_type {
             #[allow(dead_code)]
             connection: &'a Connection,
             id: u64
-        }
-
-        paste::item! {
-            #[derive(Clone)]
-            pub struct [<$object_name Stream>]<'a> {
-                connection: &'a Connection,
-                id: u64
-            }
-
-            impl<$lifetime> [<$object_name Stream>]<$lifetime> {
-                pub fn new(remote_object: &$object_name<$lifetime>) -> Self {
-                    Self {
-                        connection: remote_object.connection,
-                        id: remote_object.id
-                    }
-                }
-
-                // Properties
-                $(
-                    $(
-                        remote_type!(@stream_property(service=$service, class=$object_name, lifetime=$lifetime) $( $property )+ );
-                    )*
-                )?
-
-                // Methods
-                $(
-                    $(
-                        remote_type!(@stream_method(service=$service, class=$object_name, separator=_, lifetime=$lifetime) $( $method )+ );
-                    )*
-                )?
-            }
         }
 
         impl<'a> RemoteObject<'a> for $object_name<'a> {
@@ -599,15 +661,7 @@ macro_rules! remote_type {
             }
         }
 
-        impl<$lifetime> $object_name<$lifetime> {
-            paste::item! {
-                /// Get a stream instance that allows access to stream version of the methods
-                /// and properties for this remote object.
-                pub fn stream(&self) -> [<$object_name Stream>]<$lifetime> {
-                    [<$object_name Stream>]::new(self)
-                }
-            }
-
+        impl<'a> $object_name<'a> {
             // Properties
             $(
                 $(
@@ -629,6 +683,26 @@ macro_rules! remote_type {
                 )*
             )?
         }
+
+        remote_type!(
+            @stream_remote_object(service=$service, class=$object_name)
+            properties: {
+                $( $( { $( $property)+ } )* )?
+            }
+            methods: {
+                $( $( { $( $method)+ } )* )?
+            }
+        );
+
+        remote_type!(
+            @expr_remote_object(service=$service, class=$object_name)
+            properties: {
+                $( $( { $( $property)+ } )* )?
+            }
+            methods: {
+                $( $( { $( $method)+ } )* )?
+            }
+        );
     };
 
     //
@@ -910,24 +984,6 @@ macro_rules! remote_type {
     };
 
     //
-    // Stream Properties
-    //
-    (
-        @stream_property(service=$service:tt, class=$class:tt, lifetime=$lifetime: tt)
-            $prop_name: ident : $prop_type: ty,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident $(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@stream_method(service=$service, class=$class, separator=_get_, lifetime=$lifetime)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> $prop_type {
-                $prop_name()
-            });
-    };
-
-    //
     // Methods
     //
     (
@@ -967,39 +1023,6 @@ macro_rules! remote_type {
     };
 
     //
-    // Stream Methods
-    //
-    (
-        @stream_method(service=$service:tt, class=$class:tt, separator=$separator:tt, lifetime=$lifetime: tt)
-        $(#[$meta:meta])*
-        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
-            $rpc_name: tt($( $arg_expr: expr ),* )
-        }
-    ) => {
-        $(#[$meta])*
-        pub fn $method_name(&$lifetime self $(, $arg_name : $arg_type)*) -> StreamResult<Stream<$lifetime, $return_type>> {
-            let args: Vec<Vec<u8>> = vec![self.id.encode()? $(, $arg_expr.encode()?)*];
-
-            Ok(self.connection.add_stream(
-                stringify!($service),
-                concat!( stringify!($class), stringify!($separator), stringify!($rpc_name)),
-                &args,
-                false
-            )?)
-        }
-    };
-
-    (
-        @stream_method(service=$service:tt, class=$class:tt, separator=$separator:tt, lifetime=$lifetime: tt)
-        $(#[$meta:meta])*
-        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
-            $rpc_name: tt($( $arg_expr: expr ),* )
-        }
-    ) => {
-        // This space intentionally left blank
-    };
-
-    //
     // Static Methods
     //
     (
@@ -1018,6 +1041,221 @@ macro_rules! remote_type {
                 &args)?;
             Ok(decode(&response, connection)?)
         }
+    };
+
+    //
+    // Remote Object Stream
+    //
+    (
+        @stream_remote_object(service=$service: ident, class=$object_name: ident)
+        properties: {}
+        methods: {}
+    ) => {
+
+    };
+
+    (
+        @stream_remote_object(service=$service: ident, class=$object_name: ident)
+        properties: {
+            $( { $( $property: tt)+ } )*
+        }
+        methods: {
+            $( { $( $method: tt)+ } )*
+        }
+    ) => {
+        paste::item! {
+            #[derive(Clone)]
+            pub struct [<$object_name Stream>]<'a> {
+                connection: &'a Connection,
+                id: u64
+            }
+
+            impl<'a> $object_name<'a> {
+                /// Returns a stream instance that provides streaming versions of the
+                /// property getters and methods with return values.
+                pub fn stream(&self) -> [<$object_name Stream>]<'a> {
+                    [<$object_name Stream>]::new(self)
+                }
+            }
+
+            impl<'a> [<$object_name Stream>]<'a> {
+                pub fn new(remote_object: &$object_name<'a>) -> Self {
+                    Self {
+                        connection: remote_object.connection,
+                        id: remote_object.id
+                    }
+                }
+
+                // Properties
+                $(
+                    remote_type!(@stream_property(service=$service, class=$object_name) $( $property )+ );
+                )*
+
+                // Methods
+                $(
+                    remote_type!(@stream_method(service=$service, class=$object_name, separator=_) $( $method )+ );
+                )*
+            }
+        }
+    };
+
+    //
+    // Stream Properties
+    //
+    (
+        @stream_property(service=$service:tt, class=$class:tt)
+            $prop_name: ident : $prop_type: ty,
+            $(#[$getter_meta:meta])*
+            get: $getter_name: ident $(,
+            $(#[$setter_meta:meta])*
+            set: $setter_name: ident)?
+    ) => {
+        remote_type!(@stream_method(service=$service, class=$class, separator=_get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $prop_type {
+                $prop_name()
+            });
+    };
+
+    //
+    // Stream Methods
+    //
+    (
+        @stream_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
+        $(#[$meta:meta])*
+        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
+            $rpc_name: tt($( $arg_expr: expr ),* )
+        }
+    ) => {
+        $(#[$meta])*
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> StreamResult<Stream<$return_type>> {
+            let args: Vec<Vec<u8>> = vec![self.id.encode()? $(, $arg_expr.encode()?)*];
+
+            Ok(self.connection.add_stream(
+                stringify!($service),
+                concat!( stringify!($class), stringify!($separator), stringify!($rpc_name)),
+                &args,
+                false
+            )?)
+        }
+    };
+
+    (
+        @stream_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
+        $(#[$meta:meta])*
+        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
+            $rpc_name: tt($( $arg_expr: expr ),* )
+        }
+    ) => {
+        // This space intentionally left blank
+    };
+
+    //
+    // Remote Object Expression
+    //
+    (
+        @expr_remote_object(service=$service: ident, class=$object_name: ident)
+        properties: {}
+        methods: {}
+    ) => {
+
+    };
+
+    (
+        @expr_remote_object(service=$service: ident, class=$object_name: ident)
+        properties: {
+            $( { $( $property: tt)+ } )*
+        }
+        methods: {
+            $( { $( $method: tt)+ } )*
+        }
+    ) => {
+        paste::item! {
+            #[derive(Clone)]
+            pub struct [<$object_name Expression>]<'a> {
+                connection: &'a Connection,
+                id: u64
+            }
+
+            impl<'a> $object_name<'a> {
+                /// Returns an expression instance that provides versions of the property getters
+                /// and methods with return values as expressions.
+                pub fn expr(&self) -> [<$object_name Expression>] {
+                    [<$object_name Expression>]::new(self)
+                }
+            }
+
+            impl<'a> [<$object_name Expression>]<'a> {
+                pub fn new(remote_object: &$object_name<'a>) -> Self {
+                    Self {
+                        connection: remote_object.connection,
+                        id: remote_object.id
+                    }
+                }
+
+                // Propertie
+                $(
+                    remote_type!(@expr_property(service=$service, class=$object_name) $( $property )+ );
+                )*
+
+                // Methods
+                $(
+                    remote_type!(@expr_method(service=$service, class=$object_name, separator=_) $( $method )+ );
+                )*
+            }
+        }
+    };
+
+    //
+    // Expression Properties
+    //
+    (
+        @expr_property(service=$service:tt, class=$class:tt)
+            $prop_name: ident : $prop_type: ty,
+            $(#[$getter_meta:meta])*
+            get: $getter_name: ident $(,
+            $(#[$setter_meta:meta])*
+            set: $setter_name: ident)?
+    ) => {
+        remote_type!(@expr_method(service=$service, class=$class, separator=_get_)
+            $( #[$getter_meta] )*
+            fn $getter_name() -> $prop_type {
+                $prop_name()
+            });
+    };
+
+    //
+    // Expression Methods
+    //
+    (
+        @expr_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
+        $(#[$meta:meta])*
+        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
+            $rpc_name: tt($( $arg_expr: expr ),* )
+        }
+    ) => {
+        $(#[$meta])*
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<Expression> {
+            let args: Vec<Vec<u8>> = vec![self.id.encode()? $(, $arg_expr.encode()?)*];
+
+            let call = self.connection.procedure_call(
+                stringify!($service),
+                concat!( stringify!($class), stringify!($separator), stringify!($rpc_name)),
+                &args,
+            );
+
+            Expression::call(self.connection, &call)
+        }
+    };
+
+    (
+        @expr_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
+        $(#[$meta:meta])*
+        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
+            $rpc_name: tt($( $arg_expr: expr ),* )
+        }
+    ) => {
+        // This space intentionally left blank
     };
 
     //

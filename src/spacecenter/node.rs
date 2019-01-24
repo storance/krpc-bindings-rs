@@ -1,6 +1,7 @@
 use super::{Orbit, ReferenceFrame};
 use crate::codec::*;
 use crate::*;
+use crate::krpc::Expression;
 
 remote_type!(
 /// Represents a maneuver node.  Can be created using `Control::add_node()`.
