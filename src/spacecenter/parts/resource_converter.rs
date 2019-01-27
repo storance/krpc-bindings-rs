@@ -1,7 +1,7 @@
 use super::Part;
 use crate::codec::*;
-use crate::*;
 use crate::krpc::Expression;
+use crate::*;
 
 remote_type!(
 /// A resource converter. Obtained by calling `Part::resource_converter().`

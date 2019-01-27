@@ -1,7 +1,7 @@
 use super::{CelestialBody, Contract};
 use crate::codec::*;
-use crate::*;
 use crate::krpc::Expression;
+use crate::*;
 
 use std::collections::BTreeMap;
 

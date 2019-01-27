@@ -1,7 +1,7 @@
 use super::Part;
 use crate::codec::*;
-use crate::*;
 use crate::krpc::Expression;
+use crate::*;
 
 remote_type!(
 /// An intake. Obtained by calling `Part::intake().`

@@ -1,7 +1,7 @@
 use super::Part;
 use crate::codec::*;
-use crate::*;
 use crate::krpc::Expression;
+use crate::*;
 
 remote_type!(
 /// An experiment. Obtained by calling `Part::experiment().`

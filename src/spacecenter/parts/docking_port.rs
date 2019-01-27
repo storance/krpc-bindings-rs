@@ -1,7 +1,7 @@
 use super::Part;
 use crate::codec::*;
-use crate::spacecenter::{ReferenceFrame, Vessel};
 use crate::krpc::Expression;
+use crate::spacecenter::{ReferenceFrame, Vessel};
 use crate::*;
 
 remote_type!(

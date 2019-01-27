@@ -1,7 +1,7 @@
 use super::{Node, Vessel};
 use crate::codec::*;
-use crate::*;
 use crate::krpc::Expression;
+use crate::*;
 
 remote_type!(
 /// Used to manipulate the controls of a vessel. This includes adjusting the throttle,

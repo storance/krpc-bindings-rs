@@ -1,7 +1,7 @@
 use super::Part;
 use crate::codec::*;
-use crate::*;
 use crate::krpc::Expression;
+use crate::*;
 
 remote_type!(
     /// Represents the collection of resources stored in a vessel, stage or part. Created by

@@ -15,8 +15,8 @@ pub use self::error::*;
 pub use self::stream::{Event, Stream};
 
 use self::rpc::Rpc;
+use self::schema::ProcedureCall;
 use self::stream::StreamRaw;
-use self::schema::{ProcedureCall};
 
 pub const DEFAULT_RPC_PORT: u16 = 50000;
 pub const DEFAULT_STREAM_PORT: u16 = 50001;

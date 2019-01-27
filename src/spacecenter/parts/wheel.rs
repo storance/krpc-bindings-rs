@@ -1,7 +1,7 @@
 use super::Part;
 use crate::codec::*;
-use crate::*;
 use crate::krpc::Expression;
+use crate::*;
 
 remote_type!(
 /// A wheel. Includes landing gear and rover wheels. Obtained by calling `Part::wheel()`. Can be

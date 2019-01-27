@@ -1,7 +1,7 @@
 use super::Part;
 use crate::codec::*;
-use crate::spacecenter::{Propellant, Thruster};
 use crate::krpc::Expression;
+use crate::spacecenter::{Propellant, Thruster};
 use crate::*;
 
 use std::collections::BTreeMap;
