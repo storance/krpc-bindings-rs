@@ -4,6 +4,7 @@ extern crate paste;
 extern crate protobuf;
 
 mod client;
+pub mod kac;
 pub mod krpc;
 pub mod spacecenter;
 #[macro_use]

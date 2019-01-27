@@ -434,7 +434,7 @@ remote_type!(
                 /// # Returns
                 /// When the warp is complete.
                 fn warp_to(ut: f64, max_rails_rate: i32, max_physics_rate: i32) {
-                    WarpTO(ut, max_rails_rate, max_physics_rate)
+                    WarpTo(ut, max_rails_rate, max_physics_rate)
                 }
             }
             {
