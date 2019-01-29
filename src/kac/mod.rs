@@ -1,5 +1,5 @@
 use crate::codec::{Decode, Encode};
-use crate::{remote_type};
+use crate::remote_type;
 
 mod alarm;
 

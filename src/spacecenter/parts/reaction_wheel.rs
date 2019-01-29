@@ -1,6 +1,6 @@
 use super::Part;
 use crate::codec::{Decode, Encode};
-use crate::{remote_type, Vector3, RemoteObject};
+use crate::{remote_type, RemoteObject, Vector3};
 
 remote_type!(
 /// An reaction wheel. Obtained by calling `Part::reaction_wheel().`

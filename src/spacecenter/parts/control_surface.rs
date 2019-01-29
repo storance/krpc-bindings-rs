@@ -1,6 +1,6 @@
 use super::Part;
 use crate::codec::{Decode, Encode};
-use crate::{remote_type, Vector3, RemoteObject};
+use crate::{remote_type, RemoteObject, Vector3};
 
 remote_type!(
 /// A control surface. Obtained by calling `Part::control_surface().`

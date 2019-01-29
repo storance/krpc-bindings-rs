@@ -1,7 +1,7 @@
 use super::Part;
 use crate::codec::{Decode, Encode};
 use crate::spacecenter::ReferenceFrame;
-use crate::{remote_type, Vector3, RemoteObject};
+use crate::{remote_type, RemoteObject, Vector3};
 
 remote_type!(
 /// The component of an Engine or RCS part that generates thrust. Can obtained by

@@ -1,7 +1,7 @@
 use super::Part;
 use crate::codec::{Decode, Encode};
 use crate::spacecenter::{ReferenceFrame, Vessel};
-use crate::{remote_type, Quaternion, Vector3, RemoteEnum, RemoteObject};
+use crate::{remote_type, Quaternion, RemoteEnum, RemoteObject, Vector3};
 
 remote_type!(
 /// A docking port. Obtained by calling `Part::docking_port().`

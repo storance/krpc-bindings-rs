@@ -1,7 +1,7 @@
 use super::Part;
 use crate::codec::{Decode, Encode};
 use crate::spacecenter::Thruster;
-use crate::{remote_type, Vector3, RemoteObject};
+use crate::{remote_type, RemoteObject, Vector3};
 
 use std::collections::BTreeMap;
 
