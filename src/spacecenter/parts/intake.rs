@@ -1,7 +1,6 @@
 use super::Part;
-use crate::codec::*;
-use crate::krpc::Expression;
-use crate::*;
+use crate::codec::{Decode, Encode};
+use crate::{remote_type, RemoteObject};
 
 remote_type!(
 /// An intake. Obtained by calling `Part::intake().`

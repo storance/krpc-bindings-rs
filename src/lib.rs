@@ -3,19 +3,16 @@ extern crate failure;
 extern crate paste;
 extern crate protobuf;
 
-mod client;
+pub mod client;
 pub mod kac;
 pub mod krpc;
 pub mod spacecenter;
 #[macro_use]
 mod macros;
-mod codec;
-
-pub use self::client::schema::{Services, Status};
-pub use self::client::*;
+pub mod codec;
 
 pub trait RemoteObject<'a> {
-    fn new(connection: &'a Connection, id: u64) -> Self
+    fn new(connection: &'a client::Connection, id: u64) -> Self
     where
         Self: Sized;
 

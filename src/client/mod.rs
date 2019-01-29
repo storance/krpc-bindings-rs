@@ -1,21 +1,22 @@
-use crate::codec::*;
+use crate::codec::{CodecError, Decode, Encode};
 use crate::krpc::Expression;
 
 use std::net::TcpStream;
+use std::result;
 use std::sync::Arc;
 
-use protobuf::{CodedInputStream, CodedOutputStream, ProtobufError};
+use protobuf::{CodedInputStream, CodedOutputStream};
 
-mod error;
+pub mod error;
 mod rpc;
 pub mod schema;
 mod stream;
 
 pub use self::error::*;
+pub use self::schema::{Argument, ProcedureCall, Services, Status};
 pub use self::stream::{Event, Stream};
 
 use self::rpc::Rpc;
-use self::schema::ProcedureCall;
 use self::stream::StreamRaw;
 
 pub const DEFAULT_RPC_PORT: u16 = 50000;
@@ -24,22 +25,23 @@ pub const DEFAULT_STREAM_PORT: u16 = 50001;
 fn send_msg<T: protobuf::Message>(
     socket: &mut TcpStream,
     message: &T,
-) -> Result<(), ProtobufError> {
+) -> result::Result<(), CodecError> {
     let mut cos = CodedOutputStream::new(socket);
     cos.write_message_no_tag(message)?;
-    cos.flush()
+    cos.flush()?;
+    Ok(())
 }
 
-fn recv_msg<T: protobuf::Message>(socket: &mut TcpStream) -> Result<T, ProtobufError> {
+fn recv_msg<T: protobuf::Message>(socket: &mut TcpStream) -> result::Result<T, CodecError> {
     let mut cis = CodedInputStream::new(socket);
-    cis.read_message()
+    Ok(cis.read_message()?)
 }
 
 fn convert_procedure_result(
     result: &schema::ProcedureResult,
-) -> Result<Vec<u8>, error::ResponseError> {
+) -> result::Result<Vec<u8>, ResponseError> {
     if result.has_error() {
-        Err(error::ResponseError::from(result.get_error()))
+        Err(ResponseError::from(result.get_error()))
     } else {
         Ok(Vec::from(result.get_value()))
     }
@@ -51,7 +53,19 @@ pub struct Connection {
 }
 
 impl Connection {
-    pub fn connect(name: &str, host: &str) -> Result<Connection, ConnectionError> {
+    pub fn connect_localhost(name: &str) -> Result<Connection> {
+        Self::connect_with_ports(name, "localhost", DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT)
+    }
+
+    pub fn connect_localhost_with_ports(
+        name: &str,
+        rpc_port: u16,
+        stream_port: u16,
+    ) -> Result<Connection> {
+        Self::connect_with_ports(name, "localhost", rpc_port, stream_port)
+    }
+
+    pub fn connect(name: &str, host: &str) -> Result<Connection> {
         Self::connect_with_ports(name, host, DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT)
     }
 
@@ -60,7 +74,7 @@ impl Connection {
         host: &str,
         rpc_port: u16,
         stream_port: u16,
-    ) -> Result<Connection, ConnectionError> {
+    ) -> Result<Connection> {
         let rpc = rpc::Rpc::connect(name, host, rpc_port)?;
         let stream = stream::StreamManager::connect(rpc.id(), host, stream_port)?;
 
@@ -71,12 +85,7 @@ impl Connection {
         self.rpc.id()
     }
 
-    pub fn invoke(
-        &self,
-        service: &str,
-        procedure: &str,
-        args: &Vec<Vec<u8>>,
-    ) -> RpcResult<Vec<u8>> {
+    pub fn invoke(&self, service: &str, procedure: &str, args: &Vec<Vec<u8>>) -> Result<Vec<u8>> {
         self.rpc.invoke(service, procedure, args)
     }
 
@@ -89,10 +98,10 @@ impl Connection {
         Rpc::create_procedure_call(service, procedure, args)
     }
 
-    pub fn add_event<'a>(&'a self, expr: &Expression) -> StreamResult<Event<'a>> {
+    pub fn add_event<'a>(&'a self, expr: &Expression) -> Result<Event<'a>> {
         let response = self.rpc.invoke("KRPC", "AddEvent", &vec![expr.encode()?])?;
 
-        let event: schema::Event = decode(&response, self)?;
+        let event = schema::Event::decode(&response, self)?;
         let id = event.get_stream().get_id();
         let stream_value = Arc::new(StreamRaw::new(id, false));
 
@@ -107,7 +116,7 @@ impl Connection {
         procedure: &str,
         args: &Vec<Vec<u8>>,
         start: bool,
-    ) -> StreamResult<Stream<'a, T>> {
+    ) -> Result<Stream<'a, T>> {
         let response = self.rpc.invoke(
             "KRPC",
             "AddStream",
@@ -117,7 +126,7 @@ impl Connection {
             ],
         )?;
 
-        let stream: schema::Stream = decode(&response, self)?;
+        let stream = schema::Stream::decode(&response, self)?;
         let id = stream.get_id();
         let stream_value = Arc::new(StreamRaw::new(id, start));
 
@@ -132,6 +141,4 @@ impl Connection {
 }
 
 /// Result type alias for RPC calls.
-pub type RpcResult<T> = Result<T, RpcError>;
-/// Result type alias for stream calls.
-pub type StreamResult<T> = Result<T, StreamError>;
+pub type Result<T> = result::Result<T, error::Error>;

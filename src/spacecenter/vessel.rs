@@ -1,7 +1,6 @@
 use super::{AutoPilot, Comms, Control, Flight, Orbit, Parts, ReferenceFrame, Resources};
-use crate::codec::*;
-use crate::krpc::Expression;
-use crate::*;
+use crate::codec::{Decode, Encode};
+use crate::{remote_type, Quaternion, RemoteEnum, RemoteObject, Vector3};
 
 remote_type!(
 /// These objects are used to interact with vessels in KSP. This includes getting orbital and

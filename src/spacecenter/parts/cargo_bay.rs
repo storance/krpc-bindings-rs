@@ -1,7 +1,6 @@
 use super::Part;
-use crate::codec::*;
-use crate::krpc::Expression;
-use crate::*;
+use crate::codec::{Decode, Encode};
+use crate::{remote_type, RemoteEnum, RemoteObject};
 
 remote_type!(
 /// A cargo bay. Obtained by calling `Part::cargo_bay().`

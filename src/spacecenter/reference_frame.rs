@@ -1,5 +1,5 @@
-use crate::codec::*;
-use crate::*;
+use crate::codec::{Decode, Encode};
+use crate::{remote_type, Quaternion, RemoteObject, Vector3};
 
 remote_type!(
 /// Represents a reference frame for positions, rotations and velocities. Contains:

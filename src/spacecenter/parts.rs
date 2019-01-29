@@ -1,7 +1,6 @@
 use super::{ReferenceFrame, Resources, Vessel};
-use crate::codec::*;
-use crate::krpc::Expression;
-use crate::*;
+use crate::codec::{Decode, Encode};
+use crate::{remote_type, Quaternion, RemoteObject, Vector3};
 
 mod antenna;
 mod cargo_bay;

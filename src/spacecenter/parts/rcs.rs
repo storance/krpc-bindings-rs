@@ -1,8 +1,7 @@
 use super::Part;
-use crate::codec::*;
-use crate::krpc::Expression;
+use crate::codec::{Decode, Encode};
 use crate::spacecenter::{Propellant, Thruster};
-use crate::*;
+use crate::{remote_type, Vector3, RemoteObject};
 
 use std::collections::BTreeMap;
 

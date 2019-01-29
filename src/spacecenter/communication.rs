@@ -1,7 +1,6 @@
-use super::spacecenter::Vessel;
-use crate::codec::*;
-use crate::krpc::Expression;
-use crate::*;
+use super::Vessel;
+use crate::codec::{Decode, Encode};
+use crate::{remote_type, RemoteEnum, RemoteObject};
 
 remote_type!(
 /// Used to interact with CommNet for a given vessel. Obtained by calling `Vessel::comms()`.

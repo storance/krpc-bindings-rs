@@ -1,6 +1,5 @@
-use crate::codec::*;
-use crate::krpc::Expression;
-use crate::*;
+use crate::codec::{Decode, Encode};
+use crate::{remote_type, Quaternion, RemoteEnum, Vector3};
 
 use std::collections::BTreeMap;
 

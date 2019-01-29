@@ -17,12 +17,12 @@ macro_rules! remote_type {
         $(#[$meta])*
         #[derive(Clone)]
         pub struct $service<'a> {
-            connection: &'a Connection,
+            connection: &'a $crate::client::Connection,
         }
 
         impl<'a> $service<'a> {
             /// Creates a new service using the given `connection`.
-            pub fn new(connection: &'a Connection) -> Self {
+            pub fn new(connection: &'a $crate::client::Connection) -> Self {
                 Self { connection }
             }
 
@@ -48,7 +48,7 @@ macro_rules! remote_type {
         );
 
         remote_type!(
-            @expr_service(service=$service)
+            @call_service(service=$service)
             properties: {
                 $( { $( $property)+ } )*
             }
@@ -347,13 +347,13 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<$return_type> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$return_type> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
             let response = self.connection.invoke(stringify!($service),
                 concat!( $( stringify!($prefix), )? stringify!($rpc_name)),
                 &args)?;
-            Ok(decode(&response, &self.connection)?)
+            Ok(<$return_type>::decode(&response, self.connection)?)
         }
     };
 
@@ -365,7 +365,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<()> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<()> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
             self.connection.invoke(stringify!($service),
@@ -398,7 +398,7 @@ macro_rules! remote_type {
         paste::item! {
             #[derive(Clone)]
             pub struct [<$service Stream>]<'a> {
-                connection: &'a Connection,
+                connection: &'a $crate::client::Connection,
             }
 
             impl<'a> $service<'a> {
@@ -410,7 +410,7 @@ macro_rules! remote_type {
             }
 
             impl<'a> [<$service Stream>]<'a> {
-                pub fn new(connection: &'a Connection) -> Self {
+                pub fn new(connection: &'a $crate::client::Connection) -> Self {
                     Self { connection }
                 }
 
@@ -456,7 +456,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&'a self $(, $arg_name : $arg_type)*) -> StreamResult<Stream<'a, $return_type>> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$crate::client::Stream<$return_type>> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
             Ok(self.connection.add_stream(
@@ -482,7 +482,7 @@ macro_rules! remote_type {
     // Service Expression
     //
     (
-        @expr_service(service=$service: ident)
+        @call_service(service=$service: ident)
         properties: {}
         methods: {}
     ) => {
@@ -490,7 +490,7 @@ macro_rules! remote_type {
     };
 
     (
-        @expr_service(service=$service: ident)
+        @call_service(service=$service: ident)
         properties: {
             $( { $( $property: tt)+ } )*
         }
@@ -500,31 +500,31 @@ macro_rules! remote_type {
     ) => {
         paste::item! {
             #[derive(Clone)]
-            pub struct [<$service Expression>]<'a> {
-                connection: &'a Connection,
+            pub struct [<$service Call>]<'a> {
+                connection: &'a $crate::client::Connection,
             }
 
             impl<'a> $service<'a> {
-                /// Returns an expression instance that provides versions of the property getters
-                /// and methods with return values as expressions.
-                pub fn expr(&self) -> [<$service Expression>] {
-                    [<$service Expression>]::new(self.connection)
+                /// Returns a call instance that provides versions of the property getters
+                /// and methods with return values as `ProcedureCall`s.
+                pub fn call(&self) -> [<$service Call>] {
+                    [<$service Call>]::new(self.connection)
                 }
             }
 
-            impl<'a> [<$service Expression>]<'a> {
-                pub fn new(connection: &'a Connection) -> Self {
+            impl<'a> [<$service Call>]<'a> {
+                pub fn new(connection: &'a $crate::client::Connection) -> Self {
                     Self { connection }
                 }
 
                 // Properties
                 $(
-                    remote_type!(@expr_property(service=$service) $( $property )+ );
+                    remote_type!(@call_property(service=$service) $( $property )+ );
                 )*
 
                 // Methods
                 $(
-                    remote_type!(@expr_method(service=$service) $( $method )+ );
+                    remote_type!(@call_method(service=$service) $( $method )+ );
                 )*
             }
         }
@@ -534,14 +534,14 @@ macro_rules! remote_type {
     // Expression Properties
     //
     (
-        @expr_property(service=$service:tt)
+        @call_property(service=$service:tt)
             $prop_name: ident : $prop_type: ty,
             $(#[$getter_meta:meta])*
             get: $getter_name: ident $(,
             $(#[$setter_meta:meta])*
             set: $setter_name: ident)?
     ) => {
-        remote_type!(@expr_method(service=$service, prefix=get_)
+        remote_type!(@call_method(service=$service, prefix=get_)
             $( #[$getter_meta] )*
             fn $getter_name() -> $prop_type {
                 $prop_name()
@@ -552,28 +552,26 @@ macro_rules! remote_type {
     // Expression Methods
     //
     (
-        @expr_method(service=$service:tt $(, prefix=$prefix:tt)?)
+        @call_method(service=$service:tt $(, prefix=$prefix:tt)?)
         $(#[$meta:meta])*
         fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
             $rpc_name: tt($( $arg_expr: expr ),* )
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<Expression> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$crate::client::ProcedureCall> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
-            let call = self.connection.procedure_call(
+            Ok(self.connection.procedure_call(
                 stringify!($service),
                 concat!( $( stringify!($prefix), )? stringify!($rpc_name)),
                 &args
-            );
-
-            Expression::call(self.connection, &call)
+            ))
         }
     };
 
     (
-        @expr_method(service=$service:tt $(, prefix=$prefix:tt)?)
+        @call_method(service=$service:tt $(, prefix=$prefix:tt)?)
         $(#[$meta:meta])*
         fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
             $rpc_name: tt($( $arg_expr: expr ),* )
@@ -603,32 +601,32 @@ macro_rules! remote_type {
         #[derive(Clone)]
         pub struct $object_name<'a> {
             #[allow(dead_code)]
-            connection: &'a Connection,
+            connection: &'a $crate::client::Connection,
             id: u64
         }
 
-        impl<'a> RemoteObject<'a> for $object_name<'a> {
-            fn new(connection: &'a Connection, id: u64) -> Self {
+        impl<'a> $crate::RemoteObject<'a> for $object_name<'a> {
+            fn new(connection: &'a $crate::client::Connection, id: u64) -> Self {
                 Self { connection, id }
             }
 
             fn id(&self) -> u64 { self.id }
         }
 
-        impl<'a> Decode<'a> for $object_name<'a> {
-            fn decode(bytes: &Vec<u8>, connection: &'a Connection) -> Result<Self, CodecError> {
-                let id: u64 = decode(bytes, connection)?;
+        impl<'a> $crate::codec::Decode<'a> for $object_name<'a> {
+            fn decode(bytes: &Vec<u8>, connection: &'a $crate::client::Connection) -> Result<Self, $crate::codec::CodecError> {
+                let id = u64::decode(bytes, connection)?;
                 if id == 0 {
-                    Err(CodecError::NullValue)
+                    Err($crate::codec::CodecError::NullValue)
                 } else {
                     Ok($object_name::new(connection, id))
                 }
             }
         }
 
-        impl<'a> Decode<'a> for Option<$object_name<'a>> {
-            fn decode(bytes: &Vec<u8>, connection: &'a Connection) -> Result<Self, CodecError> {
-                let id: u64 = decode(bytes, connection)?;
+        impl<'a> $crate::codec::Decode<'a> for Option<$object_name<'a>> {
+            fn decode(bytes: &Vec<u8>, connection: &'a $crate::client::Connection) -> Result<Self, $crate::codec::CodecError> {
+                let id = u64::decode(bytes, connection)?;
                 if id == 0 {
                     Ok(None)
                 } else {
@@ -637,14 +635,14 @@ macro_rules! remote_type {
             }
         }
 
-        impl<'a> Encode for $object_name<'a> {
-            fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        impl<'a> $crate::codec::Encode for $object_name<'a> {
+            fn encode(&self) -> Result<Vec<u8>, $crate::codec::CodecError> {
                 self.id().encode()
             }
         }
 
-        impl<'a> Encode for Option<$object_name<'a>> {
-            fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        impl<'a> $crate::codec::Encode for Option<$object_name<'a>> {
+            fn encode(&self) -> Result<Vec<u8>, $crate::codec::CodecError> {
                 match self {
                     None => (0 as u64).encode(),
                     Some(obj) => obj.id().encode()
@@ -652,8 +650,8 @@ macro_rules! remote_type {
             }
         }
 
-        impl<'a> Encode for Option<&$object_name<'a>> {
-            fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        impl<'a> $crate::codec::Encode for Option<&$object_name<'a>> {
+            fn encode(&self) -> Result<Vec<u8>, $crate::codec::CodecError> {
                 match self {
                     None => (0 as u64).encode(),
                     Some(ref obj) => obj.id().encode()
@@ -695,7 +693,7 @@ macro_rules! remote_type {
         );
 
         remote_type!(
-            @expr_remote_object(service=$service, class=$object_name)
+            @call_remote_object(service=$service, class=$object_name)
             properties: {
                 $( $( { $( $property)+ } )* )?
             }
@@ -994,13 +992,13 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<$return_type> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$return_type> {
             let args: Vec<Vec<u8>> = vec![self.encode()? $(, $arg_expr.encode()?)*];
 
             let response = self.connection.invoke(stringify!($service),
                 concat!( stringify!($class), stringify!($separator), stringify!($rpc_name)),
                 &args)?;
-            Ok(decode(&response, &self.connection)?)
+            Ok(<$return_type>::decode(&response, self.connection)?)
         }
     };
 
@@ -1012,7 +1010,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<()> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<()> {
             let args: Vec<Vec<u8>> = vec![self.encode()? $(, $arg_expr.encode()?)*];
 
             self.connection.invoke(stringify!($service),
@@ -1033,13 +1031,13 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(connection: &'a Connection $(, $arg_name : $arg_type)*) -> RpcResult<$return_type> {
+        pub fn $method_name(connection: &'a $crate::client::Connection $(, $arg_name : $arg_type)*) -> $crate::client::Result<$return_type> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
             let response = connection.invoke(stringify!($service),
                 concat!( stringify!($class), "_static_", stringify!($rpc_name)),
                 &args)?;
-            Ok(decode(&response, connection)?)
+            Ok(<$return_type>::decode(&response, connection)?)
         }
     };
 
@@ -1066,7 +1064,7 @@ macro_rules! remote_type {
         paste::item! {
             #[derive(Clone)]
             pub struct [<$object_name Stream>]<'a> {
-                connection: &'a Connection,
+                connection: &'a $crate::client::Connection,
                 id: u64
             }
 
@@ -1128,7 +1126,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> StreamResult<Stream<$return_type>> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$crate::client::Stream<$return_type>> {
             let args: Vec<Vec<u8>> = vec![self.id.encode()? $(, $arg_expr.encode()?)*];
 
             Ok(self.connection.add_stream(
@@ -1154,7 +1152,7 @@ macro_rules! remote_type {
     // Remote Object Expression
     //
     (
-        @expr_remote_object(service=$service: ident, class=$object_name: ident)
+        @call_remote_object(service=$service: ident, class=$object_name: ident)
         properties: {}
         methods: {}
     ) => {
@@ -1162,7 +1160,7 @@ macro_rules! remote_type {
     };
 
     (
-        @expr_remote_object(service=$service: ident, class=$object_name: ident)
+        @call_remote_object(service=$service: ident, class=$object_name: ident)
         properties: {
             $( { $( $property: tt)+ } )*
         }
@@ -1172,20 +1170,20 @@ macro_rules! remote_type {
     ) => {
         paste::item! {
             #[derive(Clone)]
-            pub struct [<$object_name Expression>]<'a> {
-                connection: &'a Connection,
+            pub struct [<$object_name Call>]<'a> {
+                connection: &'a $crate::client::Connection,
                 id: u64
             }
 
             impl<'a> $object_name<'a> {
-                /// Returns an expression instance that provides versions of the property getters
-                /// and methods with return values as expressions.
-                pub fn expr(&self) -> [<$object_name Expression>] {
-                    [<$object_name Expression>]::new(self)
+                /// Returns a call instance that provides versions of the property getters
+                /// and methods with return values as `ProcedureCall`s.
+                pub fn call(&self) -> [<$object_name Call>] {
+                    [<$object_name Call>]::new(self)
                 }
             }
 
-            impl<'a> [<$object_name Expression>]<'a> {
+            impl<'a> [<$object_name Call>]<'a> {
                 pub fn new(remote_object: &$object_name<'a>) -> Self {
                     Self {
                         connection: remote_object.connection,
@@ -1195,12 +1193,12 @@ macro_rules! remote_type {
 
                 // Propertie
                 $(
-                    remote_type!(@expr_property(service=$service, class=$object_name) $( $property )+ );
+                    remote_type!(@call_property(service=$service, class=$object_name) $( $property )+ );
                 )*
 
                 // Methods
                 $(
-                    remote_type!(@expr_method(service=$service, class=$object_name, separator=_) $( $method )+ );
+                    remote_type!(@call_method(service=$service, class=$object_name, separator=_) $( $method )+ );
                 )*
             }
         }
@@ -1210,14 +1208,14 @@ macro_rules! remote_type {
     // Expression Properties
     //
     (
-        @expr_property(service=$service:tt, class=$class:tt)
+        @call_property(service=$service:tt, class=$class:tt)
             $prop_name: ident : $prop_type: ty,
             $(#[$getter_meta:meta])*
             get: $getter_name: ident $(,
             $(#[$setter_meta:meta])*
             set: $setter_name: ident)?
     ) => {
-        remote_type!(@expr_method(service=$service, class=$class, separator=_get_)
+        remote_type!(@call_method(service=$service, class=$class, separator=_get_)
             $( #[$getter_meta] )*
             fn $getter_name() -> $prop_type {
                 $prop_name()
@@ -1228,28 +1226,26 @@ macro_rules! remote_type {
     // Expression Methods
     //
     (
-        @expr_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
+        @call_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
         $(#[$meta:meta])*
         fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
             $rpc_name: tt($( $arg_expr: expr ),* )
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> RpcResult<Expression> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$crate::client::ProcedureCall> {
             let args: Vec<Vec<u8>> = vec![self.id.encode()? $(, $arg_expr.encode()?)*];
 
-            let call = self.connection.procedure_call(
+            Ok(self.connection.procedure_call(
                 stringify!($service),
                 concat!( stringify!($class), stringify!($separator), stringify!($rpc_name)),
                 &args,
-            );
-
-            Expression::call(self.connection, &call)
+            ))
         }
     };
 
     (
-        @expr_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
+        @call_method(service=$service:tt, class=$class:tt, separator=$separator:tt)
         $(#[$meta:meta])*
         fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
             $rpc_name: tt($( $arg_expr: expr ),* )
@@ -1275,7 +1271,7 @@ macro_rules! remote_type {
             ),+
         }
 
-        impl RemoteEnum for $enum_name {
+        impl $crate::RemoteEnum for $enum_name {
             fn from_value(value: i64) -> Option<Self> {
                 match value {
                     $( $value_int => Some($enum_name::$value_name)),+,
@@ -1288,16 +1284,16 @@ macro_rules! remote_type {
             }
         }
 
-        impl<'a> Decode<'a> for $enum_name {
-            fn decode(bytes: &Vec<u8>, connection: &'a Connection) -> Result<Self, CodecError> {
-                let value: i64 = decode(bytes, connection)?;
+        impl<'a> $crate::codec::Decode<'a> for $enum_name {
+            fn decode(bytes: &Vec<u8>, connection: &'a $crate::client::Connection) -> Result<Self, $crate::codec::CodecError> {
+                let value = i64::decode(bytes, connection)?;
                 $enum_name::from_value(value)
-                    .ok_or(CodecError::InvalidEnumValue(value))
+                    .ok_or($crate::codec::CodecError::InvalidEnumValue(value))
             }
         }
 
-        impl Encode for $enum_name {
-            fn encode(&self) -> Result<Vec<u8>, CodecError> {
+        impl $crate::codec::Encode for $enum_name {
+            fn encode(&self) -> Result<Vec<u8>, $crate::codec::CodecError> {
                 self.value().encode()
             }
         }

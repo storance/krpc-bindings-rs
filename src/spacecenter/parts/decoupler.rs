@@ -1,8 +1,7 @@
 use super::Part;
-use crate::codec::*;
-use crate::krpc::Expression;
+use crate::codec::{Decode, Encode};
 use crate::spacecenter::Vessel;
-use crate::*;
+use crate::{remote_type, RemoteObject};
 
 remote_type!(
 /// A decoupler. Obtained by calling `Part::decoupler().`

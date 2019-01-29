@@ -3,7 +3,7 @@ use super::schema::{
     ConnectionResponse_Status, ProcedureCall, Request, Response,
 };
 use super::{
-    convert_procedure_result, recv_msg, send_msg, ConnectionError, ResponseError, RpcError,
+    convert_procedure_result, recv_msg, send_msg, ConnectionError, Error, ResponseError, Result,
 };
 
 use std::cell::RefCell;
@@ -20,7 +20,7 @@ impl Rpc {
         self.id.as_slice()
     }
 
-    pub(super) fn connect(name: &str, host: &str, port: u16) -> Result<Rpc, ConnectionError> {
+    pub(super) fn connect(name: &str, host: &str, port: u16) -> Result<Rpc> {
         let mut rpc_socket = TcpStream::connect((host, port))?;
 
         let mut request = ConnectionRequest::new();
@@ -30,13 +30,18 @@ impl Rpc {
         send_msg(&mut rpc_socket, &request)?;
         let response: ConnectionResponse = recv_msg(&mut rpc_socket)?;
 
-        if response.status == ConnectionResponse_Status::OK {
-            Ok(Rpc {
+        match response.status {
+            ConnectionResponse_Status::OK => Ok(Rpc {
                 id: Vec::from(response.get_client_identifier()),
                 socket: RefCell::new(rpc_socket),
-            })
-        } else {
-            Err(ConnectionError::ConnectionError(response.message))
+            }),
+            ConnectionResponse_Status::TIMEOUT => Err(ConnectionError::Timeout(response.message))?,
+            ConnectionResponse_Status::MALFORMED_MESSAGE => {
+                Err(ConnectionError::MalformedMessage(response.message))?
+            }
+            ConnectionResponse_Status::WRONG_TYPE => {
+                Err(ConnectionError::WrongType(response.message))?
+            }
         }
     }
 
@@ -45,20 +50,20 @@ impl Rpc {
         service: &str,
         procedure: &str,
         args: &Vec<Vec<u8>>,
-    ) -> Result<Vec<u8>, RpcError> {
+    ) -> Result<Vec<u8>> {
         let request = Self::create_request(service, procedure, args);
 
         send_msg(&mut self.socket.borrow_mut(), &request)?;
         let response: Response = recv_msg(&mut self.socket.borrow_mut())?;
 
         if response.has_error() {
-            Err(RpcError::ResponseError(ResponseError::from(
+            Err(Error::ResponseError(ResponseError::from(
                 response.get_error(),
             )))
         } else {
             let results = response.get_results();
             if results.len() == 0 {
-                Err(RpcError::ResponseError(ResponseError::MissingResult))
+                Err(Error::ResponseError(ResponseError::MissingResult))
             } else {
                 Ok(convert_procedure_result(&results[0])?)
             }

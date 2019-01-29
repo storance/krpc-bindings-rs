@@ -1,7 +1,6 @@
 use super::CelestialBody;
-use crate::codec::*;
-use crate::krpc::Expression;
-use crate::*;
+use crate::codec::{Decode, Encode};
+use crate::{remote_type, Quaternion, RemoteObject, Vector3};
 
 remote_type!(
 /// Used to get flight telemetry for a vessel, by calling `Vessel::flight()`. All of

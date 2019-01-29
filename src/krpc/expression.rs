@@ -1,7 +1,6 @@
-use crate::codec::*;
-use crate::*;
-
-use crate::client::schema::ProcedureCall;
+use crate::client::ProcedureCall;
+use crate::codec::{Decode, Encode};
+use crate::{remote_type, RemoteObject};
 
 use std::collections::BTreeMap;
 

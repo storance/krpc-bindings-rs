@@ -1,6 +1,6 @@
 use super::CodecError;
 use crate::client::schema::{Dictionary, Event, List, Services, Set, Status, Stream, Tuple};
-use crate::Connection;
+use crate::client::Connection;
 
 use protobuf::{CodedInputStream, Message};
 

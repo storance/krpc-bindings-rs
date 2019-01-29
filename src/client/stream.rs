@@ -3,12 +3,13 @@ use super::schema::{
     StreamUpdate,
 };
 use super::{
-    convert_procedure_result, recv_msg, send_msg, Connection, ConnectionError, ResponseError,
-    StreamError,
+    convert_procedure_result, recv_msg, send_msg, Connection, ConnectionError, Error,
+    ResponseError, Result, StreamError,
 };
-use crate::codec::{Decode, Encode};
+use crate::codec::{CodecError, Decode, Encode};
 
 use std::io;
+use std::result;
 use std::thread;
 
 use std::collections::BTreeMap;
@@ -35,7 +36,7 @@ impl<'a> Event<'a> {
     }
 
     /// Wait until the event has occurred.
-    pub fn wait(&self) -> Result<(), StreamError> {
+    pub fn wait(&self) -> Result<()> {
         if !self.stream.started() {
             self.stream.start()?;
         }
@@ -52,7 +53,7 @@ impl<'a> Event<'a> {
     ///
     /// # Arguments
     /// * `dur` - The maximum amount of time to wait.
-    pub fn wait_timeout(&self, dur: Duration) -> Result<bool, StreamError> {
+    pub fn wait_timeout(&self, dur: Duration) -> Result<bool> {
         if !self.stream.started() {
             self.stream.start()?;
         }
@@ -73,11 +74,11 @@ impl<'a> Event<'a> {
     }
 
     /// Returns whether or not the event has occurred.
-    pub fn is_occurred(&self) -> Result<bool, StreamError> {
+    pub fn is_occurred(&self) -> Result<bool> {
         self.stream.value()
     }
 
-    pub fn start(&self) -> Result<(), StreamError> {
+    pub fn start(&self) -> Result<()> {
         self.stream.start()
     }
 
@@ -85,7 +86,7 @@ impl<'a> Event<'a> {
         self.stream.started()
     }
 
-    pub fn remove(&mut self) -> Result<(), StreamError> {
+    pub fn remove(&mut self) -> Result<()> {
         self.stream.remove()
     }
 }
@@ -114,7 +115,7 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
 
     /// Returns the current value for the stream.  If the stream is not started, this will
     /// start it.
-    pub fn value(&self) -> Result<T, StreamError> {
+    pub fn value(&self) -> Result<T> {
         if !self.value.started() {
             self.start()?;
             self.wait()?;
@@ -131,7 +132,7 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
 
     /// Starts this stream value if it hs not already been started.  This will cause the stream
     /// to start receiving updates from the KRPC server.
-    pub fn start(&self) -> Result<(), StreamError> {
+    pub fn start(&self) -> Result<()> {
         if self.started() {
             return Ok(());
         }
@@ -152,13 +153,13 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
     ///
     /// # Arguments
     /// * `rate` - The new update in hertz.
-    pub fn set_rate(&self, rate: f32) -> Result<(), StreamError> {
+    pub fn set_rate(&self, rate: f32) -> Result<()> {
         if !self.started() {
-            return Err(StreamError::NotStarted);
+            return Err(Error::StreamError(StreamError::NotStarted));
         }
 
         if self.removed {
-            return Err(StreamError::Removed);
+            return Err(Error::StreamError(StreamError::Removed));
         }
 
         let args = vec![self.value.id().encode()?, rate.encode()?];
@@ -171,7 +172,7 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
 
     /// Removes the stream so it no longer receives updates from the KRPC server.  The last
     /// received value for this stream can still be obtained by calling `value()`.
-    pub fn remove(&mut self) -> Result<(), StreamError> {
+    pub fn remove(&mut self) -> Result<()> {
         if !self.removed {
             let args = vec![self.id().encode()?];
             self.connection.invoke("KRPC", "RemoveStream", &args)?;
@@ -190,9 +191,9 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
     }
 
     /// Waits for the stream value to be updated.
-    pub fn wait(&self) -> Result<(), StreamError> {
+    pub fn wait(&self) -> Result<()> {
         if self.removed {
-            return Err(StreamError::Removed);
+            return Err(Error::StreamError(StreamError::Removed));
         }
 
         self.value.wait()
@@ -203,9 +204,9 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
     ///
     /// # Arguments
     /// * `timeout` - The maximum amount on time to wait for the stream value to be updated.
-    pub fn wait_timeout(&self, timeout: Duration) -> Result<bool, StreamError> {
+    pub fn wait_timeout(&self, timeout: Duration) -> Result<bool> {
         if self.removed {
-            return Err(StreamError::Removed);
+            return Err(Error::StreamError(StreamError::Removed));
         }
 
         self.value.wait_timeout(timeout)
@@ -245,11 +246,11 @@ impl StreamRaw {
         }
     }
 
-    fn wait(&self) -> Result<(), StreamError> {
+    fn wait(&self) -> Result<()> {
         let mut state = self.state.lock().unwrap();
 
         if !state.started {
-            return Err(StreamError::NotStarted);
+            return Err(Error::StreamError(StreamError::NotStarted));
         }
 
         let initial_version = state.version;
@@ -261,11 +262,11 @@ impl StreamRaw {
         Ok(())
     }
 
-    fn wait_timeout(&self, dur: Duration) -> Result<bool, StreamError> {
+    fn wait_timeout(&self, dur: Duration) -> Result<bool> {
         let mut state = self.state.lock().unwrap();
 
         if !state.started {
-            return Err(StreamError::NotStarted);
+            return Err(Error::StreamError(StreamError::NotStarted));
         }
 
         let initial_version = state.version;
@@ -288,14 +289,14 @@ impl StreamRaw {
         self.id
     }
 
-    fn value_map<F, R>(&self, map: F) -> Result<R, StreamError>
+    fn value_map<F, R>(&self, map: F) -> Result<R>
     where
-        F: FnOnce(&Vec<u8>, u64) -> Result<R, StreamError>,
+        F: FnOnce(&Vec<u8>, u64) -> Result<R>,
     {
         let state = self.state.lock().unwrap();
 
         if !state.started {
-            return Err(StreamError::NotStarted);
+            return Err(Error::StreamError(StreamError::NotStarted));
         }
 
         let bytes = state.value.as_ref().map_err(Clone::clone)?;
@@ -349,7 +350,7 @@ struct StreamState {
     started: bool,
     version: u64,
     rate: f32,
-    value: Result<Vec<u8>, ResponseError>,
+    value: result::Result<Vec<u8>, ResponseError>,
 }
 
 impl StreamState {
@@ -369,11 +370,7 @@ pub struct StreamManager {
 }
 
 impl StreamManager {
-    pub(super) fn connect(
-        client_id: &[u8],
-        host: &str,
-        port: u16,
-    ) -> Result<StreamManager, ConnectionError> {
+    pub(super) fn connect(client_id: &[u8], host: &str, port: u16) -> Result<StreamManager> {
         let mut stream_socket = TcpStream::connect((host, port))?;
 
         let mut request = ConnectionRequest::new();
@@ -383,17 +380,24 @@ impl StreamManager {
         send_msg(&mut stream_socket, &request)?;
         let response: ConnectionResponse = recv_msg(&mut stream_socket)?;
 
-        if response.status == ConnectionResponse_Status::OK {
-            let active_streams = Arc::new(Mutex::new(BTreeMap::new()));
-            let stop_flag = Arc::new(AtomicBool::new(false));
-            Self::start_updater(stream_socket, active_streams.clone(), stop_flag.clone());
+        match response.status {
+            ConnectionResponse_Status::OK => {
+                let active_streams = Arc::new(Mutex::new(BTreeMap::new()));
+                let stop_flag = Arc::new(AtomicBool::new(false));
+                Self::start_updater(stream_socket, active_streams.clone(), stop_flag.clone());
 
-            Ok(StreamManager {
-                active_streams,
-                stop_flag,
-            })
-        } else {
-            Err(ConnectionError::ConnectionError(response.message))
+                Ok(StreamManager {
+                    active_streams,
+                    stop_flag,
+                })
+            }
+            ConnectionResponse_Status::TIMEOUT => Err(ConnectionError::Timeout(response.message))?,
+            ConnectionResponse_Status::MALFORMED_MESSAGE => {
+                Err(ConnectionError::MalformedMessage(response.message))?
+            }
+            ConnectionResponse_Status::WRONG_TYPE => {
+                Err(ConnectionError::WrongType(response.message))?
+            }
         }
     }
 
@@ -410,7 +414,7 @@ impl StreamManager {
                 .expect("Unable to set read timeout");
 
             while !(*stop_flag).load(Ordering::Relaxed) {
-                let msg: Result<StreamUpdate, ProtobufError> = recv_msg(&mut stream_socket);
+                let msg: result::Result<StreamUpdate, CodecError> = recv_msg(&mut stream_socket);
                 match msg {
                     Ok(stream_update) => {
                         Self::process_stream_update(stream_update, &active_streams)
@@ -440,11 +444,14 @@ impl StreamManager {
         }
     }
 
-    fn is_timeout_error(err: &ProtobufError) -> bool {
+    fn is_timeout_error(err: &CodecError) -> bool {
         match err {
-            &ProtobufError::IoError(ref e) => {
-                e.kind() == io::ErrorKind::TimedOut || e.kind() == io::ErrorKind::WouldBlock
-            }
+            &CodecError::ProtobufError(ref e) => match e {
+                &ProtobufError::IoError(ref ioe) => {
+                    ioe.kind() == io::ErrorKind::TimedOut || ioe.kind() == io::ErrorKind::WouldBlock
+                }
+                _ => false,
+            },
             _ => false,
         }
     }
