@@ -104,7 +104,7 @@ macro_rules! remote_type {
         $(
             remote_type!(@method(service=$service, prefix=set_)
                 $( #[$setter_meta] )*
-                fn $setter_name(value: &[$prop_type])> {
+                fn $setter_name(value: &[$prop_type]) {
                     $prop_name(value)
                 }
             );
@@ -749,7 +749,7 @@ macro_rules! remote_type {
         $(
             remote_type!(@method(service=$service, class=$class, separator=_set_)
                 $( #[$setter_meta] )*
-                fn $setter_name(value: &[$prop_type])> {
+                fn $setter_name(value: &[$prop_type]) {
                     $prop_name(value)
                 }
             );
