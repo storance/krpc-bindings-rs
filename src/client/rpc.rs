@@ -3,9 +3,10 @@ use super::schema::{
     ConnectionResponse_Status, ProcedureCall, Request, Response,
 };
 use super::{
-    convert_procedure_result, recv_msg, send_msg, ConnectionError, Error, ResponseError, Result,
+    convert_procedure_result, recv_msg, send_msg, ConnectionError, KrpcResult, ResponseError,
 };
 
+use failure::Error;
 use std::cell::RefCell;
 use std::net::TcpStream;
 
@@ -20,7 +21,7 @@ impl Rpc {
         self.id.as_slice()
     }
 
-    pub(super) fn connect(name: &str, host: &str, port: u16) -> Result<Rpc> {
+    pub(super) fn connect(name: &str, host: &str, port: u16) -> KrpcResult<Rpc> {
         let mut rpc_socket = TcpStream::connect((host, port))?;
 
         let mut request = ConnectionRequest::new();
@@ -50,27 +51,25 @@ impl Rpc {
         service: &str,
         procedure: &str,
         args: &Vec<Vec<u8>>,
-    ) -> Result<Vec<u8>> {
+    ) -> KrpcResult<Vec<u8>> {
         let request = Self::create_request(service, procedure, args);
 
         send_msg(&mut self.socket.borrow_mut(), &request)?;
         let response: Response = recv_msg(&mut self.socket.borrow_mut())?;
 
         if response.has_error() {
-            Err(Error::ResponseError(ResponseError::from(
-                response.get_error(),
-            )))
+            Err(Error::from(ResponseError::from(response.get_error())))
         } else {
             let results = response.get_results();
             if results.len() == 0 {
-                Err(Error::ResponseError(ResponseError::MissingResult))
+                Err(Error::from(ResponseError::MissingResult))
             } else {
                 Ok(convert_procedure_result(&results[0])?)
             }
         }
     }
 
-    pub(super) fn create_request(service: &str, procedure: &str, args: &Vec<Vec<u8>>) -> Request {
+    pub(super) fn create_request(service: &str, procedure: &str, args: &[Vec<u8>]) -> Request {
         let mut request = Request::new();
         request
             .calls
@@ -82,7 +81,7 @@ impl Rpc {
     pub(super) fn create_procedure_call(
         service: &str,
         procedure: &str,
-        args: &Vec<Vec<u8>>,
+        args: &[Vec<u8>],
     ) -> ProcedureCall {
         let mut procedure_call = ProcedureCall::new();
         procedure_call.set_service(service.to_owned());

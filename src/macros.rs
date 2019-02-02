@@ -347,7 +347,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$return_type> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::KrpcResult<$return_type> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
             let response = self.connection.invoke(stringify!($service),
@@ -365,7 +365,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<()> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::KrpcResult<()> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
             self.connection.invoke(stringify!($service),
@@ -456,7 +456,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$crate::client::Stream<$return_type>> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::KrpcResult<$crate::client::Stream<$return_type>> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
             Ok(self.connection.add_stream(
@@ -559,7 +559,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$crate::client::ProcedureCall> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::KrpcResult<$crate::client::ProcedureCall> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
             Ok(self.connection.procedure_call(
@@ -614,10 +614,10 @@ macro_rules! remote_type {
         }
 
         impl<'a> $crate::codec::Decode<'a> for $object_name<'a> {
-            fn decode(bytes: &Vec<u8>, connection: &'a $crate::client::Connection) -> Result<Self, $crate::codec::CodecError> {
+            fn decode(bytes: &Vec<u8>, connection: &'a $crate::client::Connection) -> $crate::codec::CodecResult<Self> {
                 let id = u64::decode(bytes, connection)?;
                 if id == 0 {
-                    Err($crate::codec::CodecError::NullValue)
+                    Err(failure::Error::from($crate::codec::CodecError::NullValue))
                 } else {
                     Ok($object_name::new(connection, id))
                 }
@@ -625,7 +625,7 @@ macro_rules! remote_type {
         }
 
         impl<'a> $crate::codec::Decode<'a> for Option<$object_name<'a>> {
-            fn decode(bytes: &Vec<u8>, connection: &'a $crate::client::Connection) -> Result<Self, $crate::codec::CodecError> {
+            fn decode(bytes: &Vec<u8>, connection: &'a $crate::client::Connection) -> $crate::codec::CodecResult<Self> {
                 let id = u64::decode(bytes, connection)?;
                 if id == 0 {
                     Ok(None)
@@ -636,13 +636,13 @@ macro_rules! remote_type {
         }
 
         impl<'a> $crate::codec::Encode for $object_name<'a> {
-            fn encode(&self) -> Result<Vec<u8>, $crate::codec::CodecError> {
+            fn encode(&self) -> $crate::codec::CodecResult<Vec<u8>> {
                 self.id().encode()
             }
         }
 
         impl<'a> $crate::codec::Encode for Option<$object_name<'a>> {
-            fn encode(&self) -> Result<Vec<u8>, $crate::codec::CodecError> {
+            fn encode(&self) -> $crate::codec::CodecResult<Vec<u8>> {
                 match self {
                     None => (0 as u64).encode(),
                     Some(obj) => obj.id().encode()
@@ -651,7 +651,7 @@ macro_rules! remote_type {
         }
 
         impl<'a> $crate::codec::Encode for Option<&$object_name<'a>> {
-            fn encode(&self) -> Result<Vec<u8>, $crate::codec::CodecError> {
+            fn encode(&self) -> $crate::codec::CodecResult<Vec<u8>> {
                 match self {
                     None => (0 as u64).encode(),
                     Some(ref obj) => obj.id().encode()
@@ -992,7 +992,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$return_type> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::KrpcResult<$return_type> {
             let args: Vec<Vec<u8>> = vec![self.encode()? $(, $arg_expr.encode()?)*];
 
             let response = self.connection.invoke(stringify!($service),
@@ -1010,7 +1010,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<()> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::KrpcResult<()> {
             let args: Vec<Vec<u8>> = vec![self.encode()? $(, $arg_expr.encode()?)*];
 
             self.connection.invoke(stringify!($service),
@@ -1031,7 +1031,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(connection: &'a $crate::client::Connection $(, $arg_name : $arg_type)*) -> $crate::client::Result<$return_type> {
+        pub fn $method_name(connection: &'a $crate::client::Connection $(, $arg_name : $arg_type)*) -> $crate::client::KrpcResult<$return_type> {
             let args: Vec<Vec<u8>> = vec![$($arg_expr.encode()?),*];
 
             let response = connection.invoke(stringify!($service),
@@ -1126,7 +1126,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$crate::client::Stream<$return_type>> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::KrpcResult<$crate::client::Stream<$return_type>> {
             let args: Vec<Vec<u8>> = vec![self.id.encode()? $(, $arg_expr.encode()?)*];
 
             Ok(self.connection.add_stream(
@@ -1233,7 +1233,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::Result<$crate::client::ProcedureCall> {
+        pub fn $method_name(&self $(, $arg_name : $arg_type)*) -> $crate::client::KrpcResult<$crate::client::ProcedureCall> {
             let args: Vec<Vec<u8>> = vec![self.id.encode()? $(, $arg_expr.encode()?)*];
 
             Ok(self.connection.procedure_call(
@@ -1285,15 +1285,15 @@ macro_rules! remote_type {
         }
 
         impl<'a> $crate::codec::Decode<'a> for $enum_name {
-            fn decode(bytes: &Vec<u8>, connection: &'a $crate::client::Connection) -> Result<Self, $crate::codec::CodecError> {
+            fn decode(bytes: &Vec<u8>, connection: &'a $crate::client::Connection) -> $crate::codec::CodecResult<Self> {
                 let value = i64::decode(bytes, connection)?;
-                $enum_name::from_value(value)
-                    .ok_or($crate::codec::CodecError::InvalidEnumValue(value))
+                Ok(Self::from_value(value)
+                    .ok_or($crate::codec::CodecError::InvalidEnumValue(value))?)
             }
         }
 
         impl $crate::codec::Encode for $enum_name {
-            fn encode(&self) -> Result<Vec<u8>, $crate::codec::CodecError> {
+            fn encode(&self) -> $crate::codec::CodecResult<Vec<u8>> {
                 self.value().encode()
             }
         }

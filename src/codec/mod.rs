@@ -4,12 +4,10 @@ mod encode;
 pub use crate::codec::decode::*;
 pub use crate::codec::encode::*;
 
-use protobuf::ProtobufError;
+pub use failure::Error;
 
 #[derive(Debug, Fail)]
 pub enum CodecError {
-    #[fail(display = "Protobuf Error: {}", _0)]
-    ProtobufError(ProtobufError),
     #[fail(display = "Invalid enum value {}", _0)]
     InvalidEnumValue(i64),
     #[fail(display = "Value was unexpectedly null")]
@@ -18,14 +16,4 @@ pub enum CodecError {
     MismatchedTupleLength { actual: usize, expected: usize },
 }
 
-impl CodecError {
-    pub fn mismatched_tuple_length(actual: usize, expected: usize) -> CodecError {
-        CodecError::MismatchedTupleLength { actual, expected }
-    }
-}
-
-impl From<ProtobufError> for CodecError {
-    fn from(err: ProtobufError) -> Self {
-        CodecError::ProtobufError(err)
-    }
-}
+pub type CodecResult<T> = Result<T, Error>;

@@ -1,7 +1,4 @@
 use super::schema;
-use crate::codec::CodecError;
-
-use std::io;
 
 #[derive(Debug, Clone, Fail)]
 pub enum ConnectionError {
@@ -65,49 +62,5 @@ impl From<&schema::Error> for ResponseError {
                 stack_trace: err.get_stack_trace().to_owned(),
             }
         }
-    }
-}
-
-#[derive(Debug, Fail)]
-pub enum Error {
-    #[fail(display = "IO Error: {}", _0)]
-    IoError(#[fail(cause)] io::Error),
-    #[fail(display = "Codec Error: {}", _0)]
-    CodecError(#[fail(cause)] CodecError),
-    #[fail(display = "Response Error: {}", _0)]
-    ResponseError(#[fail(cause)] ResponseError),
-    #[fail(display = "Connection Error: {}", _0)]
-    ConnectionError(#[fail(cause)] ConnectionError),
-    #[fail(display = "Stream Error: {}", _0)]
-    StreamError(#[fail(cause)] StreamError),
-}
-
-impl From<io::Error> for Error {
-    fn from(err: io::Error) -> Self {
-        Error::IoError(err)
-    }
-}
-
-impl From<CodecError> for Error {
-    fn from(err: CodecError) -> Self {
-        Error::CodecError(err)
-    }
-}
-
-impl From<ResponseError> for Error {
-    fn from(err: ResponseError) -> Self {
-        Error::ResponseError(err)
-    }
-}
-
-impl From<ConnectionError> for Error {
-    fn from(err: ConnectionError) -> Self {
-        Error::ConnectionError(err)
-    }
-}
-
-impl From<StreamError> for Error {
-    fn from(err: StreamError) -> Self {
-        Error::StreamError(err)
     }
 }

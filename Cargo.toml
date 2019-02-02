@@ -8,9 +8,9 @@ edition = "2018"
 name = "krpc_bindings"
 
 [dependencies]
-protobuf = "^2.2.2"
-failure = "0.1.5"
-paste = "0.1.4"
+protobuf = "^2.3.0"
+failure = "^0.1.5"
+paste = "^0.1.4"
 
 [build-dependencies]
-protoc-rust = "^2.2.2"
+protoc-rust = "^2.3.0"

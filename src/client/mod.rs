@@ -1,13 +1,12 @@
-use crate::codec::{CodecError, Decode, Encode};
+use crate::codec::{Decode, Encode};
 use crate::krpc::Expression;
 
+use failure::Error;
+use protobuf::{CodedInputStream, CodedOutputStream};
 use std::net::TcpStream;
-use std::result;
 use std::sync::Arc;
 
-use protobuf::{CodedInputStream, CodedOutputStream};
-
-pub mod error;
+mod error;
 mod rpc;
 pub mod schema;
 mod stream;
@@ -22,24 +21,19 @@ use self::stream::StreamRaw;
 pub const DEFAULT_RPC_PORT: u16 = 50000;
 pub const DEFAULT_STREAM_PORT: u16 = 50001;
 
-fn send_msg<T: protobuf::Message>(
-    socket: &mut TcpStream,
-    message: &T,
-) -> result::Result<(), CodecError> {
+fn send_msg<T: protobuf::Message>(socket: &mut TcpStream, message: &T) -> KrpcResult<()> {
     let mut cos = CodedOutputStream::new(socket);
     cos.write_message_no_tag(message)?;
     cos.flush()?;
     Ok(())
 }
 
-fn recv_msg<T: protobuf::Message>(socket: &mut TcpStream) -> result::Result<T, CodecError> {
+fn recv_msg<T: protobuf::Message>(socket: &mut TcpStream) -> KrpcResult<T> {
     let mut cis = CodedInputStream::new(socket);
     Ok(cis.read_message()?)
 }
 
-fn convert_procedure_result(
-    result: &schema::ProcedureResult,
-) -> result::Result<Vec<u8>, ResponseError> {
+fn convert_procedure_result(result: &schema::ProcedureResult) -> Result<Vec<u8>, ResponseError> {
     if result.has_error() {
         Err(ResponseError::from(result.get_error()))
     } else {
@@ -53,7 +47,7 @@ pub struct Connection {
 }
 
 impl Connection {
-    pub fn connect_localhost(name: &str) -> Result<Connection> {
+    pub fn connect_localhost(name: &str) -> KrpcResult<Connection> {
         Self::connect_with_ports(name, "localhost", DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT)
     }
 
@@ -61,11 +55,11 @@ impl Connection {
         name: &str,
         rpc_port: u16,
         stream_port: u16,
-    ) -> Result<Connection> {
+    ) -> KrpcResult<Connection> {
         Self::connect_with_ports(name, "localhost", rpc_port, stream_port)
     }
 
-    pub fn connect(name: &str, host: &str) -> Result<Connection> {
+    pub fn connect(name: &str, host: &str) -> KrpcResult<Connection> {
         Self::connect_with_ports(name, host, DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT)
     }
 
@@ -74,7 +68,7 @@ impl Connection {
         host: &str,
         rpc_port: u16,
         stream_port: u16,
-    ) -> Result<Connection> {
+    ) -> KrpcResult<Connection> {
         let rpc = rpc::Rpc::connect(name, host, rpc_port)?;
         let stream = stream::StreamManager::connect(rpc.id(), host, stream_port)?;
 
@@ -85,7 +79,12 @@ impl Connection {
         self.rpc.id()
     }
 
-    pub fn invoke(&self, service: &str, procedure: &str, args: &Vec<Vec<u8>>) -> Result<Vec<u8>> {
+    pub fn invoke(
+        &self,
+        service: &str,
+        procedure: &str,
+        args: &Vec<Vec<u8>>,
+    ) -> KrpcResult<Vec<u8>> {
         self.rpc.invoke(service, procedure, args)
     }
 
@@ -93,13 +92,14 @@ impl Connection {
         &self,
         service: &str,
         procedure: &str,
-        args: &Vec<Vec<u8>>,
+        args: &[Vec<u8>],
     ) -> ProcedureCall {
         Rpc::create_procedure_call(service, procedure, args)
     }
 
-    pub fn add_event<'a>(&'a self, expr: &Expression) -> Result<Event<'a>> {
-        let response = self.rpc.invoke("KRPC", "AddEvent", &vec![expr.encode()?])?;
+    pub fn add_event<'a>(&'a self, expr: &Expression) -> KrpcResult<Event<'a>> {
+        let args = vec![expr.encode()?];
+        let response = self.rpc.invoke("KRPC", "AddEvent", &args)?;
 
         let event = schema::Event::decode(&response, self)?;
         let id = event.get_stream().get_id();
@@ -114,17 +114,14 @@ impl Connection {
         &'a self,
         service: &str,
         procedure: &str,
-        args: &Vec<Vec<u8>>,
+        args: &[Vec<u8>],
         start: bool,
-    ) -> Result<Stream<'a, T>> {
-        let response = self.rpc.invoke(
-            "KRPC",
-            "AddStream",
-            &vec![
-                Rpc::create_procedure_call(service, procedure, args).encode()?,
-                start.encode()?,
-            ],
-        )?;
+    ) -> KrpcResult<Stream<'a, T>> {
+        let stream_args = vec![
+            Rpc::create_procedure_call(service, procedure, args).encode()?,
+            start.encode()?,
+        ];
+        let response = self.rpc.invoke("KRPC", "AddStream", &stream_args)?;
 
         let stream = schema::Stream::decode(&response, self)?;
         let id = stream.get_id();
@@ -140,5 +137,4 @@ impl Connection {
     }
 }
 
-/// Result type alias for RPC calls.
-pub type Result<T> = result::Result<T, error::Error>;
+pub type KrpcResult<T> = Result<T, Error>;
