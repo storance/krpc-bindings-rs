@@ -7,6 +7,7 @@ pub mod client;
 pub mod drawing;
 pub mod kac;
 pub mod krpc;
+pub mod remotetech;
 pub mod spacecenter;
 pub mod ui;
 #[macro_use]

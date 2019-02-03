@@ -33,38 +33,46 @@ impl<'a> Event<'a> {
         &self.stream
     }
 
-    /// Wait until the event has occurred.
-    pub fn wait(&self) -> KrpcResult<()> {
+    /// Wait until the event is in the expected state.
+    ///
+    /// # Arguments
+    /// * `triggered` - If `true`, waits until the event is triggered; otherwise, wait until
+    /// it's not triggered.
+    pub fn wait(&self, triggered: bool) -> KrpcResult<()> {
         if !self.stream.started() {
             self.stream.start()?;
         }
 
-        while !self.stream.value()? {
+        while self.stream.value()? != triggered {
             self.stream.wait()?;
         }
 
         Ok(())
     }
 
-    /// Wait for the specified amount of time until the event has occurred.  Returns whether or
-    /// not the timeout was reached before the event occurred.
+    /// Wait for the specified amount of time until the event has occurred.
     ///
     /// # Arguments
+    /// * `triggered` - If `true`, waits until the event is triggered; otherwise, wait until
+    /// it's not triggered.
     /// * `dur` - The maximum amount of time to wait.
-    pub fn wait_timeout(&self, dur: Duration) -> KrpcResult<bool> {
+    ///
+    /// # Returns
+    /// Returns `true` if the event matches the desired triggered state; `false` if it timed-out.
+    pub fn wait_timeout(&self, triggered: bool, dur: Duration) -> KrpcResult<bool> {
         if !self.stream.started() {
             self.stream.start()?;
         }
 
         let start = Instant::now();
         loop {
-            if self.stream.value()? {
-                return Ok(false);
+            if self.stream.value()? == triggered {
+                return Ok(true);
             }
 
             let timeout = match dur.checked_sub(start.elapsed()) {
                 Some(timeout) => timeout,
-                None => return Ok(true),
+                None => return Ok(false),
             };
 
             self.stream.wait_timeout(timeout)?;
@@ -72,7 +80,7 @@ impl<'a> Event<'a> {
     }
 
     /// Returns whether or not the event has occurred.
-    pub fn is_occurred(&self) -> KrpcResult<bool> {
+    pub fn is_triggered(&self) -> KrpcResult<bool> {
         self.stream.value()
     }
 
