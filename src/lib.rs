@@ -5,6 +5,7 @@ extern crate protobuf;
 
 pub mod client;
 pub mod drawing;
+pub mod infernalrobotics;
 pub mod kac;
 pub mod krpc;
 pub mod remotetech;
