@@ -6,35 +6,42 @@ mod expression;
 
 pub use self::expression::*;
 
+/// Type alias for client information.  First element is client identifier, second is name, and
+/// the third is address.
+pub type Client = (Vec<u8>, String, String);
+
 remote_type!(
     /// KRPC service.
     service KRPC {
         properties: {
             {
-                Clients: Vec<(Vec<u8>, String, String)>,
-                /// Returns a list of RPC clients that are currently connected to the server.
-                /// Each entry in the list is a clients identifier, name and address.
-                ///
-                /// **Game Scenes**: All
-                get: clients
+                Clients {
+                    /// Returns a list of RPC clients that are currently connected to the server.
+                    /// Each entry in the list is a clients identifier, name and address.
+                    ///
+                    /// **Game Scenes**: All
+                    get: clients -> Vec<Client>
+                }
             }
             {
-                CurrentGameScene: GameScene,
-                /// Returns the current game scene.
-                ///
-                /// **Game Scenes**: All
-                get: current_game_scene
+                CurrentGameScene {
+                    /// Returns the current game scene.
+                    ///
+                    /// **Game Scenes**: All
+                    get: current_game_scene -> GameScene
+                }
             }
             {
-                Paused: bool,
-                /// Returns whether the game is paused.
-                ///
-                /// **Game Scenes**: All
-                get: is_paused,
-                /// Sets whether the game is paused.
-                ///
-                /// **Game Scenes**: All
-                set: set_paused
+                Paused {
+                    /// Returns whether the game is paused.
+                    ///
+                    /// **Game Scenes**: All
+                    get: is_paused -> bool,
+                    /// Sets whether the game is paused.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_paused(bool)
+                }
             }
         }
         methods: {

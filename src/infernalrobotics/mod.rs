@@ -13,18 +13,20 @@ remote_type!(
 service InfernalRobotics {
     properties: {
         {
-            Available: bool,
-            /// Returns whether Infernal Robotics is installed.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_available
+            Available {
+                /// Returns whether Infernal Robotics is installed.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_available -> bool
+            }
         }
         {
-            Ready: bool,
-            /// Returns whether the Infernal Robotics API is ready.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_ready
+            Ready {
+                /// Returns whether the Infernal Robotics API is ready.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_ready -> bool
+            }
         }
     }
     methods: {

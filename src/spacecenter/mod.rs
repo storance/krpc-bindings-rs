@@ -48,230 +48,253 @@ remote_type!(
     service SpaceCenter {
         properties: {
             {
-                Science: f64,
-                /// Returns the current amount of science.
-                ///
-                /// **Game Scenes**: All
-                get: science
+                Science {
+                    /// Returns the current amount of science.
+                    ///
+                    /// **Game Scenes**: All
+                    get: science -> f64
+                }
             }
             {
-                Funds: f64,
-                /// Returns the current amount of funds.
-                ///
-                /// **Game Scenes**: All
-                get: funds
+                Funds {
+                    /// Returns the current amount of funds.
+                    ///
+                    /// **Game Scenes**: All
+                    get: funds -> f64
+                }
             }
             {
-                Reputation: f32,
-                /// Returns the current amount of reputation.
-                ///
-                /// **Game Scenes**: All
-                get: reputation
+                Reputation {
+                    /// Returns the current amount of reputation.
+                    ///
+                    /// **Game Scenes**: All
+                    get: reputation -> f32
+                }
             }
             {
-                ActiveVessel: Option<Vessel>,
-                /// Returns the currently active vessel or None if there isn't one.
-                ///
-                /// **Game Scenes**: Flight
-                get: active_vessel,
-                /// Sets the active vessel to the given vessel.
-                ///
-                /// **Game Scenes**: Flight
-                ///
-                /// # Arguments
-                /// * `value` - The vessel to make active.
-                set: set_active_vessel
+                ActiveVessel {
+                    /// Returns the currently active vessel or None if there isn't one.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: active_vessel -> Option<Vessel>,
+                    /// Sets the active vessel to the given vessel.
+                    ///
+                    /// **Game Scenes**: Flight
+                    ///
+                    /// # Arguments
+                    /// * `value` - The vessel to make active.
+                    set: set_active_vessel(&Vessel)
+                }
             }
             {
-                Vessels: Vec<Vessel>,
-                /// Returns a list of all the vessels in the game.
-                ///
-                /// **Game Scenes**: All
-                get: vessels
+                Vessels {
+                    /// Returns a list of all the vessels in the game.
+                    ///
+                    /// **Game Scenes**: All
+                    get: vessels -> Vec<Vessel>
+                }
             }
             {
-                Bodies: BTreeMap<String, CelestialBody>,
-                /// A map of all celestial bodies (planets, moons, etc.) in the game,
-                /// keyed by the name of the body.
-                ///
-                /// **Game Scenes**: All
-                get: bodies
+                Bodies {
+                    /// A map of all celestial bodies (planets, moons, etc.) in the game,
+                    /// keyed by the name of the body.
+                    ///
+                    /// **Game Scenes**: All
+                    get: bodies -> BTreeMap<String, CelestialBody>
+                }
             }
             {
-                TargetBody: Option<CelestialBody>,
-                /// Returns the currently targeted celestial body or `None` if there isn't one.
-                ///
-                /// **Game Scenes**: All
-                get: target_body,
-                /// Sets the current target to the given `body`.
-                ///
-                /// **Game Scenes**: All
-                ///
-                /// # Arguments
-                /// * `value` - The celestial body to target.
-                set: set_target_body
+                TargetBody {
+                    /// Returns the currently targeted celestial body or `None` if there isn't one.
+                    ///
+                    /// **Game Scenes**: All
+                    get: target_body -> Option<CelestialBody>,
+                    /// Sets the current target to the given `body`.
+                    ///
+                    /// **Game Scenes**: All
+                    ///
+                    /// # Arguments
+                    /// * `value` - The celestial body to target.
+                    set: set_target_body(&CelestialBody)
+                }
             }
             {
-                TargetVessel: Option<Vessel>,
-                /// Returns the currently targeted vessel or `None` if there isn't one.
-                ///
-                /// **Game Scenes**: All
-                get: target_vessel,
-                /// Sets the current target to the given vessel.
-                ///
-                /// **Game Scenes**: All
-                ///
-                /// # Arguments
-                /// * `value` - The vessel to target.
-                set: set_target_vessel
+                TargetVessel {
+                    /// Returns the currently targeted vessel or `None` if there isn't one.
+                    ///
+                    /// **Game Scenes**: All
+                    get: target_vessel -> Option<Vessel>,
+                    /// Sets the current target to the given vessel.
+                    ///
+                    /// **Game Scenes**: All
+                    ///
+                    /// # Arguments
+                    /// * `value` - The vessel to target.
+                    set: set_target_vessel(&Vessel)
+                }
             }
             {
-                TargetDockingPort: Option<DockingPort>,
-                /// Returns the currently targeted docking port or `None` if there isn't one.
-                ///
-                /// **Game Scenes**: All
-                get: target_docking_port,
-                /// Sets the current target to the given docking port.
-                ///
-                /// **Game Scenes**: All
-                ///
-                /// # Arguments
-                /// * `value` - The docking port to target.
-                set: set_target_docking_port
+                TargetDockingPort {
+                    /// Returns the currently targeted docking port or `None` if there isn't one.
+                    ///
+                    /// **Game Scenes**: All
+                    get: target_docking_port -> Option<DockingPort>,
+                    /// Sets the current target to the given docking port.
+                    ///
+                    /// **Game Scenes**: All
+                    ///
+                    /// # Arguments
+                    /// * `value` - The docking port to target.
+                    set: set_target_docking_port(&DockingPort)
+                }
             }
             {
-                UIVisible: bool,
-                /// Returns whether the UI is visible.
-                ///
-                /// **Game Scenes**: Flight
-                get: is_ui_visible,
-                /// Sets whether the UI is visible.
-                ///
-                /// **Game Scenes**: Flight
-                set: set_ui_visible
+                UIVisible {
+                    /// Returns whether the UI is visible.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: is_ui_visible -> bool,
+                    /// Sets whether the UI is visible.
+                    ///
+                    /// **Game Scenes**: Flight
+                    set: set_ui_visible(bool)
+                }
             }
             {
-                Navball: bool,
-                /// Returns whether the navball is visible.
-                ///
-                /// **Game Scenes**: Flight
-                get: is_navball_visible,
-                /// Sets whether the navball is visible.
-                ///
-                /// **Game Scenes**: Flight
-                set: set_navball_visible
+                Navball {
+                    /// Returns whether the navball is visible.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: is_navball_visible -> bool,
+                    /// Sets whether the navball is visible.
+                    ///
+                    /// **Game Scenes**: Flight
+                    set: set_navball_visible(bool)
+                }
             }
             {
-                G: f64,
-                /// Returns the value of the gravitational constant G in N(m/kg)<sup>2</sup>.
-                ///
-                /// **Game Scenes**: All
-                get: g
+                G {
+                    /// Returns the value of the gravitational constant G in N(m/kg)<sup>2</sup>.
+                    ///
+                    /// **Game Scenes**: All
+                    get: g -> f64
+                }
             }
             {
-                WarpRate: f32,
-                /// Returns the current warp rate. This is the rate at which time is passing
-                /// for either on-rails or physical time warp. For example, a value of 10 means
-                /// time is passing 10x faster than normal. Returns 1 if time warp is not active.
-                ///
-                /// **Game Scenes**: Flight
-                get: warp_rate
+                WarpRate {
+                    /// Returns the current warp rate. This is the rate at which time is passing
+                    /// for either on-rails or physical time warp. For example, a value of 10 means
+                    /// time is passing 10x faster than normal. Returns 1 if time warp is not active.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: warp_rate -> f32
+                }
             }
             {
-                WarpFactor: f32,
-                /// Returns the current warp factor. This is the index of the rate at which
-                /// time is passing for either regular “on-rails” or physical time warp. Returns
-                /// 0 if time warp is not active. When in on-rails time warp, this is equal to
-                /// `rails_warp_factor()`, and in physics time warp, this is
-                /// equal to `physics_warp_factor()`.
-                ///
-                /// **Game Scenes**: Flight
-                get: warp_factor
+                WarpFactor {
+                    /// Returns the current warp factor. This is the index of the rate at which
+                    /// time is passing for either regular “on-rails” or physical time warp. Returns
+                    /// 0 if time warp is not active. When in on-rails time warp, this is equal to
+                    /// `rails_warp_factor()`, and in physics time warp, this is
+                    /// equal to `physics_warp_factor()`.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: warp_factor -> f32
+                }
             }
             {
-                RailsWarpFactor: f32,
-                /// Returns the time warp rate, using regular “on-rails” time warp. A value
-                /// between 0 and 7 inclusive. Returns 0 if no time warp or physical time
-                /// warp is active.
-                ///
-                /// **Game Scenes**: Flight
-                get: rails_warp_factor,
-                /// Sets the time warp rate, using regular “on-rails” time warp. A value
-                /// between 0 and 7 inclusive. 0 means no time warp.
-                ///
-                /// If requested time warp factor cannot be set, it will be set to the next
-                /// lowest possible value. For example, if the vessel is too close to a
-                /// planet. See the [KSP wiki](https://wiki.kerbalspaceprogram.com/wiki/Time_warp)
-                /// for details.
-                ///
-                /// **Game Scenes**: Flight
-                set: set_rails_warp_factor
+                RailsWarpFactor {
+                    /// Returns the time warp rate, using regular “on-rails” time warp. A value
+                    /// between 0 and 7 inclusive. Returns 0 if no time warp or physical time
+                    /// warp is active.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: rails_warp_factor -> f32,
+                    /// Sets the time warp rate, using regular “on-rails” time warp. A value
+                    /// between 0 and 7 inclusive. 0 means no time warp.
+                    ///
+                    /// If requested time warp factor cannot be set, it will be set to the next
+                    /// lowest possible value. For example, if the vessel is too close to a
+                    /// planet. See the [KSP wiki](https://wiki.kerbalspaceprogram.com/wiki/Time_warp)
+                    /// for details.
+                    ///
+                    /// **Game Scenes**: Flight
+                    set: set_rails_warp_factor(f32)
+                }
             }
             {
-                PhysicsWarpFactor: f32,
-                /// Returns the physical time warp rate. A value between 0 and 3 inclusive.
-                /// Returns 0 if no time warp or regular “on-rails” time warp is active.
-                ///
-                /// **Game Scenes**: Flight
-                get: physics_warp_factor,
-                /// Sets the physical time warp rate. A value between 0 and 3 inclusive.
-                /// 0 means no time warp.
-                ///
-                /// **Game Scenes**: Flight
-                set: set_physics_warp_factor
+                PhysicsWarpFactor {
+                    /// Returns the physical time warp rate. A value between 0 and 3 inclusive.
+                    /// Returns 0 if no time warp or regular “on-rails” time warp is active.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: physics_warp_factor -> f32,
+                    /// Sets the physical time warp rate. A value between 0 and 3 inclusive.
+                    /// 0 means no time warp.
+                    ///
+                    /// **Game Scenes**: Flight
+                    set: set_physics_warp_factor(f32)
+                }
             }
             {
-                MaximumRailsWarpFactor: f32,
-                /// Returns the current maximum regular “on-rails” warp factor that can be set.
-                /// A value between 0 and 7 inclusive. See the
-                /// [KSP wiki](https://wiki.kerbalspaceprogram.com/wiki/Time_warp) for details.
-                ///
-                /// **Game Scenes**: Flight
-                get: max_rails_warp_factor
+                MaximumRailsWarpFactor {
+                    /// Returns the current maximum regular “on-rails” warp factor that can be set.
+                    /// A value between 0 and 7 inclusive. See the
+                    /// [KSP wiki](https://wiki.kerbalspaceprogram.com/wiki/Time_warp) for details.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: max_rails_warp_factor -> f32
+                }
             }
             {
-                FARAvailable: bool,
-                /// Returns whether Ferram Aerospace Research is installed.
-                ///
-                /// **Game Scenes**: All
-                get: is_far_available
+                FARAvailable {
+                    /// Returns whether Ferram Aerospace Research is installed.
+                    ///
+                    /// **Game Scenes**: All
+                    get: is_far_available -> bool
+                }
             }
             {
-                GameMode: GameMode,
-                /// Returns the current mode the game is in.
-                ///
-                /// **Game Scenes**: All
-                get: game_mode
+                GameMode {
+                    /// Returns the current mode the game is in.
+                    ///
+                    /// **Game Scenes**: All
+                    get: game_mode -> GameMode
+                }
             }
             {
-                WarpMode: WarpMode,
-                /// Returns the current time warp mode. Returns `WarpMode::NONE` if time warp
-                /// is not active, `WarpMode::RAILS` if regular “on-rails” time warp is active,
-                /// or `WarpMode::PHYSICS` if physical time warp is active.
-                ///
-                /// **Game Scenes**: Flight
-                get: warp_mode
+                WarpMode {
+                    /// Returns the current time warp mode. Returns `WarpMode::NONE` if time warp
+                    /// is not active, `WarpMode::RAILS` if regular “on-rails” time warp is active,
+                    /// or `WarpMode::PHYSICS` if physical time warp is active.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: warp_mode -> WarpMode
+                }
             }
             {
-                Camera: Camera,
-                /// Returns an object that can be used to control the camera.
-                ///
-                /// **Game Scenes**: Flight
-                get: camera
+                Camera {
+                    /// Returns an object that can be used to control the camera.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: camera -> Camera
+                }
             }
             {
-                WaypointManager: WaypointManager,
-                /// Returns the waypoint manager.
-                ///
-                /// **Game Scenes**: Flight
-                get: waypoint_manager
+                WaypointManager {
+                    /// Returns the waypoint manager.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: waypoint_manager -> WaypointManager
+                }
             }
             {
-                ContractManager: ContractManager,
-                /// Returns the contract manager.
-                ///
-                /// **Game Scenes**: All
-                get: contract_manager
+                ContractManager {
+                    /// Returns the contract manager.
+                    ///
+                    /// **Game Scenes**: All
+                    get: contract_manager -> ContractManager
+                }
             }
         }
         methods: {

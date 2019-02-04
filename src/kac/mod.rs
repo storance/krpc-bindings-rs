@@ -10,18 +10,20 @@ remote_type!(
     service KerbalAlarmClock {
         properties: {
             {
-                Available: bool,
-                /// Returns whether Kerbal Alarm Clock is available.
-                ///
-                /// **Game Scenes**: All
-                get: is_available
+                Available {
+                    /// Returns whether Kerbal Alarm Clock is available.
+                    ///
+                    /// **Game Scenes**: All
+                    get: is_available -> bool
+                }
             }
             {
-                Alarms: Vec<Alarm>,
-                /// Returns a list of all the alarms.
-                ///
-                /// **Game Scenes**: All
-                get: alarms
+                Alarms {
+                    /// Returns a list of all the alarms.
+                    ///
+                    /// **Game Scenes**: All
+                    get: alarms -> Vec<Alarm>
+                }
             }
         }
         methods: {

@@ -13,18 +13,20 @@ remote_type!(
 service RemoteTech {
     properties: {
         {
-            Available: bool,
-            /// Returns whether RemoteTech is installed.
-            ///
-            /// **Game Scenes**: All
-            get: is_available
+            Available {
+                /// Returns whether RemoteTech is installed.
+                ///
+                /// **Game Scenes**: All
+                get: is_available -> bool
+            }
         }
         {
-            GroundStations: Vec<String>,
-            /// Returns the names of the ground stations.
-            ///
-            /// **Game Scenes**: All
-            get: ground_stations
+            GroundStations {
+                /// Returns the names of the ground stations.
+                ///
+                /// **Game Scenes**: All
+                get: ground_stations -> Vec<String>
+            }
         }
     }
     methods: {

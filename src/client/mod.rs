@@ -5,6 +5,7 @@ use failure::Error;
 use protobuf::{CodedInputStream, CodedOutputStream};
 use std::net::TcpStream;
 use std::sync::Arc;
+use std::fmt;
 
 mod error;
 mod rpc;
@@ -42,6 +43,7 @@ fn convert_procedure_result(result: &schema::ProcedureResult) -> Result<Vec<u8>,
 }
 
 pub struct Connection {
+    name: String,
     rpc: rpc::Rpc,
     stream: stream::StreamManager,
 }
@@ -72,11 +74,15 @@ impl Connection {
         let rpc = rpc::Rpc::connect(name, host, rpc_port)?;
         let stream = stream::StreamManager::connect(rpc.id(), host, stream_port)?;
 
-        Ok(Connection { rpc, stream })
+        Ok(Connection { name: name.to_owned(), rpc, stream })
     }
 
     pub fn id(&self) -> &[u8] {
         self.rpc.id()
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
     }
 
     pub fn invoke(
@@ -137,4 +143,11 @@ impl Connection {
     }
 }
 
+impl fmt::Debug for Connection {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), std::fmt::Error> {
+        write!(f, "Connection{{ name: {}, id: {} }}", self.name, hex::encode(self.rpc.id()))
+    }
+}
+
+/// Result type for all KRPC services.
 pub type KrpcResult<T> = Result<T, Error>;

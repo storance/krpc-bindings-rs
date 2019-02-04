@@ -20,11 +20,12 @@ remote_type!(
 service UI {
     properties: {
         {
-            StockCanvas: Canvas,
-            /// The stock UI canvas.
-            ///
-            /// **Game Scenes**: All
-            get: stock_canvas
+            StockCanvas {
+                /// The stock UI canvas.
+                ///
+                /// **Game Scenes**: All
+                get: stock_canvas -> Canvas
+            }
         }
     }
     methods: {

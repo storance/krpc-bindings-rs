@@ -15,7 +15,7 @@ macro_rules! remote_type {
         }
     ) => {
         $(#[$meta])*
-        #[derive(Clone)]
+        #[derive(Debug, Clone)]
         pub struct $service<'a> {
             connection: &'a $crate::client::Connection,
         }
@@ -63,15 +63,16 @@ macro_rules! remote_type {
     //
     (
         @property(service=$service:tt)
-            $prop_name: ident : Option<$prop_type: ty>,
+        $prop_name: ident {
             $(#[$getter_meta:meta])*
-            get: $getter_name: ident$(,
+            get: $getter_name: ident -> $getter_type: ty $(,
             $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
+            set: $setter_name: ident ($setter_type: ty) )?
+        }
     ) => {
         remote_type!(@method(service=$service, prefix=get_)
             $( #[$getter_meta] )*
-            fn $getter_name() -> Option<$prop_type> {
+            fn $getter_name() -> $getter_type {
                 $prop_name()
             }
         );
@@ -79,257 +80,7 @@ macro_rules! remote_type {
         $(
             remote_type!(@method(service=$service, prefix=set_)
                 $( #[$setter_meta] )*
-                fn $setter_name(value: Option<&$prop_type>) {
-                    $prop_name(value)
-                }
-            );
-        )?
-    };
-
-    (
-        @property(service=$service:tt)
-            $prop_name: ident : Vec<$prop_type: ty>,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident$(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@method(service=$service, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> Vec<$prop_type> {
-                $prop_name()
-            }
-        );
-
-        $(
-            remote_type!(@method(service=$service, prefix=set_)
-                $( #[$setter_meta] )*
-                fn $setter_name(value: &[$prop_type]) {
-                    $prop_name(value)
-                }
-            );
-        )?
-    };
-
-    (
-        @property(service=$service:tt)
-            $prop_name: ident : String,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident$(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@method(service=$service, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> String {
-                $prop_name()
-            }
-        );
-
-        $(
-            remote_type!(@method(service=$service, prefix=set_)
-                $( #[$setter_meta] )*
-                fn $setter_name(value: &str) {
-                    $prop_name(value)
-                }
-            );
-        )?
-    };
-
-    (
-        @property(service=$service:tt)
-            $prop_name: ident : f32,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident$(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@method(service=$service, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> f32 {
-                $prop_name()
-            }
-        );
-
-        $(
-            remote_type!(@method(service=$service, prefix=_set)
-                $( #[$setter_meta] )*
-                fn $setter_name(value: f32) {
-                    $prop_name(value)
-                }
-            );
-        )?
-    };
-
-    (
-        @property(service=$service:tt)
-            $prop_name: ident : f64,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident$(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@method(service=$service, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> f64 {
-                $prop_name()
-            }
-        );
-
-        $(
-            remote_type!(@method(service=$service, prefix=set_)
-                $( #[$setter_meta] )*
-                fn $setter_name(value: f64) {
-                    $prop_name(value)
-                }
-            );
-        )?
-    };
-
-    (
-        @property(service=$service:tt)
-            $prop_name: ident : i32,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident$(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@method(service=$service, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> i32 {
-                $prop_name()
-            }
-        );
-
-        $(
-            remote_type!(@method(service=$service, prefix=set_)
-                $( #[$setter_meta] )*
-                fn $setter_name(value: i32) {
-                    $prop_name(value)
-                }
-            );
-        )?
-    };
-
-    (
-        @property(service=$service:tt)
-            $prop_name: ident : i64,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident$(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@method(service=$service, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> i64 {
-                $prop_name()
-            }
-        );
-
-        $(
-            remote_type!(@method(service=$service, prefix=set_)
-                $( #[$setter_meta] )*
-                fn $setter_name(value: i64) {
-                    $prop_name(value)
-                }
-            );
-        )?
-    };
-
-    (
-        @property(service=$service:tt)
-            $prop_name: ident : u32,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident$(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@method(service=$service, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> u32 {
-                $prop_name()
-            }
-        );
-
-        $(
-            remote_type!(@method(service=$service, prefix=set_)
-                $( #[$setter_meta] )*
-                fn $setter_name(value: u32) {
-                    $prop_name(value)
-                }
-            );
-        )?
-    };
-
-    (
-        @property(service=$service:tt)
-            $prop_name: ident : u64,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident$(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@method(service=$service, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> u64 {
-                $prop_name()
-            }
-        );
-
-        $(
-            remote_type!(@method(service=$service, prefix=set_)
-                $( #[$setter_meta] )*
-                fn $setter_name(value: u64) {
-                    $prop_name(value)
-                }
-            );
-        )?
-    };
-
-    (
-        @property(service=$service:tt)
-            $prop_name: ident : bool,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident$(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@method(service=$service, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> bool {
-                $prop_name()
-            }
-        );
-
-        $(
-            remote_type!(@method(service=$service, prefix=set_)
-                $( #[$setter_meta] )*
-                fn $setter_name(value: bool) {
-                    $prop_name(value)
-                }
-            );
-        )?
-    };
-
-    (
-        @property(service=$service:tt)
-            $prop_name: ident : $prop_type: ty,
-            $(#[$getter_meta:meta])*
-            get: $getter_name: ident$(,
-            $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
-    ) => {
-        remote_type!(@method(service=$service, prefix=get_)
-            $( #[$getter_meta] )*
-            fn $getter_name() -> $prop_type {
-                $prop_name()
-            }
-        );
-
-        $(
-            remote_type!(@method(service=$service, prefix=set_)
-                $( #[$setter_meta] )*
-                fn $setter_name(value: &$prop_type) {
+                fn $setter_name(value: $setter_type) {
                     $prop_name(value)
                 }
             );
@@ -396,7 +147,7 @@ macro_rules! remote_type {
         }
     ) => {
         paste::item! {
-            #[derive(Clone)]
+            #[derive(Debug, Clone)]
             pub struct [<$service Stream>]<'a> {
                 connection: &'a $crate::client::Connection,
             }
@@ -432,15 +183,16 @@ macro_rules! remote_type {
     //
     (
         @stream_property(service=$service:tt)
-            $prop_name: ident : $prop_type: ty,
+        $prop_name: ident {
             $(#[$getter_meta:meta])*
-            get: $getter_name: ident $(,
+            get: $getter_name: ident -> $getter_type: ty $(,
             $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
+            set: $setter_name: ident ($setter_type: ty) )?
+        }
     ) => {
         remote_type!(@stream_method(service=$service, prefix=get_)
             $( #[$getter_meta] )*
-            fn $getter_name() -> $prop_type {
+            fn $getter_name() -> $getter_type {
                 $prop_name()
             });
     };
@@ -499,14 +251,14 @@ macro_rules! remote_type {
         }
     ) => {
         paste::item! {
-            #[derive(Clone)]
+            #[derive(Debug, Clone)]
             pub struct [<$service Call>]<'a> {
                 connection: &'a $crate::client::Connection,
             }
 
             impl<'a> $service<'a> {
-                /// Returns a call instance that provides versions of the property getters
-                /// and methods with return values as `ProcedureCall`s.
+                /// Returns a call instance that provides versions of the properties
+                /// and methods as `ProcedureCall`s.
                 pub fn call(&self) -> [<$service Call>] {
                     [<$service Call>]::new(self.connection)
                 }
@@ -531,30 +283,43 @@ macro_rules! remote_type {
     };
 
     //
-    // Expression Properties
+    // Call Properties
     //
     (
         @call_property(service=$service:tt)
-            $prop_name: ident : $prop_type: ty,
+        $prop_name: ident {
             $(#[$getter_meta:meta])*
-            get: $getter_name: ident $(,
+            get: $getter_name: ident -> $getter_type: ty $(,
             $(#[$setter_meta:meta])*
-            set: $setter_name: ident)?
+            set: $setter_name: ident ($setter_type: ty) )?
+        }
     ) => {
-        remote_type!(@call_method(service=$service, prefix=get_)
+        remote_type!(
+            @call_method(service=$service, prefix=get_)
             $( #[$getter_meta] )*
-            fn $getter_name() -> $prop_type {
+            fn $getter_name() -> $getter_type {
                 $prop_name()
-            });
+            }
+        );
+
+        $(
+            remote_type!(
+                @call_method(service=$service, prefix=set_)
+                $( #[$setter_meta] )*
+                fn $setter_name(value: $setter_type) {
+                    $prop_name(value)
+                }
+            );
+        )?
     };
 
     //
-    // Expression Methods
+    // Call Methods
     //
     (
         @call_method(service=$service:tt $(, prefix=$prefix:tt)?)
         $(#[$meta:meta])*
-        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) -> $return_type: ty {
+        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) $( -> $return_type: ty )? {
             $rpc_name: tt($( $arg_expr: expr ),* )
         }
     ) => {
@@ -568,16 +333,6 @@ macro_rules! remote_type {
                 &args
             ))
         }
-    };
-
-    (
-        @call_method(service=$service:tt $(, prefix=$prefix:tt)?)
-        $(#[$meta:meta])*
-        fn $method_name: ident ($( $arg_name: ident : $arg_type: ty), *) {
-            $rpc_name: tt($( $arg_expr: expr ),* )
-        }
-    ) => {
-        // This space intentionally left blank
     };
 
     //
@@ -598,7 +353,7 @@ macro_rules! remote_type {
         }
      ) => {
         $(#[$meta])*
-        #[derive(Clone)]
+        #[derive(Debug, Clone)]
         pub struct $object_name<'a> {
             #[allow(dead_code)]
             connection: &'a $crate::client::Connection,
@@ -1062,7 +817,7 @@ macro_rules! remote_type {
         }
     ) => {
         paste::item! {
-            #[derive(Clone)]
+            #[derive(Debug, Clone)]
             pub struct [<$object_name Stream>]<'a> {
                 connection: &'a $crate::client::Connection,
                 id: u64
@@ -1169,7 +924,7 @@ macro_rules! remote_type {
         }
     ) => {
         paste::item! {
-            #[derive(Clone)]
+            #[derive(Debug, Clone)]
             pub struct [<$object_name Call>]<'a> {
                 connection: &'a $crate::client::Connection,
                 id: u64

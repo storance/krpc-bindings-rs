@@ -2,6 +2,7 @@
 extern crate failure;
 extern crate paste;
 extern crate protobuf;
+extern crate hex;
 
 pub mod client;
 pub mod drawing;

@@ -19,12 +19,15 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Condvar, Mutex};
 use std::time::{Duration, Instant};
 
+/// An event is a KRPC object that allows clients to wait for an Event to occur.  This is
+/// essentially just a wrapper around a Stream with a `bool` return type that indicates whether
+/// the event has triggered/occurred.
 pub struct Event<'a> {
     stream: Stream<'a, bool>,
 }
 
 impl<'a> Event<'a> {
-    pub fn new(stream: Stream<'a, bool>) -> Self {
+    pub(super) fn new(stream: Stream<'a, bool>) -> Self {
         Event { stream }
     }
 
@@ -84,19 +87,24 @@ impl<'a> Event<'a> {
         self.stream.value()
     }
 
+    /// Starts the backing stream for this event.
     pub fn start(&self) -> KrpcResult<()> {
         self.stream.start()
     }
 
+    /// Returns whether the backing stream has been started.
     pub fn started(&self) -> bool {
         self.stream.started()
     }
 
+    /// Removes the backing stream so it no longer receives updates from the KRPC server.
     pub fn remove(&mut self) -> KrpcResult<()> {
         self.stream.remove()
     }
 }
 
+/// An object representing a KRPC streams. Streams allow the KRPC server to push updates to the
+/// stream value instead of the client having to continuously poll for them.
 pub struct Stream<'a, T: Decode<'a>> {
     connection: &'a Connection,
     value: Arc<StreamRaw>,
@@ -120,7 +128,7 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
     }
 
     /// Returns the current value for the stream.  If the stream is not started, this will
-    /// start it.
+    /// start it and wait for the stream to be updated.
     pub fn value(&self) -> KrpcResult<T> {
         if !self.value.started() {
             self.start()?;
