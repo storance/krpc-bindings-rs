@@ -4,7 +4,6 @@ use crate::krpc::Expression;
 use failure::Error;
 use protobuf::{CodedInputStream, CodedOutputStream};
 use std::net::TcpStream;
-use std::sync::Arc;
 use std::fmt;
 
 mod error;
@@ -17,7 +16,6 @@ pub use self::schema::{Argument, ProcedureCall, Services, Status};
 pub use self::stream::{Event, Stream};
 
 use self::rpc::Rpc;
-use self::stream::StreamRaw;
 
 pub const DEFAULT_RPC_PORT: u16 = 50000;
 pub const DEFAULT_STREAM_PORT: u16 = 50001;
@@ -109,9 +107,7 @@ impl Connection {
 
         let event = schema::Event::decode(&response, self)?;
         let id = event.get_stream().get_id();
-        let stream_value = Arc::new(StreamRaw::new(id, false));
-
-        self.stream.register(stream_value.clone());
+        let stream_value = self.stream.register(id);
 
         Ok(Event::new(Stream::new(self, stream_value)))
     }
@@ -121,19 +117,16 @@ impl Connection {
         service: &str,
         procedure: &str,
         args: &[Vec<u8>],
-        start: bool,
     ) -> KrpcResult<Stream<'a, T>> {
         let stream_args = vec![
             Rpc::create_procedure_call(service, procedure, args).encode()?,
-            start.encode()?,
+            false.encode()?,
         ];
         let response = self.rpc.invoke("KRPC", "AddStream", &stream_args)?;
 
         let stream = schema::Stream::decode(&response, self)?;
         let id = stream.get_id();
-        let stream_value = Arc::new(StreamRaw::new(id, start));
-
-        self.stream.register(stream_value.clone());
+        let stream_value = self.stream.register(id);
 
         Ok(Stream::new(self, stream_value))
     }
@@ -144,7 +137,7 @@ impl Connection {
 }
 
 impl fmt::Debug for Connection {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         write!(f, "Connection{{ name: {}, id: {} }}", self.name, hex::encode(self.rpc.id()))
     }
 }

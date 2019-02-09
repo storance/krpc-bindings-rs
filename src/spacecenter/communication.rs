@@ -7,46 +7,52 @@ remote_type!(
 object SpaceCenter.Comms {
     properties: {
         {
-            CanCommunicate: bool,
-            /// Returns whether the vessel can communicate with KSC.
-            ///
-            /// **Game Scenes**: Flight
-            get: has_uplink
+            CanCommunicate {
+                /// Returns whether the vessel can communicate with KSC.
+                ///
+                /// **Game Scenes**: Flight
+                get: can_communicate -> bool
+            }
         }
         {
-            CanTransmitScience: bool,
-            /// Returns whether the vessel can transmit science data to KSC.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_science_transmittable
+            CanTransmitScience {
+                /// Returns whether the vessel can transmit science data to KSC.
+                ///
+                /// **Game Scenes**: Flight
+                get: can_transmit_science -> bool
+            }
         }
         {
-            SignalStrength: f64,
-            /// Returns the signal strength to KSC.
-            ///
-            /// **Game Scenes**: Flight
-            get: signal_strength
+            SignalStrength {
+                /// Returns the signal strength to KSC.
+                ///
+                /// **Game Scenes**: Flight
+                get: signal_strength -> f64
+            }
         }
         {
-            SignalDelay: f64,
-            /// Returns the signal delay to KSC in seconds.
-            ///
-            /// **Game Scenes**: Flight
-            get: signal_delay
+            SignalDelay {
+                /// Returns the signal delay to KSC in seconds.
+                ///
+                /// **Game Scenes**: Flight
+                get: signal_delay -> f64
+            }
         }
         {
-            Power: f64,
-            /// Returns the combined power of all active antennae on the vessel.
-            ///
-            /// **Game Scenes**: Flight
-            get: power
+            Power {
+                /// Returns the combined power of all active antennae on the vessel.
+                ///
+                /// **Game Scenes**: Flight
+                get: power -> f64
+            }
         }
         {
-            ControlPath: Vec<CommLink>,
-            /// Returns the combined power of all active antennae on the vessel.
-            ///
-            /// **Game Scenes**: Flight
-            get: control_path
+            ControlPath {
+                /// Returns the combined power of all active antennae on the vessel.
+                ///
+                /// **Game Scenes**: Flight
+                get: control_path -> Vec<CommLink>
+            }
         }
     }
 });
@@ -56,32 +62,36 @@ remote_type!(
 object SpaceCenter.CommLink {
     properties: {
         {
-            Type: CommLinkType,
-            /// Returns the type of link
-            ///
-            /// **Game Scenes**: Flight
-            get: link_type
+            Type {
+                /// Returns the type of link
+                ///
+                /// **Game Scenes**: Flight
+                get: link_type -> CommLinkType
+            }
         }
         {
-            SignalStrength: f64,
-            /// Returns the signal strength of the link.
-            ///
-            /// **Game Scenes**: Flight
-            get: signal_strength
+            SignalStrength {
+                /// Returns the signal strength of the link.
+                ///
+                /// **Game Scenes**: Flight
+                get: signal_strength -> f64
+            }
         }
         {
-            Start: CommNode,
-            /// Returns the start point of the link.
-            ///
-            /// **Game Scenes**: Flight
-            get: start
+            Start {
+                /// Returns the start point of the link.
+                ///
+                /// **Game Scenes**: Flight
+                get: start -> CommNode
+            }
         }
         {
-            End: CommNode,
-            /// Returns the end point of the link.
-            ///
-            /// **Game Scenes**: Flight
-            get: end
+            End {
+                /// Returns the end point of the link.
+                ///
+                /// **Game Scenes**: Flight
+                get: end -> CommNode
+            }
         }
     }
 
@@ -92,40 +102,45 @@ remote_type!(
 object SpaceCenter.CommNode {
     properties: {
         {
-            Name: String,
-            /// Returns the name of the communication node.
-            ///
-            /// **Game Scenes**: Flight
-            get: name
+            Name {
+                /// Returns the name of the communication node.
+                ///
+                /// **Game Scenes**: Flight
+                get: name -> String
+            }
         }
         {
-            IsHome: bool,
-            /// Returns whether the communication node is on Kerbin.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_home
+            IsHome {
+                /// Returns whether the communication node is on Kerbin.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_home -> bool
+            }
         }
         {
-            IsControlPoint: bool,
-            /// Returns whether the communication node is a control point, for example
-            /// a manned vessel.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_control_point
+            IsControlPoint {
+                /// Returns whether the communication node is a control point, for example
+                /// a manned vessel.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_control_point -> bool
+            }
         }
         {
-            IsVessel: bool,
-            /// Returns whether the communication node is a vessel.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_vessel
+            IsVessel {
+                /// Returns whether the communication node is a vessel.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_vessel -> bool
+            }
         }
         {
-            Vessel: Option<Vessel>,
-            /// Returns the vessel for this communication node.
-            ///
-            /// **Game Scenes**: Flight
-            get: vessel
+            Vessel {
+                /// Returns the vessel for this communication node.
+                ///
+                /// **Game Scenes**: Flight
+                get: vessel -> Option<Vessel>
+            }
         }
     }
 

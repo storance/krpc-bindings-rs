@@ -7,141 +7,156 @@ remote_type!(
 object InfernalRobotics.Servo {
     properties: {
         {
-            Name: String,
-            /// Returns the name of the servo.
-            ///
-            /// **Game Scenes**: Flight
-            get: name,
-            /// Sets the name of the servo.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_name
+            Name {
+                /// Returns the name of the servo.
+                ///
+                /// **Game Scenes**: Flight
+                get: name -> String,
+                /// Sets the name of the servo.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_name(&str)
+            }
         }
         {
-            Part: Part,
-            /// Returns the part containing the servo.
-            ///
-            /// **Game Scenes**: Flight
-            get: part
+            Part {
+                /// Returns the part containing the servo.
+                ///
+                /// **Game Scenes**: Flight
+                get: part -> Part
+            }
         }
         {
-            Position: f32,
-            /// Returns the position of the servo.
-            ///
-            /// **Game Scenes**: Flight
-            get: position
+            Position {
+                /// Returns the position of the servo.
+                ///
+                /// **Game Scenes**: Flight
+                get: position -> f32
+            }
         }
         {
-            MinConfigPosition: f32,
-            /// Returns the minimum position of the servo, specified by the part configuration.
-            ///
-            /// **Game Scenes**: Flight
-            get: min_config_position
+            MinConfigPosition {
+                /// Returns the minimum position of the servo, specified by the part configuration.
+                ///
+                /// **Game Scenes**: Flight
+                get: min_config_position -> f32
+            }
         }
         {
-            MaxConfigPosition: f32,
-            /// Returns the maximum position of the servo, specified by the part configuration.
-            ///
-            /// **Game Scenes**: Flight
-            get: max_config_position
+            MaxConfigPosition {
+                /// Returns the maximum position of the servo, specified by the part configuration.
+                ///
+                /// **Game Scenes**: Flight
+                get: max_config_position -> f32
+            }
         }
         {
-            MinPosition: f32,
-            /// Returns the minimum position of the servo, specified by the in-game tweak menu.
-            ///
-            /// **Game Scenes**: Flight
-            get: min_position,
-            /// Sets the minimum position of the servo, specified by the in-game tweak menu.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_min_position
+            MinPosition {
+                /// Returns the minimum position of the servo, specified by the in-game tweak menu.
+                ///
+                /// **Game Scenes**: Flight
+                get: min_position -> f32,
+                /// Sets the minimum position of the servo, specified by the in-game tweak menu.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_min_position(f32)
+            }
         }
         {
-            MaxPosition: f32,
-            /// Returns the maximum position of the servo, specified by the in-game tweak menu.
-            ///
-            /// **Game Scenes**: Flight
-            get: max_position,
-            /// Sets the maximum position of the servo, specified by the in-game tweak menu.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_max_position
+            MaxPosition {
+                /// Returns the maximum position of the servo, specified by the in-game tweak menu.
+                ///
+                /// **Game Scenes**: Flight
+                get: max_position -> f32,
+                /// Sets the maximum position of the servo, specified by the in-game tweak menu.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_max_position(f32)
+            }
         }
         {
-            ConfigSpeed: f32,
-            /// Returns the speed multiplier of the servo, specified by the part configuration.
-            ///
-            /// **Game Scenes**: Flight
-            get: config_speed
+            ConfigSpeed {
+                /// Returns the speed multiplier of the servo, specified by the part configuration.
+                ///
+                /// **Game Scenes**: Flight
+                get: config_speed -> f32
+            }
         }
         {
-            Speed: f32,
-            /// Returns the speed multiplier of the servo, specified by the in-game tweak menu.
-            ///
-            /// **Game Scenes**: Flight
-            get: speed,
-            /// Sets the speed multiplier of the servo, specified by the in-game tweak menu.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_speed
+            Speed {
+                /// Returns the speed multiplier of the servo, specified by the in-game tweak menu.
+                ///
+                /// **Game Scenes**: Flight
+                get: speed -> f32,
+                /// Sets the speed multiplier of the servo, specified by the in-game tweak menu.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_speed(f32)
+            }
         }
         {
-            CurrentSpeed: f32,
-            /// Returns the current speed at which the servo is moving.
-            ///
-            /// **Game Scenes**: Flight
-            get: current_speed,
-            /// Sets the current speed at which the servo is moving.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_current_speed
+            CurrentSpeed {
+                /// Returns the current speed at which the servo is moving.
+                ///
+                /// **Game Scenes**: Flight
+                get: current_speed -> f32,
+                /// Sets the current speed at which the servo is moving.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_current_speed(f32)
+            }
         }
         {
-            Acceleration: f32,
-            /// Returns the acceleration of the servo.
-            ///
-            /// **Game Scenes**: Flight
-            get: acceleration,
-            /// Sets the acceleration of the servo.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_acceleration
+            Acceleration {
+                /// Returns the acceleration of the servo.
+                ///
+                /// **Game Scenes**: Flight
+                get: acceleration -> f32,
+                /// Sets the acceleration of the servo.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_acceleration(f32)
+            }
         }
         {
-            IsMoving: bool,
-            /// Returns whether the servo is moving.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_moving
+            IsMoving {
+                /// Returns whether the servo is moving.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_moving -> bool
+            }
         }
         {
-            IsFreeMoving: bool,
-            /// Returns whether the servo is freely moving.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_free_moving
+            IsFreeMoving {
+                /// Returns whether the servo is freely moving.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_free_moving -> bool
+            }
         }
         {
-            IsLocked: bool,
-            /// Returns whether the servo is locked.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_locked,
-            /// Sets whether the servo is locked.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_locked
+            IsLocked {
+                /// Returns whether the servo is locked.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_locked -> bool,
+                /// Sets whether the servo is locked.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_locked(bool)
+            }
         }
         {
-            IsAxisInverted: bool,
-            /// Returns whether the servos axis is inverted.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_axis_inverted,
-            /// Sets whether the servos axis is inverted.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_axis_inverted
+            IsAxisInverted {
+                /// Returns whether the servos axis is inverted.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_axis_inverted -> bool,
+                /// Sets whether the servos axis is inverted.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_axis_inverted(bool)
+            }
         }
     }
     methods: {

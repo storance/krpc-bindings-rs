@@ -7,102 +7,114 @@ remote_type!(
 object SpaceCenter.Antenna {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this antenna.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this antenna.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            State: AntennaState,
-            /// Returns the current state of the antenna.
-            ///
-            /// **Game Scenes**: All
-            get: state
+            State {
+                /// Returns the current state of the antenna.
+                ///
+                /// **Game Scenes**: All
+                get: state -> AntennaState
+            }
         }
         {
-            Deployable: bool,
-            /// Returns whether the antenna is deployable.
-            ///
-            /// **Game Scenes**: All
-            get: is_deployable
+            Deployable {
+                /// Returns whether the antenna is deployable.
+                ///
+                /// **Game Scenes**: All
+                get: is_deployable -> bool
+            }
         }
         {
-            Deployed: bool,
-            /// Returns whether the antenna is deployed.
-            ///
-            /// **Game Scenes**: All
-            get: is_deployed,
-            /// Sets whether the antenna is deployed.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Note
-            /// Fixed antennas are always deployed. Returns an error if you try to deploy
-            /// a fixed antenna.
-            set: set_deployed
+            Deployed {
+                /// Returns whether the antenna is deployed.
+                ///
+                /// **Game Scenes**: All
+                get: is_deployed -> bool,
+                /// Sets whether the antenna is deployed.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Note
+                /// Fixed antennas are always deployed. Returns an error if you try to deploy
+                /// a fixed antenna.
+                set: set_deployed(bool)
+            }
         }
         {
-            CanTransmit: bool,
-            /// Returns whether data can be transmitted by this antenna.
-            ///
-            /// **Game Scenes**: All
-            get: can_transmit
+            CanTransmit {
+                /// Returns whether data can be transmitted by this antenna.
+                ///
+                /// **Game Scenes**: All
+                get: can_transmit -> bool
+            }
         }
         {
-            AllowPartial: bool,
-            /// Returns whether partial data transmission is permitted.
-            ///
-            /// **Game Scenes**: All
-            get: is_allow_partial,
-            /// Sets whether partial data transmission is permitted.
-            ///
-            /// **Game Scenes**: All
-            set: set_allow_partial
+            AllowPartial {
+                /// Returns whether partial data transmission is permitted.
+                ///
+                /// **Game Scenes**: All
+                get: is_allow_partial -> bool,
+                /// Sets whether partial data transmission is permitted.
+                ///
+                /// **Game Scenes**: All
+                set: set_allow_partial(bool)
+            }
         }
         {
-            Power: f64,
-            /// Returns the power of the antenna.
-            ///
-            /// **Game Scenes**: All
-            get: power
+            Power {
+                /// Returns the power of the antenna.
+                ///
+                /// **Game Scenes**: All
+                get: power -> f64
+            }
         }
         {
-            Combinable: bool,
-            /// Returns whether the antenna can be combined with other antennae on the
-            /// vessel to boost the power.
-            ///
-            /// **Game Scenes**: All
-            get: is_combinable
+            Combinable {
+                /// Returns whether the antenna can be combined with other antennae on the
+                /// vessel to boost the power.
+                ///
+                /// **Game Scenes**: All
+                get: is_combinable -> bool
+            }
         }
         {
-            CombinableExponent: f64,
-            /// Returns the exponent used to calculate the combined power of multiple
-            /// antennae on a vessel.
-            ///
-            /// **Game Scenes**: All
-            get: combinable_exponent
+            CombinableExponent {
+                /// Returns the exponent used to calculate the combined power of multiple
+                /// antennae on a vessel.
+                ///
+                /// **Game Scenes**: All
+                get: combinable_exponent -> f64
+            }
         }
         {
-            PacketInterval: f32,
-            /// Returns the interval between sending packets in seconds.
-            ///
-            /// **Game Scenes**: All
-            get: packet_interval
+            PacketInterval {
+                /// Returns the interval between sending packets in seconds.
+                ///
+                /// **Game Scenes**: All
+                get: packet_interval -> f32
+            }
         }
         {
-            PacketSize: f32,
-            /// Returns the amount of data sent per packet in Mits.
-            ///
-            /// **Game Scenes**: All
-            get: packet_size
+            PacketSize {
+                /// Returns the amount of data sent per packet in Mits.
+                ///
+                /// **Game Scenes**: All
+                get: packet_size -> f32
+            }
         }
         {
-            PacketResourceCost: f64,
-            /// Returns the units of electric charge consumed per packet sent.
-            ///
-            /// **Game Scenes**: All
-            get: packet_resource_cost
+            PacketResourceCost {
+                /// Returns the units of electric charge consumed per packet sent.
+                ///
+                /// **Game Scenes**: All
+                get: packet_resource_cost -> f64
+            }
         }
     }
     methods: {

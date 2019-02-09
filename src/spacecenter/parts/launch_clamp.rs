@@ -7,11 +7,12 @@ remote_type!(
 object SpaceCenter.LaunchClamp {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this launch clamp.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this launch clamp.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
     }
     methods: {

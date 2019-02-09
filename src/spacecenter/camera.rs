@@ -7,127 +7,139 @@ remote_type!(
 object SpaceCenter.Camera {
     properties: {
         {
-            Mode: CameraMode,
-            /// Returns the current mode of the camera.
-            ///
-            /// **Game Scenes**: Flight
-            get: mode,
-            /// Sets the current mode of the camera.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_mode
+            Mode {
+                /// Returns the current mode of the camera.
+                ///
+                /// **Game Scenes**: Flight
+                get: mode -> CameraMode,
+                /// Sets the current mode of the camera.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_mode(CameraMode)
+            }
         }
         {
-            Pitch: f32,
-            /// Returns the pitch of the camera, in degrees.
-            ///
-            /// **Game Scenes**: Flight
-            get: pitch,
-            /// Sets the pitch of the camera, in degrees.  A value between
-            /// `Camera::min_pitch()` and `Camera::max_pitch()`.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_pitch
+            Pitch {
+                /// Returns the pitch of the camera, in degrees.
+                ///
+                /// **Game Scenes**: Flight
+                get: pitch -> f32,
+                /// Sets the pitch of the camera, in degrees.  A value between
+                /// `Camera::min_pitch()` and `Camera::max_pitch()`.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_pitch(f32)
+            }
         }
         {
-            Heading: f32,
-            /// Returns the heading of the camera, in degrees.
-            ///
-            /// **Game Scenes**: Flight
-            get: heading,
-            /// Sets the heading of the camera, in degrees.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_heading
+            Heading {
+                /// Returns the heading of the camera, in degrees.
+                ///
+                /// **Game Scenes**: Flight
+                get: heading -> f32,
+                /// Sets the heading of the camera, in degrees.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_heading(f32)
+            }
         }
         {
-            Distance: f32,
-            /// Returns the distance from the camera to the subject, in meters.
-            ///
-            /// **Game Scenes**: Flight
-            get: distance,
-            /// Sets the distance from the camera to the subject, in meters. A value between
-            /// `Camera::min_distance()` and `Camera::max_distance()`.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_distance
+            Distance {
+                /// Returns the distance from the camera to the subject, in meters.
+                ///
+                /// **Game Scenes**: Flight
+                get: distance -> f32,
+                /// Sets the distance from the camera to the subject, in meters. A value between
+                /// `Camera::min_distance()` and `Camera::max_distance()`.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_distance(f32)
+            }
         }
         {
-            MinPitch: f32,
-            /// Returns the minimum pitch of the camera.
-            ///
-            /// **Game Scenes**: Flight
-            get: min_pitch
+            MinPitch {
+                /// Returns the minimum pitch of the camera.
+                ///
+                /// **Game Scenes**: Flight
+                get: min_pitch -> f32
+            }
         }
         {
-            MaxPitch: f32,
-            /// Returns the maximum pitch of the camera.
-            ///
-            /// **Game Scenes**: Flight
-            get: max_pitch
+            MaxPitch {
+                /// Returns the maximum pitch of the camera.
+                ///
+                /// **Game Scenes**: Flight
+                get: max_pitch -> f32
+            }
         }
         {
-            MinDistance: f32,
-            /// Returns the minimum distance from the camera to the subject, in meters.
-            ///
-            /// **Game Scenes**: Flight
-            get: min_distance
+            MinDistance {
+                /// Returns the minimum distance from the camera to the subject, in meters.
+                ///
+                /// **Game Scenes**: Flight
+                get: min_distance -> f32
+            }
         }
         {
-            MaxDistance: f32,
-            /// Returns the maximum distance from the camera to the subject, in meters.
-            ///
-            /// **Game Scenes**: Flight
-            get: max_distance
+            MaxDistance {
+                /// Returns the maximum distance from the camera to the subject, in meters.
+                ///
+                /// **Game Scenes**: Flight
+                get: max_distance -> f32
+            }
         }
         {
-            DefaultDistance: f32,
-            /// Returns the default distance from the camera to the subject, in meters.
-            ///
-            /// **Game Scenes**: Flight
-            get: default_distance
+            DefaultDistance {
+                /// Returns the default distance from the camera to the subject, in meters.
+                ///
+                /// **Game Scenes**: Flight
+                get: default_distance -> f32
+            }
         }
         {
-            FocussedBody: Option<CelestialBody>,
-            /// In map mode, returns the celestial body that the camera is focussed on.
-            /// Returns `None` if the camera is not focussed on a celestial body.
-            /// Returns an error if the camera is not in map mode.
-            ///
-            /// **Game Scenes**: Flight
-            get: focussed_body,
-            /// Sets the celestial body that the camera is focussed on.  Returns an error if
-            /// the camera is not in map mode.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_focussed_body
+            FocussedBody {
+                /// In map mode, returns the celestial body that the camera is focussed on.
+                /// Returns `None` if the camera is not focussed on a celestial body.
+                /// Returns an error if the camera is not in map mode.
+                ///
+                /// **Game Scenes**: Flight
+                get: focussed_body -> Option<CelestialBody>,
+                /// Sets the celestial body that the camera is focussed on.  Returns an error if
+                /// the camera is not in map mode.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_focussed_body(&CelestialBody)
+            }
         }
         {
-            FocussedVessel: Option<Vessel>,
-            /// In map mode, returns the vessel that the camera is focussed on.
-            /// Returns `None` if the camera is not focussed on a vessel.
-            /// Returns an error if the camera is not in map mode.
-            ///
-            /// **Game Scenes**: Flight
-            get: focussed_vessel,
-            /// Sets the vessel that the camera is focussed on.  Returns an error if
-            /// the camera is not in map mode.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_focussed_vessel
+            FocussedVessel {
+                /// In map mode, returns the vessel that the camera is focussed on.
+                /// Returns `None` if the camera is not focussed on a vessel.
+                /// Returns an error if the camera is not in map mode.
+                ///
+                /// **Game Scenes**: Flight
+                get: focussed_vessel -> Option<Vessel>,
+                /// Sets the vessel that the camera is focussed on.  Returns an error if
+                /// the camera is not in map mode.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_focussed_vessel(&Vessel)
+            }
         }
         {
-            FocussedNode: Option<Node>,
-            /// In map mode, returns the maneuver node that the camera is focussed on.
-            /// Returns `None` if the camera is not focussed on a maneuver node.
-            /// Returns an error if the camera is not in map mode.
-            ///
-            /// **Game Scenes**: Flight
-            get: focussed_node,
-            /// Sets the maneuver node that the camera is focussed on.  Returns an error if
-            /// the camera is not in map mode.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_focussed_node
+            FocussedNode {
+                /// In map mode, returns the maneuver node that the camera is focussed on.
+                /// Returns `None` if the camera is not focussed on a maneuver node.
+                /// Returns an error if the camera is not in map mode.
+                ///
+                /// **Game Scenes**: Flight
+                get: focussed_node -> Option<Node>,
+                /// Sets the maneuver node that the camera is focussed on.  Returns an error if
+                /// the camera is not in map mode.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_focussed_node(&Node)
+            }
         }
     }
 });

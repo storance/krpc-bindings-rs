@@ -7,69 +7,77 @@ remote_type!(
 object SpaceCenter.ResourceHarvester {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this resource harvester.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this resource harvester.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            State: ResourceHarvesterState,
-            /// Returns the state of the harvester.
-            ///
-            /// **Game Scenes**: All
-            get: state
+            State {
+                /// Returns the state of the harvester.
+                ///
+                /// **Game Scenes**: All
+                get: state -> ResourceHarvesterState
+            }
         }
         {
-            Deployed: bool,
-            /// Returns whether the harvester is deployed.
-            ///
-            /// **Game Scenes**: All
-            get: is_deployed,
-            /// Sets whether the harvester is deployed.
-            ///
-            /// **Game Scenes**: All
-            set: set_deployed
+            Deployed {
+                /// Returns whether the harvester is deployed.
+                ///
+                /// **Game Scenes**: All
+                get: is_deployed -> bool,
+                /// Sets whether the harvester is deployed.
+                ///
+                /// **Game Scenes**: All
+                set: set_deployed(bool)
+            }
         }
         {
-            Active: bool,
-            /// Returns whether the harvester is active.
-            ///
-            /// **Game Scenes**: All
-            get: is_active,
-            /// Sets whether the harvester is active.
-            ///
-            /// **Game Scenes**: All
-            set: set_active
+            Active {
+                /// Returns whether the harvester is active.
+                ///
+                /// **Game Scenes**: All
+                get: is_active -> bool,
+                /// Sets whether the harvester is active.
+                ///
+                /// **Game Scenes**: All
+                set: set_active(bool)
+            }
         }
         {
-            ExtractionRate: f32,
-            /// Returns the rate at which the drill is extracting ore, in units per second.
-            ///
-            /// **Game Scenes**: All
-            get: extraction_rate
+            ExtractionRate {
+                /// Returns the rate at which the drill is extracting ore, in units per second.
+                ///
+                /// **Game Scenes**: All
+                get: extraction_rate -> f32
+            }
         }
         {
-            OptimumCoreTemperature: f32,
-            /// Returns the core temperature at which the drill will operate with
-            /// peak efficiency, in Kelvin.
-            ///
-            /// **Game Scenes**: All
-            get: optimum_core_temperature
+            OptimumCoreTemperature {
+                /// Returns the core temperature at which the drill will operate with
+                /// peak efficiency, in Kelvin.
+                ///
+                /// **Game Scenes**: All
+                get: optimum_core_temperature -> f32
+            }
         }
         {
-            CoreTemperature: f32,
-            /// Returns the core temperature of the drill, in Kelvin.
-            ///
-            /// **Game Scenes**: All
-            get: core_temperature
+            CoreTemperature {
+                /// Returns the core temperature of the drill, in Kelvin.
+                ///
+                /// **Game Scenes**: All
+                get: core_temperature -> f32
+            }
         }
         {
-            ThermalEfficiency: f32,
-            /// Returns the thermal efficiency of the drill, as a percentage of its maximum.
-            ///
-            /// **Game Scenes**: All
-            get: thermal_efficiency
+            ThermalEfficiency {
+                /// Returns the thermal efficiency of the drill, as a percentage of its maximum.
+                ///
+                /// **Game Scenes**: All
+                get: thermal_efficiency -> f32
+            }
         }
     }
 });

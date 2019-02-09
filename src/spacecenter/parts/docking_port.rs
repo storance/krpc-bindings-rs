@@ -8,79 +8,86 @@ remote_type!(
 object SpaceCenter.DockingPort {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this docking port.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this docking port.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            State: DockingPortState,
-            /// Returns the current state of the docking port.
-            ///
-            /// **Game Scenes**: All
-            get: state
+            State {
+                /// Returns the current state of the docking port.
+                ///
+                /// **Game Scenes**: All
+                get: state -> DockingPortState
+            }
         }
         {
-            DockedPart: Option<Part>,
-            /// Returns the part that this docking port is docked to. Returns `None` if
-            /// this docking port is not docked to anything.
-            ///
-            /// **Game Scenes**: All
-            get: docked_part
+            DockedPart {
+                /// Returns the part that this docking port is docked to. Returns `None` if
+                /// this docking port is not docked to anything.
+                ///
+                /// **Game Scenes**: All
+                get: docked_part -> Option<Part>
+            }
         }
         {
-            ReengageDistance: f32,
-            /// Returns the distance a docking port must move away when it undocks before it
-            /// becomes ready to dock with another port, in meters.
-            ///
-            /// **Game Scenes**: All
-            get: reengage_distance
+            ReengageDistance {
+                /// Returns the distance a docking port must move away when it undocks before it
+                /// becomes ready to dock with another port, in meters.
+                ///
+                /// **Game Scenes**: All
+                get: reengage_distance -> f32
+            }
         }
         {
-            HasShield: bool,
-            /// Returns whether the docking port has a shield.
-            ///
-            /// **Game Scenes**: All
-            get: has_shield
+            HasShield {
+                /// Returns whether the docking port has a shield.
+                ///
+                /// **Game Scenes**: All
+                get: has_shield -> bool
+            }
         }
         {
-            Shielded: bool,
-            /// Returns the state of the docking ports shield, if it has one.  Returns `true` if
-            /// the docking port has a shield, and the shield is closed. Otherwise returns `false`.
-            ///
-            /// **Game Scenes**: All
-            get: is_shielded,
-            /// Sets the state of the docking ports shield.  When set to `true`, the shield is
-            /// closed, and when set to `false` the shield is opened. If the docking port does
-            /// not have a shield, setting this attribute has no effect.
-            ///
-            /// **Game Scenes**: All
-            set: set_shielded
+            Shielded {
+                /// Returns the state of the docking ports shield, if it has one.  Returns `true` if
+                /// the docking port has a shield, and the shield is closed. Otherwise returns `false`.
+                ///
+                /// **Game Scenes**: All
+                get: is_shielded -> bool,
+                /// Sets the state of the docking ports shield.  When set to `true`, the shield is
+                /// closed, and when set to `false` the shield is opened. If the docking port does
+                /// not have a shield, setting this attribute has no effect.
+                ///
+                /// **Game Scenes**: All
+                set: set_shielded(bool)
+            }
         }
         {
-            ReferenceFrame: ReferenceFrame,
-            /// Returns the reference frame that is fixed relative to this docking port, and
-            /// oriented with the port.
-            ///
-            /// * The origin is at the position of the docking port.
-            /// * The axes rotate with the docking port.
-            /// * The x-axis points out to the right side of the docking port.
-            /// * The y-axis points in the direction the docking port is facing.
-            /// * The z-axis points out of the bottom off the docking port.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// ![Docking port reference frame origin and axes](https://krpc.github.io/krpc/_images/docking-port.png)
-            /// *Docking port reference frame origin and axes*
-            ///
-            /// ![Inline docking port reference frame origin and axes](https://krpc.github.io/krpc/_images/docking-port-inline.png)
-            /// *Inline docking port reference frame origin and axes*
-            ///
-            /// # Note
-            /// This reference frame is not necessarily equivalent to the reference frame
-            /// for the part, returned by `Part::reference_frame()`.
-            get: reference_frame
+            ReferenceFrame {
+                /// Returns the reference frame that is fixed relative to this docking port, and
+                /// oriented with the port.
+                ///
+                /// * The origin is at the position of the docking port.
+                /// * The axes rotate with the docking port.
+                /// * The x-axis points out to the right side of the docking port.
+                /// * The y-axis points in the direction the docking port is facing.
+                /// * The z-axis points out of the bottom off the docking port.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// ![Docking port reference frame origin and axes](https://krpc.github.io/krpc/_images/docking-port.png)
+                /// *Docking port reference frame origin and axes*
+                ///
+                /// ![Inline docking port reference frame origin and axes](https://krpc.github.io/krpc/_images/docking-port-inline.png)
+                /// *Inline docking port reference frame origin and axes*
+                ///
+                /// # Note
+                /// This reference frame is not necessarily equivalent to the reference frame
+                /// for the part, returned by `Part::reference_frame()`.
+                get: reference_frame -> ReferenceFrame
+            }
         }
     }
     methods: {

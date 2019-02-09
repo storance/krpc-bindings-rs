@@ -8,46 +8,52 @@ remote_type!(
 object SpaceCenter.ContractManager {
     properties: {
         {
-            Types: HashSet<String>,
-            /// Returns a list of all contract types.
-            ///
-            /// **Game Scenes**: All
-            get: types
+            Types {
+                /// Returns a list of all contract types.
+                ///
+                /// **Game Scenes**: All
+                get: types ->  HashSet<String>
+            }
         }
         {
-            AllContracts: Vec<Contract>,
-            /// Returns a list of all contracts.
-            ///
-            /// **Game Scenes**: All
-            get: all_contracts
+            AllContracts {
+                /// Returns a list of all contracts.
+                ///
+                /// **Game Scenes**: All
+                get: all_contracts -> Vec<Contract>
+            }
         }
         {
-            ActiveContracts: Vec<Contract>,
-            /// Returns a list of all active contracts.
-            ///
-            /// **Game Scenes**: All
-            get: active_contracts
+            ActiveContracts {
+                /// Returns a list of all active contracts.
+                ///
+                /// **Game Scenes**: All
+                get: active_contracts -> Vec<Contract>
+            }
         }
         {
-            OfferedContracts: Vec<Contract>,
-            /// Returns a list of all offered, but unaccepted, contracts.
-            ///
-            /// **Game Scenes**: All
-            get: offered_contracts
+            OfferedContracts {
+                /// Returns a list of all offered, but unaccepted, contracts.
+                ///
+                /// **Game Scenes**: All
+                get: offered_contracts -> Vec<Contract>
+            }
         }
         {
-            CompletedContracts: Vec<Contract>,
-            /// Returns a list of all completed contracts.
-            ///
-            /// **Game Scenes**: All
-            get: completed_contracts
+            CompletedContracts {
+                /// Returns a list of all completed contracts.
+                ///
+                /// **Game Scenes**: All
+                get: completed_contracts -> Vec<Contract>
+            }
         }
         {
-            FailedContracts: Vec<Contract>,
-            /// Returns a list of all failed contracts.
-            ///
-            /// **Game Scenes**: All
-            get: failed_contracts
+            FailedContracts {
+                /// Returns a list of all failed contracts.
+                ///
+                /// **Game Scenes**: All
+                get: failed_contracts -> Vec<Contract>
+            }
         }
     }
 });
@@ -57,144 +63,164 @@ remote_type!(
 object SpaceCenter.Contract {
     properties: {
         {
-            Type: String,
-            /// Returns the type of the contract.
-            ///
-            /// **Game Scenes**: All
-            get: contract_type
+            Type {
+                /// Returns the type of the contract.
+                ///
+                /// **Game Scenes**: All
+                get: contract_type -> String
+            }
         }
         {
-            Title: String,
-            /// Returns the title of the contract.
-            ///
-            /// **Game Scenes**: All
-            get: title
+            Title {
+                /// Returns the title of the contract.
+                ///
+                /// **Game Scenes**: All
+                get: title -> String
+            }
         }
         {
-            Description: String,
-            /// Returns the description of the contract.
-            ///
-            /// **Game Scenes**: All
-            get: description
+            Description {
+                /// Returns the description of the contract.
+                ///
+                /// **Game Scenes**: All
+                get: description -> String
+            }
         }
         {
-            Notes: String,
-            /// Returns the notes for the contract.
-            ///
-            /// **Game Scenes**: All
-            get: notes
+            Notes {
+                /// Returns the notes for the contract.
+                ///
+                /// **Game Scenes**: All
+                get: notes -> String
+            }
         }
         {
-            Synopsis: String,
-            /// Returns the synopsis for the contract.
-            ///
-            /// **Game Scenes**: All
-            get: synopsis
+            Synopsis {
+                /// Returns the synopsis for the contract.
+                ///
+                /// **Game Scenes**: All
+                get: synopsis -> String
+            }
         }
         {
-            Keywords: Vec<String>,
-            /// Returns the keywords for the contract.
-            ///
-            /// **Game Scenes**: All
-            get: keywords
+            Keywords {
+                /// Returns the keywords for the contract.
+                ///
+                /// **Game Scenes**: All
+                get: keywords -> Vec<String>
+            }
         }
         {
-            Seen: bool,
-            /// Returns whether the contract has been seen.
-            ///
-            /// **Game Scenes**: All
-            get: is_seen
+            Seen {
+                /// Returns whether the contract has been seen.
+                ///
+                /// **Game Scenes**: All
+                get: is_seen -> bool
+            }
         }
         {
-            Read: bool,
-            /// Returns whether the contract has been read.
-            ///
-            /// **Game Scenes**: All
-            get: is_read
+            Read {
+                /// Returns whether the contract has been read.
+                ///
+                /// **Game Scenes**: All
+                get: is_read -> bool
+            }
         }
         {
-            Active: bool,
-            /// Returns whether the contract is active.
-            ///
-            /// **Game Scenes**: All
-            get: is_active
+            Active {
+                /// Returns whether the contract is active.
+                ///
+                /// **Game Scenes**: All
+                get: is_active -> bool
+            }
         }
         {
-            Failed: bool,
-            /// Returns whether the contract has been failed.
-            ///
-            /// **Game Scenes**: All
-            get: is_failed
+            Failed {
+                /// Returns whether the contract has been failed.
+                ///
+                /// **Game Scenes**: All
+                get: is_failed -> bool
+            }
         }
         {
-            CanBeCanceled: bool,
-            /// Returns whether the contract can be canceled.
-            ///
-            /// **Game Scenes**: All
-            get: is_cancelable
+            CanBeCanceled {
+                /// Returns whether the contract can be canceled.
+                ///
+                /// **Game Scenes**: All
+                get: is_cancelable -> bool
+            }
         }
         {
-            CanBeDeclined: bool,
-            /// Returns whether the contract can be declined.
-            ///
-            /// **Game Scenes**: All
-            get: is_declinable
+            CanBeDeclined {
+                /// Returns whether the contract can be declined.
+                ///
+                /// **Game Scenes**: All
+                get: is_declinable -> bool
+            }
         }
         {
-            CanBeFailed: bool,
-            /// Returns whether the contract can be failed.
-            ///
-            /// **Game Scenes**: All
-            get: is_failable
+            CanBeFailed {
+                /// Returns whether the contract can be failed.
+                ///
+                /// **Game Scenes**: All
+                get: is_failable -> bool
+            }
         }
         {
-            FundsAdvance: f64,
-            /// Returns the funds received when accepting the contract.
-            ///
-            /// **Game Scenes**: All
-            get: funds_advance
+            FundsAdvance {
+                /// Returns the funds received when accepting the contract.
+                ///
+                /// **Game Scenes**: All
+                get: funds_advance -> f64
+            }
         }
         {
-            FundsCompletion: f64,
-            /// Returns the funds received on completion of the contract.
-            ///
-            /// **Game Scenes**: All
-            get: funds_completion
+            FundsCompletion {
+                /// Returns the funds received on completion of the contract.
+                ///
+                /// **Game Scenes**: All
+                get: funds_completion -> f64
+            }
         }
         {
-            FundsFailed: f64,
-            /// Returns the funds lost if the contract is failed.
-            ///
-            /// **Game Scenes**: All
-            get: funds_failed
+            FundsFailed {
+                /// Returns the funds lost if the contract is failed.
+                ///
+                /// **Game Scenes**: All
+                get: funds_failed -> f64
+            }
         }
         {
-            ReputationCompletion: f64,
-            /// Returns the reputation received on completion of the contract.
-            ///
-            /// **Game Scenes**: All
-            get: reputation_completion
+            ReputationCompletion {
+                /// Returns the reputation received on completion of the contract.
+                ///
+                /// **Game Scenes**: All
+                get: reputation_completion -> f64
+            }
         }
         {
-            ReputationFailed: f64,
-            /// Returns the reputation lost if the contract is failed.
-            ///
-            /// **Game Scenes**: All
-            get: reputation_failed
+            ReputationFailed {
+                /// Returns the reputation lost if the contract is failed.
+                ///
+                /// **Game Scenes**: All
+                get: reputation_failed -> f64
+            }
         }
         {
-            ScienceCompletion: f64,
-            /// Returns the science received on completion of the contract.
-            ///
-            /// **Game Scenes**: All
-            get: science_completion
+            ScienceCompletion {
+                /// Returns the science received on completion of the contract.
+                ///
+                /// **Game Scenes**: All
+                get: science_completion -> f64
+            }
         }
         {
-            Parameters: Vec<ContractParameter>,
-            /// Returns the parameters for the contract.
-            ///
-            /// **Game Scenes**: All
-            get: parameters
+            Parameters {
+                /// Returns the parameters for the contract.
+                ///
+                /// **Game Scenes**: All
+                get: parameters -> Vec<ContractParameter>
+            }
         }
     }
     methods: {
@@ -230,81 +256,92 @@ remote_type!(
 object SpaceCenter.ContractParameter {
     properties: {
         {
-            Title: String,
-            /// Returns the title of the parameter.
-            ///
-            /// **Game Scenes**: All
-            get: title
+            Title {
+                /// Returns the title of the parameter.
+                ///
+                /// **Game Scenes**: All
+                get: title -> String
+            }
         }
         {
-            Notes: String,
-            /// Returns the notes of the parameter.
-            ///
-            /// **Game Scenes**: All
-            get: notes
+            Notes {
+                /// Returns the notes of the parameter.
+                ///
+                /// **Game Scenes**: All
+                get: notes -> String
+            }
         }
         {
-            Children: Vec<ContractParameter>,
-            /// Returns the child contract parameters.
-            ///
-            /// **Game Scenes**: All
-            get: children
+            Children {
+                /// Returns the child contract parameters.
+                ///
+                /// **Game Scenes**: All
+                get: children -> Vec<ContractParameter>
+            }
         }
         {
-            Completed: bool,
-            /// Returns whether the parameter has been completed.
-            ///
-            /// **Game Scenes**: All
-            get: is_completed
+            Completed {
+                /// Returns whether the parameter has been completed.
+                ///
+                /// **Game Scenes**: All
+                get: is_completed -> bool
+            }
         }
         {
-            Failed: bool,
-            /// Returns whether the parameter has been failed.
-            ///
-            /// **Game Scenes**: All
-            get: is_failed
+            Failed {
+                /// Returns whether the parameter has been failed.
+                ///
+                /// **Game Scenes**: All
+                get: is_failed -> bool
+            }
         }
         {
-            Optional: bool,
-            /// Returns whether the parameter is optional.
-            ///
-            /// **Game Scenes**: All
-            get: is_optional
+            Optional {
+                /// Returns whether the parameter is optional.
+                ///
+                /// **Game Scenes**: All
+                get: is_optional -> bool
+            }
         }
         {
-            FundsCompletion: f64,
-            /// Returns the funds received on completion of the contract parameter.
-            ///
-            /// **Game Scenes**: All
-            get: funds_completion
+            FundsCompletion {
+                /// Returns the funds received on completion of the contract parameter.
+                ///
+                /// **Game Scenes**: All
+                get: funds_completion -> f64
+            }
         }
         {
-            FundsFailed: f64,
-            /// Returns the funds lost if the contract  parameter is failed.
-            ///
-            /// **Game Scenes**: All
-            get: funds_failed
+            FundsFailed {
+                /// Returns the funds lost if the contract  parameter is failed.
+                ///
+                /// **Game Scenes**: All
+                get: funds_failed -> f64
+            }
         }
         {
-            ReputationCompletion: f64,
-            /// Returns the reputation received on completion of the contract  parameter.
-            ///
-            /// **Game Scenes**: All
-            get: reputation_completion
+            ReputationCompletion {
+                /// Returns the reputation received on completion of the contract  parameter.
+                ///
+                /// **Game Scenes**: All
+                get: reputation_completion -> f64
+            }
         }
         {
-            ReputationFailed: f64,
-            /// Returns the reputation lost if the contract  parameter is failed.
-            ///
-            /// **Game Scenes**: All
-            get: reputation_failed
+            ReputationFailed {
+                /// Returns the reputation lost if the contract  parameter is failed.
+                ///
+                /// **Game Scenes**: All
+                get: reputation_failed -> f64
+            }
         }
         {
-            ScienceCompletion: f64,
-            /// Returns the science received on completion of the contract parameter.
-            ///
-            /// **Game Scenes**: All
-            get: science_completion
+            ScienceCompletion {
+                /// Returns the science received on completion of the contract parameter.
+                ///
+                /// **Game Scenes**: All
+                get: science_completion -> f64
+            }
         }
     }
 });

@@ -13,41 +13,45 @@ remote_type!(
 object SpaceCenter.Thruster {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this thruster.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this thruster.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            ThrustReferenceFrame: ReferenceFrame,
-            /// Returns a reference frame that is fixed relative to the thruster and
-            /// orientated with its thrust direction (Thruster.thrustDirection(ReferenceFrame)).
-            /// For gimballed engines, this takes into account the current rotation of the gimbal.
-            ///
-            /// * The origin is at the position of thrust for this thruster
-            /// (`Thruster::thrust_position()`).
-            /// * The axes rotate with the thrust direction. This is the direction in which the
-            /// thruster expels propellant, including any gimballing.
-            /// * The y-axis points along the thrust direction.
-            /// * The x-axis and z-axis are perpendicular to the thrust direction.
-            ///
-            /// **Game Scenes**: All
-            get: thrust_reference_frame
+            ThrustReferenceFrame {
+                /// Returns a reference frame that is fixed relative to the thruster and
+                /// orientated with its thrust direction (Thruster.thrustDirection(ReferenceFrame)).
+                /// For gimballed engines, this takes into account the current rotation of the gimbal.
+                ///
+                /// * The origin is at the position of thrust for this thruster
+                /// (`Thruster::thrust_position()`).
+                /// * The axes rotate with the thrust direction. This is the direction in which the
+                /// thruster expels propellant, including any gimballing.
+                /// * The y-axis points along the thrust direction.
+                /// * The x-axis and z-axis are perpendicular to the thrust direction.
+                ///
+                /// **Game Scenes**: All
+                get: thrust_reference_frame -> ReferenceFrame
+            }
         }
         {
-            Gimballed: bool,
-            /// Returns whether the thruster is gimballed.
-            ///
-            /// **Game Scenes**: All
-            get: is_gimballed
+            Gimballed {
+                /// Returns whether the thruster is gimballed.
+                ///
+                /// **Game Scenes**: All
+                get: is_gimballed -> bool
+            }
         }
         {
-            GimbalAngle: f32,
-            /// Returns the current gimbal angle in the pitch, roll and yaw axes, in degrees.
-            ///
-            /// **Game Scenes**: All
-            get: gimbal_angle
+            GimbalAngle {
+                /// Returns the current gimbal angle in the pitch, roll and yaw axes, in degrees.
+                ///
+                /// **Game Scenes**: All
+                get: gimbal_angle -> f32
+            }
         }
     }
     methods: {

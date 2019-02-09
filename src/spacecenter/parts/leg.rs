@@ -7,47 +7,52 @@ remote_type!(
 object SpaceCenter.Leg {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this leg.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this leg.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            State: LegState,
-            /// Returns the current state of the landing leg.
-            ///
-            /// **Game Scenes**: All
-            get: state
+            State {
+                /// Returns the current state of the landing leg.
+                ///
+                /// **Game Scenes**: All
+                get: state -> LegState
+            }
         }
         {
-            Deployable: bool,
-            /// Returns whether the leg is deployable.
-            ///
-            /// **Game Scenes**: All
-            get: is_deployable
+            Deployable {
+                /// Returns whether the leg is deployable.
+                ///
+                /// **Game Scenes**: All
+                get: is_deployable -> bool
+            }
         }
         {
-            Deployed: bool,
-            /// Returns whether the landing leg is deployed.
-            ///
-            /// **Game Scenes**: All
-            get: is_deployed,
-            /// Sets whether the landing leg is deployed.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Note
-            /// Fixed landing legs are always deployed. Returns an error if you try to deploy
-            /// fixed landing gear.
-            set: set_deployed
+            Deployed {
+                /// Returns whether the landing leg is deployed.
+                ///
+                /// **Game Scenes**: All
+                get: is_deployed -> bool,
+                /// Sets whether the landing leg is deployed.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Note
+                /// Fixed landing legs are always deployed. Returns an error if you try to deploy
+                /// fixed landing gear.
+                set: set_deployed(bool)
+            }
         }
         {
-            IsGrounded: bool,
-            /// Returns whether the leg is touching the ground.
-            ///
-            /// **Game Scenes**: All
-            get: is_grounded
+            IsGrounded {
+                /// Returns whether the leg is touching the ground.
+                ///
+                /// **Game Scenes**: All
+                get: is_grounded -> bool
+            }
         }
     }
 });

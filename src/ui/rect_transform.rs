@@ -7,120 +7,130 @@ remote_type!(
 object UI.RectTransform {
     properties: {
         {
-            Position: (f64, f64),
-            /// Returns the position of the rectangles pivot point relative to the anchors.
-            ///
-            /// **Game Scenes**: All
-            get: position,
-            /// Sets the position of the rectangles pivot point relative to the anchors.
-            ///
-            /// **Game Scenes**: All
-            set: set_position
+            Position {
+                /// Returns the position of the rectangles pivot point relative to the anchors.
+                ///
+                /// **Game Scenes**: All
+                get: position -> (f64, f64),
+                /// Sets the position of the rectangles pivot point relative to the anchors.
+                ///
+                /// **Game Scenes**: All
+                set: set_position((f64, f64))
+            }
         }
         {
-            LocalPosition: Vector3,
-            /// Returns the position of the rectangles pivot point relative to the anchors.
-            ///
-            /// **Game Scenes**: All
-            get: local_position,
-            /// Sets the position of the rectangles pivot point relative to the anchors.
-            ///
-            /// **Game Scenes**: All
-            set: set_local_position
+            LocalPosition {
+                /// Returns the position of the rectangles pivot point relative to the anchors.
+                ///
+                /// **Game Scenes**: All
+                get: local_position -> Vector3,
+                /// Sets the position of the rectangles pivot point relative to the anchors.
+                ///
+                /// **Game Scenes**: All
+                set: set_local_position(Vector3)
+            }
         }
         {
-            Size: (f64, f64),
-            /// Returns the width and height of the rectangle.
-            ///
-            /// **Game Scenes**: All
-            get: size,
-            /// Sets the width and height of the rectangle.
-            ///
-            /// **Game Scenes**: All
-            set: set_size
+            Size {
+                /// Returns the width and height of the rectangle.
+                ///
+                /// **Game Scenes**: All
+                get: size -> (f64, f64),
+                /// Sets the width and height of the rectangle.
+                ///
+                /// **Game Scenes**: All
+                set: set_size((f64, f64))
+            }
         }
         {
-            UpperRight: (f64, f64),
-            /// Returns the position of the rectangles upper right corner relative to the anchors.
-            ///
-            /// **Game Scenes**: All
-            get: upper_right,
-            /// Sets the position of the rectangles upper right corner relative to the anchors.
-            ///
-            /// **Game Scenes**: All
-            set: set_upper_right
+            UpperRight {
+                /// Returns the position of the rectangles upper right corner relative to the anchors.
+                ///
+                /// **Game Scenes**: All
+                get: upper_right -> (f64, f64),
+                /// Sets the position of the rectangles upper right corner relative to the anchors.
+                ///
+                /// **Game Scenes**: All
+                set: set_upper_right((f64, f64))
+            }
         }
         {
-            LowerLeft: (f64, f64),
-            /// Returns the position of the rectangles lower left corner relative to the anchors.
-            ///
-            /// **Game Scenes**: All
-            get: lower_left,
-            /// Sets the position of the rectangles lower left corner relative to the anchors.
-            ///
-            /// **Game Scenes**: All
-            set: set_lower_left
+            LowerLeft {
+                /// Returns the position of the rectangles lower left corner relative to the anchors.
+                ///
+                /// **Game Scenes**: All
+                get: lower_left -> (f64, f64),
+                /// Sets the position of the rectangles lower left corner relative to the anchors.
+                ///
+                /// **Game Scenes**: All
+                set: set_lower_left((f64, f64))
+            }
         }
         {
-            AnchorMin: (f64, f64),
-            /// Returns the anchor point for the upper right corner of the rectangle defined
-            /// as a fraction of the size of the parent rectangle.
-            ///
-            /// **Game Scenes**: All
-            get: anchor_min,
-            /// Sets the anchor point for the upper right corner of the rectangle defined
-            /// as a fraction of the size of the parent rectangle.
-            ///
-            /// **Game Scenes**: All
-            set: set_anchor_min
+            AnchorMin {
+                /// Returns the anchor point for the upper right corner of the rectangle defined
+                /// as a fraction of the size of the parent rectangle.
+                ///
+                /// **Game Scenes**: All
+                get: anchor_min -> (f64, f64),
+                /// Sets the anchor point for the upper right corner of the rectangle defined
+                /// as a fraction of the size of the parent rectangle.
+                ///
+                /// **Game Scenes**: All
+                set: set_anchor_min((f64, f64))
+            }
         }
         {
-            AnchorMax: (f64, f64),
-            /// Returns the anchor point for the lower left corner of the rectangle defined as
-            /// a fraction of the size of the parent rectangle.
-            ///
-            /// **Game Scenes**: All
-            get: anchor_max,
-            /// Sets the anchor point for the lower left corner of the rectangle defined as
-            /// a fraction of the size of the parent rectangle.
-            ///
-            /// **Game Scenes**: All
-            set: set_anchor_max
+            AnchorMax {
+                /// Returns the anchor point for the lower left corner of the rectangle defined as
+                /// a fraction of the size of the parent rectangle.
+                ///
+                /// **Game Scenes**: All
+                get: anchor_max -> (f64, f64),
+                /// Sets the anchor point for the lower left corner of the rectangle defined as
+                /// a fraction of the size of the parent rectangle.
+                ///
+                /// **Game Scenes**: All
+                set: set_anchor_max((f64, f64))
+            }
         }
         {
-            Pivot: (f64, f64),
-            /// Returns the location of the pivot point around which the rectangle rotates,
-            /// defined as a fraction of the size of the rectangle itself.
-            ///
-            /// **Game Scenes**: All
-            get: pivot,
-            /// Sets the location of the pivot point around which the rectangle rotates,
-            /// defined as a fraction of the size of the rectangle itself.
-            ///
-            /// **Game Scenes**: All
-            set: set_pivot
+            Pivot {
+                /// Returns the location of the pivot point around which the rectangle rotates,
+                /// defined as a fraction of the size of the rectangle itself.
+                ///
+                /// **Game Scenes**: All
+                get: pivot -> (f64, f64),
+                /// Sets the location of the pivot point around which the rectangle rotates,
+                /// defined as a fraction of the size of the rectangle itself.
+                ///
+                /// **Game Scenes**: All
+                set: set_pivot((f64, f64))
+            }
         }
         {
-            Rotation: Quaternion,
-            /// Returns the rotation, as a quaternion, of the object around its pivot point.
-            ///
-            /// **Game Scenes**: All
-            get: rotation,
-            /// Sets the rotation, as a quaternion, of the object around its pivot point.
-            ///
-            /// **Game Scenes**: All
-            set: set_rotation
+            Rotation {
+                /// Returns the rotation, as a quaternion, of the object around its pivot point.
+                ///
+                /// **Game Scenes**: All
+                get: rotation -> Quaternion,
+                /// Sets the rotation, as a quaternion, of the object around its pivot point.
+                ///
+                /// **Game Scenes**: All
+                set: set_rotation(Quaternion)
+            }
         }
         {
-            Scale: Vector3,
-            /// Returns the scale factor applied to the object in the x, y and z dimensions.
-            ///
-            /// **Game Scenes**: All
-            get: scale,
-            /// Sets the scale factor applied to the object in the x, y and z dimensions.
-            ///
-            /// **Game Scenes**: All
-            set: set_scale
+            Scale {
+                /// Returns the scale factor applied to the object in the x, y and z dimensions.
+                ///
+                /// **Game Scenes**: All
+                get: scale -> Vector3,
+                /// Sets the scale factor applied to the object in the x, y and z dimensions.
+                ///
+                /// **Game Scenes**: All
+                set: set_scale(Vector3)
+            }
         }
     }
     methods: {

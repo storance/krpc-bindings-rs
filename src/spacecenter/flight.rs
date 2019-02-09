@@ -11,430 +11,475 @@ remote_type!(
 object SpaceCenter.Flight {
     properties: {
         {
-            GForce: f32,
-            /// Returns the current G force acting on the vessel in *g*.
-            ///
-            /// **Game Scenes**: Flight
-            get: g_force
+            GForce {
+                /// Returns the current G force acting on the vessel in *g*.
+                ///
+                /// **Game Scenes**: Flight
+                get: g_force -> f32
+            }
         }
 
         {
-            MeanAltitude: f64,
-            /// Returns the altitude above sea level, in meters. Measured from the center of
-            /// mass of the vessel.
-            ///
-            /// **Game Scenes**: Flight
-            get: mean_altitude
+            MeanAltitude {
+                /// Returns the altitude above sea level, in meters. Measured from the center of
+                /// mass of the vessel.
+                ///
+                /// **Game Scenes**: Flight
+                get: mean_altitude -> f64
+            }
         }
 
         {
-            SurfaceAltitude: f64,
-            /// Returns the altitude above the surface of the body or sea level, whichever
-            /// is closer, in meters. Measured from the center of mass of the vessel.
-            ///
-            /// **Game Scenes**: Flight
-            get: surface_altitude
+            SurfaceAltitude {
+                /// Returns the altitude above the surface of the body or sea level, whichever
+                /// is closer, in meters. Measured from the center of mass of the vessel.
+                ///
+                /// **Game Scenes**: Flight
+                get: surface_altitude -> f64
+            }
         }
 
         {
-            BedrockAltitude: f64,
-            /// Returns the altitude above the surface of the body, in meters. When over water,
-            /// this is the altitude above the sea floor. Measured from the center of mass of
-            /// the vessel.
-            ///
-            /// **Game Scenes**: Flight
-            get: bedrock_altitude
+            BedrockAltitude {
+                /// Returns the altitude above the surface of the body, in meters. When over water,
+                /// this is the altitude above the sea floor. Measured from the center of mass of
+                /// the vessel.
+                ///
+                /// **Game Scenes**: Flight
+                get: bedrock_altitude -> f64
+            }
         }
 
         {
-            Elevation: f64,
-            /// Returns the elevation of the terrain under the vessel, in meters. This is the
-            /// height of the terrain above sea level, and is negative when the vessel is
-            /// over the sea.
-            ///
-            /// **Game Scenes**: Flight
-            get: elevation
+            Elevation {
+                /// Returns the elevation of the terrain under the vessel, in meters. This is the
+                /// height of the terrain above sea level, and is negative when the vessel is
+                /// over the sea.
+                ///
+                /// **Game Scenes**: Flight
+                get: elevation -> f64
+            }
         }
 
         {
-            Latitude: f64,
-            /// Returns the [latitude](https://en.wikipedia.org/wiki/Latitude) of the vessel for
-            /// the body being orbited, in degrees.
-            ///
-            /// **Game Scenes**: Flight
-            get: latitude
+            Latitude {
+                /// Returns the [latitude](https://en.wikipedia.org/wiki/Latitude) of the vessel for
+                /// the body being orbited, in degrees.
+                ///
+                /// **Game Scenes**: Flight
+                get: latitude -> f64
+            }
         }
 
         {
-            Longitude: f64,
-            /// Returns the [longitude](https://en.wikipedia.org/wiki/Longitude) of the vessel for
-            /// the body being orbited, in degrees.
-            ///
-            /// **Game Scenes**: Flight
-            get: longitude
+            Longitude {
+                /// Returns the [longitude](https://en.wikipedia.org/wiki/Longitude) of the vessel for
+                /// the body being orbited, in degrees.
+                ///
+                /// **Game Scenes**: Flight
+                get: longitude -> f64
+            }
         }
         {
-            Velocity: Vector3,
-            /// Returns the velocity of the vessel, in the reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// The velocity as a vector. The vector points in the direction of travel, and
-            /// its magnitude is the speed of the vessel in meters per second.
-            get: velocity
+            Velocity {
+                /// Returns the velocity of the vessel, in the reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// The velocity as a vector. The vector points in the direction of travel, and
+                /// its magnitude is the speed of the vessel in meters per second.
+                get: velocity -> Vector3
+            }
         }
         {
-            Speed: f64,
-            /// Returns the speed of the vessel in meters per second, in the reference
-            /// frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            get: speed
+            Speed {
+                /// Returns the speed of the vessel in meters per second, in the reference
+                /// frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                get: speed -> f64
+            }
         }
         {
-            HorizontalSpeed: f64,
-            /// Returns the horizontal speed of the vessel in meters per second, in the reference
-            /// frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            get: horizontal_speed
+            HorizontalSpeed {
+                /// Returns the horizontal speed of the vessel in meters per second, in the reference
+                /// frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                get: horizontal_speed -> f64
+            }
         }
         {
-            VerticalSpeed: f64,
-            /// Returns the vertical speed of the vessel in meters per second, in the reference
-            /// frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            get: vertical_speed
+            VerticalSpeed {
+                /// Returns the vertical speed of the vessel in meters per second, in the reference
+                /// frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                get: vertical_speed -> f64
+            }
         }
         {
-            CenterOfMass: Vector3,
-            /// Returns the position of the center of mass of the vessel, in the
-            /// reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// The position as a vector.
-            get: center_of_mass
+            CenterOfMass {
+                /// Returns the position of the center of mass of the vessel, in the
+                /// reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// The position as a vector.
+                get: center_of_mass -> Vector3
+            }
         }
         {
-            Rotation: Quaternion,
-            /// Returns the rotation of the vessel, in the reference frame `ReferenceFrame`
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// The rotation as a quaternion of the form (*x*,*y*,*z*,*w*).
-            get: rotation
+            Rotation {
+                /// Returns the rotation of the vessel, in the reference frame `ReferenceFrame`
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// The rotation as a quaternion of the form (*x*,*y*,*z*,*w*).
+                get: rotation -> Quaternion
+            }
         }
         {
-            Direction: Vector3,
-            /// Returns the direction that the vessel is pointing in, in the
-            /// reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// The direction as a unit vector.
-            get: direction
+            Direction {
+                /// Returns the direction that the vessel is pointing in, in the
+                /// reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// The direction as a unit vector.
+                get: direction -> Vector3
+            }
         }
         {
-            Pitch: f32,
-            /// Returns the pitch of the vessel relative to the horizon, in degrees.
-            /// A value between -90° and +90°.
-            ///
-            /// **Game Scenes**: Flight
-            get: pitch
+            Pitch {
+                /// Returns the pitch of the vessel relative to the horizon, in degrees.
+                /// A value between -90° and +90°.
+                ///
+                /// **Game Scenes**: Flight
+                get: pitch -> f32
+            }
         }
         {
-            Heading: f32,
-            /// Returns the heading of the vessel (its angle relative to north), in degrees.
-            /// A value between 0° and 360°.
-            ///
-            /// **Game Scenes**: Flight
-            get: heading
+            Heading {
+                /// Returns the heading of the vessel (its angle relative to north), in degrees.
+                /// A value between 0° and 360°.
+                ///
+                /// **Game Scenes**: Flight
+                get: heading -> f32
+            }
         }
         {
-            Roll: f32,
-            /// Returns the roll of the vessel relative to the horizon, in degrees.
-            /// A value between -180° and +180°.
-            ///
-            /// **Game Scenes**: Flight
-            get: roll
+            Roll {
+                /// Returns the roll of the vessel relative to the horizon, in degrees.
+                /// A value between -180° and +180°.
+                ///
+                /// **Game Scenes**: Flight
+                get: roll -> f32
+            }
         }
         {
-            Prograde: Vector3,
-            /// Returns the prograde direction of the vessels orbit, in the
-            /// reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// The direction as a unit vector.
-            get: prograde
+            Prograde {
+                /// Returns the prograde direction of the vessels orbit, in the
+                /// reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// The direction as a unit vector.
+                get: prograde -> Vector3
+            }
         }
         {
-            Retrograde: Vector3,
-            /// Returns the retrograde direction of the vessels orbit, in the
-            /// reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// The direction as a unit vector.
-            get: retrograde
+            Retrograde {
+                /// Returns the retrograde direction of the vessels orbit, in the
+                /// reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// The direction as a unit vector.
+                get: retrograde -> Vector3
+            }
         }
 
         {
-            Normal: Vector3,
-            /// Returns the normal direction of the vessels orbit, in the
-            /// reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// The direction as a unit vector.
-            get: normal
+            Normal {
+                /// Returns the normal direction of the vessels orbit, in the
+                /// reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// The direction as a unit vector.
+                get: normal -> Vector3
+            }
         }
         {
-            AntiNormal: Vector3,
-            /// Returns the direction opposite to the normal of the vessels orbit, in the
-            /// reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// The direction as a unit vector.
-            get: anti_normal
+            AntiNormal {
+                /// Returns the direction opposite to the normal of the vessels orbit, in the
+                /// reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// The direction as a unit vector.
+                get: anti_normal -> Vector3
+            }
         }
         {
-            Radial: Vector3,
-            /// Returns the radial direction of the vessels orbit, in the
-            /// reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// The direction as a unit vector.
-            get: radial
+            Radial {
+                /// Returns the radial direction of the vessels orbit, in the
+                /// reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// The direction as a unit vector.
+                get: radial -> Vector3
+            }
         }
         {
-            AntiRadial: Vector3,
-            /// Returns the direction opposite to the radial of the vessels orbit, in the
-            /// reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// The direction as a unit vector.
-            get: anti_radial
+            AntiRadial {
+                /// Returns the direction opposite to the radial of the vessels orbit, in the
+                /// reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// The direction as a unit vector.
+                get: anti_radial -> Vector3
+            }
         }
         {
-            AtmosphereDensity: f32,
-            /// Returns the current density of the atmosphere around the vessel,
-            /// in kg/m<sup>3</sup>.
-            ///
-            /// **Game Scenes**: Flight
-            get: atmosphere_density
+            AtmosphereDensity {
+                /// Returns the current density of the atmosphere around the vessel,
+                /// in kg/m<sup>3</sup>.
+                ///
+                /// **Game Scenes**: Flight
+                get: atmosphere_density -> f32
+            }
         }
         {
-            DynamicPressure: f32,
-            /// Returns the dynamic pressure acting on the vessel, in Pascals. This is a
-            /// measure of the strength of the aerodynamic forces. It is equal to
-            /// `1/2 · air density · velocity<sup>2</sup>`. It is commonly denoted Q.
-            ///
-            /// **Game Scenes**: Flight
-            get: dynamic_pressure
+            DynamicPressure {
+                /// Returns the dynamic pressure acting on the vessel, in Pascals. This is a
+                /// measure of the strength of the aerodynamic forces. It is equal to
+                /// `1/2 · air density · velocity<sup>2</sup>`. It is commonly denoted Q.
+                ///
+                /// **Game Scenes**: Flight
+                get: dynamic_pressure -> f32
+            }
         }
         {
-            StaticPressure: f32,
-            /// Returns the static atmospheric pressure acting on the vessel, in Pascals.
-            ///
-            /// **Game Scenes**: Flight
-            get: static_pressure
+            StaticPressure {
+                /// Returns the static atmospheric pressure acting on the vessel, in Pascals.
+                ///
+                /// **Game Scenes**: Flight
+                get: static_pressure -> f32
+            }
         }
         {
-            StaticPressureAtMSL: f32,
-            /// Returns the static pressure at mean sea level, in Pascals.
-            ///
-            /// **Game Scenes**: Flight
-            get: static_pressure_at_msl
+            StaticPressureAtMSL {
+                /// Returns the static pressure at mean sea level, in Pascals.
+                ///
+                /// **Game Scenes**: Flight
+                get: static_pressure_at_msl -> f32
+            }
         }
         {
-            AerodynamicForce: Vector3,
-            /// Returns the total aerodynamic forces acting on the vessel,
-            /// in reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// A vector pointing in the direction that the force acts, with its magnitude
-            /// equal to the strength of the force in Newtons.
-            get: aerodynamic_force
+            AerodynamicForce {
+                /// Returns the total aerodynamic forces acting on the vessel,
+                /// in reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// A vector pointing in the direction that the force acts, with its magnitude
+                /// equal to the strength of the force in Newtons.
+                get: aerodynamic_force -> Vector3
+            }
         }
         {
-            Lift: Vector3,
-            /// Returns the [aerodynamic lift](https://en.wikipedia.org/wiki/Aerodynamic_force)
-            /// currently acting on the vessel.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// A vector pointing in the direction that the force acts, with its magnitude
-            /// equal to the strength of the force in Newtons.
-            get: lift
+            Lift {
+                /// Returns the [aerodynamic lift](https://en.wikipedia.org/wiki/Aerodynamic_force)
+                /// currently acting on the vessel.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// A vector pointing in the direction that the force acts, with its magnitude
+                /// equal to the strength of the force in Newtons.
+                get: lift -> Vector3
+            }
         }
         {
-            Drag: Vector3,
-            /// Returns the [aerodynamic drag](https://en.wikipedia.org/wiki/Aerodynamic_force)
-            /// currently acting on the vessel.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Return
-            /// A vector pointing in the direction that the force acts, with its magnitude
-            /// equal to the strength of the force in Newtons.
-            get: drag
+            Drag {
+                /// Returns the [aerodynamic drag](https://en.wikipedia.org/wiki/Aerodynamic_force)
+                /// currently acting on the vessel.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Return
+                /// A vector pointing in the direction that the force acts, with its magnitude
+                /// equal to the strength of the force in Newtons.
+                get: drag -> Vector3
+            }
         }
         {
-            SpeedOfSound: f32,
-            /// Returns the speed of sound, in the atmosphere around the vessel, in m/s.
-            ///
-            /// **Game Scenes**: Flight
-            get: speed_of_sound
+            SpeedOfSound {
+                /// Returns the speed of sound, in the atmosphere around the vessel, in m/s.
+                ///
+                /// **Game Scenes**: Flight
+                get: speed_of_sound -> f32
+            }
         }
         {
-            Mach: f32,
-            /// Returns the speed of the vessel, in multiples of the speed of sound.
-            ///
-            /// **Game Scenes**: Flight
-            get: mach
+            Mach {
+                /// Returns the speed of the vessel, in multiples of the speed of sound.
+                ///
+                /// **Game Scenes**: Flight
+                get: mach -> f32
+            }
         }
         {
-            ReynoldsNumber: f32,
-            /// Returns the vessels Reynolds number.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Note
-            /// Requires Ferram Aerospace Research.
-            get: reynolds_number
+            ReynoldsNumber {
+                /// Returns the vessels Reynolds number.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Note
+                /// Requires Ferram Aerospace Research.
+                get: reynolds_number -> f32
+            }
         }
         {
-            TrueAirSpeed: f32,
-            /// Returns the [true air speed](https://en.wikipedia.org/wiki/True_airspeed)
-            /// of the vessel, in meters per second.
-            ///
-            /// **Game Scenes**: Flight
-            get: true_air_speed
+            TrueAirSpeed {
+                /// Returns the [true air speed](https://en.wikipedia.org/wiki/True_airspeed)
+                /// of the vessel, in meters per second.
+                ///
+                /// **Game Scenes**: Flight
+                get: true_air_speed -> f32
+            }
         }
         {
-            EquivalentAirSpeed: f32,
-            /// Returns the [equivalent air speed](https://en.wikipedia.org/wiki/Equivalent_airspeed)
-            /// of the vessel, in meters per second.
-            ///
-            /// **Game Scenes**: Flight
-            get: equivalent_air_speed
+            EquivalentAirSpeed {
+                /// Returns the [equivalent air speed](https://en.wikipedia.org/wiki/Equivalent_airspeed)
+                /// of the vessel, in meters per second.
+                ///
+                /// **Game Scenes**: Flight
+                get: equivalent_air_speed -> f32
+            }
         }
         {
-            TerminalVelocity: f32,
-            /// Returns an estimate of the current terminal velocity of the vessel,
-            /// in meters per second. This is the speed at which the drag forces cancel
-            /// out the force of gravity.
-            ///
-            /// **Game Scenes**: Flight
-            get: terminal_velocity
+            TerminalVelocity {
+                /// Returns an estimate of the current terminal velocity of the vessel,
+                /// in meters per second. This is the speed at which the drag forces cancel
+                /// out the force of gravity.
+                ///
+                /// **Game Scenes**: Flight
+                get: terminal_velocity -> f32
+            }
         }
         {
-            AngleOfAttack: f32,
-            /// Returns the pitch angle between the orientation of the vessel and its
-            /// velocity vector, in degrees..
-            ///
-            /// **Game Scenes**: Flight
-            get: angle_of_attack
+            AngleOfAttack {
+                /// Returns the pitch angle between the orientation of the vessel and its
+                /// velocity vector, in degrees..
+                ///
+                /// **Game Scenes**: Flight
+                get: angle_of_attack -> f32
+            }
         }
         {
-            SideslipAngle: f32,
-            /// Returns the yaw angle between the orientation of the vessel and its
-            /// velocity vector, in degrees.
-            ///
-            /// **Game Scenes**: Flight
-            get: sideslip_angle
+            SideslipAngle {
+                /// Returns the yaw angle between the orientation of the vessel and its
+                /// velocity vector, in degrees.
+                ///
+                /// **Game Scenes**: Flight
+                get: sideslip_angle -> f32
+            }
         }
         {
-            TotalAirTemperature: f32,
-            /// Returns the [total air temperature](https://en.wikipedia.org/wiki/Total_air_temperature)
-            /// of the atmosphere around the vessel, in Kelvin. This includes the
-            /// `Flight::static_air_temperature()` and the vessel’s kinetic energy.
-            ///
-            /// **Game Scenes**: Flight
-            get: total_air_temperature
+            TotalAirTemperature {
+                /// Returns the [total air temperature](https://en.wikipedia.org/wiki/Total_air_temperature)
+                /// of the atmosphere around the vessel, in Kelvin. This includes the
+                /// `Flight::static_air_temperature()` and the vessel’s kinetic energy.
+                ///
+                /// **Game Scenes**: Flight
+                get: total_air_temperature -> f32
+            }
         }
         {
-            StaticAirTemperature: f32,
-            /// Returns the [static (ambient) temperature](https://en.wikipedia.org/wiki/Total_air_temperature)
-            /// of the atmosphere around the vessel, in Kelvin.
-            ///
-            /// **Game Scenes**: Flight
-            get: static_air_temperature
+            StaticAirTemperature {
+                /// Returns the [static (ambient) temperature](https://en.wikipedia.org/wiki/Total_air_temperature)
+                /// of the atmosphere around the vessel, in Kelvin.
+                ///
+                /// **Game Scenes**: Flight
+                get: static_air_temperature -> f32
+            }
         }
         {
-            StallFraction: f32,
-            /// Returns the current amount of stall, between 0 and 1. A value greater than
-            /// 0.005 indicates a minor stall and a value greater than 0.5 indicates
-            /// a large-scale stall.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Note
-            /// Requires Ferram Aerospace Research.
-            get: stall_fraction
+            StallFraction {
+                /// Returns the current amount of stall, between 0 and 1. A value greater than
+                /// 0.005 indicates a minor stall and a value greater than 0.5 indicates
+                /// a large-scale stall.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Note
+                /// Requires Ferram Aerospace Research.
+                get: stall_fraction -> f32
+            }
         }
         {
-            DragCoefficient: f32,
-            /// Returns the coefficient of drag. This is the amount of drag produced by the
-            /// vessel. It depends on air speed, air density and wing area.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Note
-            /// Requires Ferram Aerospace Research.
-            get: drag_coefficient
+            DragCoefficient {
+                /// Returns the coefficient of drag. This is the amount of drag produced by the
+                /// vessel. It depends on air speed, air density and wing area.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Note
+                /// Requires Ferram Aerospace Research.
+                get: drag_coefficient -> f32
+            }
         }
         {
-            LiftCoefficient: f32,
-            /// Returns the coefficient of lift. This is the amount of lift produced by the
-            /// vessel. It depends on air speed, air density and wing area.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Note
-            /// Requires Ferram Aerospace Research.
-            get: lift_coefficient
+            LiftCoefficient {
+                /// Returns the coefficient of lift. This is the amount of lift produced by the
+                /// vessel. It depends on air speed, air density and wing area.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Note
+                /// Requires Ferram Aerospace Research.
+                get: lift_coefficient -> f32
+            }
         }
         {
-            BallisticCoefficient: f32,
-            /// Returns the [ballistic coefficient](https://en.wikipedia.org/wiki/Ballistic_coefficient).
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Note
-            /// Requires Ferram Aerospace Research.
-            get: ballistic_coefficient
+            BallisticCoefficient {
+                /// Returns the [ballistic coefficient](https://en.wikipedia.org/wiki/Ballistic_coefficient).
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Note
+                /// Requires Ferram Aerospace Research.
+                get: ballistic_coefficient -> f32
+            }
         }
         {
-            ThrustSpecificFuelConsumption: f32,
-            /// Returns the efficiency of the engines, with a lower value indicating a
-            /// more efficient vessel. This value is the number of Newtons of fuel that
-            /// are burned, per hour, to produce one newton of thrust.
-            ///
-            /// **Game Scenes**: Flight
-            ///
-            /// # Note
-            /// Requires Ferram Aerospace Research.
-            get: thrust_specific_fuel_consumption
+            ThrustSpecificFuelConsumption {
+                /// Returns the efficiency of the engines, with a lower value indicating a
+                /// more efficient vessel. This value is the number of Newtons of fuel that
+                /// are burned, per hour, to produce one newton of thrust.
+                ///
+                /// **Game Scenes**: Flight
+                ///
+                /// # Note
+                /// Requires Ferram Aerospace Research.
+                get: thrust_specific_fuel_consumption -> f32
+            }
         }
     }
     methods: {

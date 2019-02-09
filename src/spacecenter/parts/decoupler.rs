@@ -8,32 +8,36 @@ remote_type!(
 object SpaceCenter.Decoupler {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this decoupler.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this decoupler.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            Decoupled: bool,
-            /// Returns whether the decoupler has fired.
-            ///
-            /// **Game Scenes**: All
-            get: is_decoupled
+            Decoupled {
+                /// Returns whether the decoupler has fired.
+                ///
+                /// **Game Scenes**: All
+                get: is_decoupled -> bool
+            }
         }
         {
-            Staged: bool,
-            /// Returns whether the decoupler has fired.
-            ///
-            /// **Game Scenes**: All
-            get: is_staged
+            Staged {
+                /// Returns whether the decoupler has fired.
+                ///
+                /// **Game Scenes**: All
+                get: is_staged -> bool
+            }
         }
         {
-            Impulse: f32,
-            /// Returns the impulse that the decoupler imparts when it is fired, in Newton seconds.
-            ///
-            /// **Game Scenes**: All
-            get: impulse
+            Impulse {
+                /// Returns the impulse that the decoupler imparts when it is fired, in Newton seconds.
+                ///
+                /// **Game Scenes**: All
+                get: impulse -> f32
+            }
         }
     }
     methods: {

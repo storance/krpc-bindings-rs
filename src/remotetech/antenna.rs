@@ -7,65 +7,71 @@ remote_type!(
 object RemoteTech.Antenna {
     properties: {
         {
-            Part: Part,
-            /// Returns the part containing this antenna.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part containing this antenna.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            HasConnection: bool,
-            /// Returns whether the antenna has a connection.
-            ///
-            /// **Game Scenes**: All
-            get: has_connection
+            HasConnection {
+                /// Returns whether the antenna has a connection.
+                ///
+                /// **Game Scenes**: All
+                get: has_connection -> bool
+            }
         }
         {
-            Target: Target,
-            /// Returns the object that the antenna is targetting.
-            ///
-            /// **Game Scenes**: All
-            get: target,
-            /// Sets the object that the antenna is targetting.  This property can be used to set
-            /// the target to Target.NONE or Target.ACTIVE_VESSEL. To set the target to a
-            /// celestial body, ground station or vessel see `Antenna::set_target_body()`,
-            /// `Antenna::set_target_ground_station()` and `Antenna::set_target_vessel()`.
-            ///
-            /// **Game Scenes**: All
-            set: set_target
+            Target {
+                /// Returns the object that the antenna is targetting.
+                ///
+                /// **Game Scenes**: All
+                get: target -> Target,
+                /// Sets the object that the antenna is targetting.  This property can be used to set
+                /// the target to Target.NONE or Target.ACTIVE_VESSEL. To set the target to a
+                /// celestial body, ground station or vessel see `Antenna::set_target_body()`,
+                /// `Antenna::set_target_ground_station()` and `Antenna::set_target_vessel()`.
+                ///
+                /// **Game Scenes**: All
+                set: set_target(Target)
+            }
         }
         {
-            TargetBody: Option<CelestialBody>,
-            /// Returns the celestial body the antenna is targetting.
-            ///
-            /// **Game Scenes**: All
-            get: target_body,
-            /// Sets the celestial body the antenna is targetting.
-            ///
-            /// **Game Scenes**: All
-            set: set_target_body
+            TargetBody {
+                /// Returns the celestial body the antenna is targetting.
+                ///
+                /// **Game Scenes**: All
+                get: target_body -> Option<CelestialBody>,
+                /// Sets the celestial body the antenna is targetting.
+                ///
+                /// **Game Scenes**: All
+                set: set_target_body(&CelestialBody)
+            }
         }
         {
-            TargetGroundStation: String,
-            /// Returns the ground station the antenna is targetting.
-            ///
-            /// **Game Scenes**: All
-            get: target_ground_station,
-            /// Sets the ground station the antenna is targetting.
-            ///
-            /// **Game Scenes**: All
-            set: set_target_ground_station
+            TargetGroundStation {
+                /// Returns the ground station the antenna is targetting.
+                ///
+                /// **Game Scenes**: All
+                get: target_ground_station -> String,
+                /// Sets the ground station the antenna is targetting.
+                ///
+                /// **Game Scenes**: All
+                set: set_target_ground_station(&str)
+            }
         }
         {
-            TargetVessel: Option<Vessel>,
-            /// Returns the vessel the antenna is targetting.
-            ///
-            /// **Game Scenes**: All
-            get: target_vessel,
-            /// Sets the vessel the antenna is targetting.
-            ///
-            /// **Game Scenes**: All
-            set: set_target_vessel
+            TargetVessel {
+                /// Returns the vessel the antenna is targetting.
+                ///
+                /// **Game Scenes**: All
+                get: target_vessel -> Option<Vessel>,
+                /// Sets the vessel the antenna is targetting.
+                ///
+                /// **Game Scenes**: All
+                set: set_target_vessel(&Vessel)
+            }
         }
     }
 });

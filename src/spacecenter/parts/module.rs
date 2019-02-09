@@ -14,42 +14,47 @@ remote_type!(
 object SpaceCenter.Module {
     properties: {
         {
-            Name: String,
-            /// Returns the name of the PartModule. For example, “ModuleEngines”.
-            ///
-            /// **Game Scenes**: All
-            get: name
+            Name {
+                /// Returns the name of the PartModule. For example, “ModuleEngines”.
+                ///
+                /// **Game Scenes**: All
+                get: name -> String
+            }
         }
         {
-            Part: Part,
-            /// The part that contains this module.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// The part that contains this module.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            Fields: BTreeMap<String, String>,
-            /// Returns the modules field names and their associated values, as a dictionary.
-            /// These are the values visible in the right-click menu of the part.
-            ///
-            /// **Game Scenes**: All
-            get: fields
+            Fields {
+                /// Returns the modules field names and their associated values, as a dictionary.
+                /// These are the values visible in the right-click menu of the part.
+                ///
+                /// **Game Scenes**: All
+                get: fields -> BTreeMap<String, String>
+            }
         }
         {
-            Events: Vec<String>,
-            /// Returns a list of the names of all of the modules events. Events are the
-            /// clickable buttons visible in the right-click menu of the part.
-            ///
-            /// **Game Scenes**: All
-            get: events
+            Events {
+                /// Returns a list of the names of all of the modules events. Events are the
+                /// clickable buttons visible in the right-click menu of the part.
+                ///
+                /// **Game Scenes**: All
+                get: events -> Vec<String>
+            }
         }
         {
-            Actions: Vec<String>,
-            /// Returns a list of all the names of the modules actions. These are the parts
-            /// actions that can be assigned to action groups in the in-game editor.
-            ///
-            /// **Game Scenes**: All
-            get: actions
+            Actions {
+                /// Returns a list of all the names of the modules actions. These are the parts
+                /// actions that can be assigned to action groups in the in-game editor.
+                ///
+                /// **Game Scenes**: All
+                get: actions -> Vec<String>
+            }
         }
     }
     methods: {

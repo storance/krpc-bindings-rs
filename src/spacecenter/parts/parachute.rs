@@ -7,59 +7,65 @@ remote_type!(
 object SpaceCenter.Parachute {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this parachute.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this parachute.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            Deployed: bool,
-            /// Returns whether the parachute has been deployed.
-            ///
-            /// **Game Scenes**: All
-            get: is_deployed
+            Deployed {
+                /// Returns whether the parachute has been deployed.
+                ///
+                /// **Game Scenes**: All
+                get: is_deployed -> bool
+            }
         }
         {
-            Armed: Part,
-            /// Returns whether the parachute has been armed or deployed. Only applicable to
-            /// RealChutes parachutes.
-            ///
-            /// **Game Scenes**: All
-            get: is_armed
+            Armed {
+                /// Returns whether the parachute has been armed or deployed. Only applicable to
+                /// RealChutes parachutes.
+                ///
+                /// **Game Scenes**: All
+                get: is_armed -> bool
+            }
         }
         {
-            State: ParachuteState,
-            /// Returns the current state of the parachute.
-            ///
-            /// **Game Scenes**: All
-            get: state
+            State {
+                /// Returns the current state of the parachute.
+                ///
+                /// **Game Scenes**: All
+                get: state -> ParachuteState
+            }
         }
         {
-            DeployAltitude: f32,
-            /// Returns the altitude at which the parachute will full deploy, in meters.
-            /// Only applicable to stock parachutes.
-            ///
-            /// **Game Scenes**: All
-            get: deploy_altitude,
-            /// Sets the altitude at which the parachute will full deploy, in meters.
-            /// Only applicable to stock parachutes.
-            ///
-            /// **Game Scenes**: All
-            set: set_deploy_altitude
+            DeployAltitude {
+                /// Returns the altitude at which the parachute will full deploy, in meters.
+                /// Only applicable to stock parachutes.
+                ///
+                /// **Game Scenes**: All
+                get: deploy_altitude -> f32,
+                /// Sets the altitude at which the parachute will full deploy, in meters.
+                /// Only applicable to stock parachutes.
+                ///
+                /// **Game Scenes**: All
+                set: set_deploy_altitude(f32)
+            }
         }
         {
-            DeployMinPressure: f32,
-            /// Returns the minimum pressure at which the parachute will semi-deploy, in
-            /// atmospheres. Only applicable to stock parachutes.
-            ///
-            /// **Game Scenes**: All
-            get: deploy_min_pressure,
-            /// Sets the minimum pressure at which the parachute will semi-deploy, in
-            /// atmospheres. Only applicable to stock parachutes.
-            ///
-            /// **Game Scenes**: All
-            set: set_deploy_min_pressure
+            DeployMinPressure {
+                /// Returns the minimum pressure at which the parachute will semi-deploy, in
+                /// atmospheres. Only applicable to stock parachutes.
+                ///
+                /// **Game Scenes**: All
+                get: deploy_min_pressure -> f32,
+                /// Sets the minimum pressure at which the parachute will semi-deploy, in
+                /// atmospheres. Only applicable to stock parachutes.
+                ///
+                /// **Game Scenes**: All
+                set: set_deploy_min_pressure(f32)
+            }
         }
     }
 });

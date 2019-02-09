@@ -9,29 +9,32 @@ remote_type!(
     object SpaceCenter.Resources {
         properties: {
             {
-                All: Vec<Resource>,
-                /// Returns all the individual resources that can be stored.
-                ///
-                /// **Game Scenes**: Flight
-                get: all
+                All {
+                    /// Returns all the individual resources that can be stored.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: all -> Vec<Resource>
+                }
             }
             {
-                Names: Vec<String>,
-                /// Returns a list of resource names that can be stored.
-                ///
-                /// **Game Scenes**: Flight
-                get: names
+                Names {
+                    /// Returns a list of resource names that can be stored.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: names -> Vec<String>
+                }
             }
             {
-                Enabled: bool,
-                /// Returns whether use of all the resources are enabled.
-                ///
-                /// **Game Scenes**: Flight
-                get: is_enabled,
-                /// Sets whether use of all the resources are enabled.
-                ///
-                /// **Game Scenes**: Flight
-                set: set_enabled
+                Enabled {
+                    /// Returns whether use of all the resources are enabled.
+                    ///
+                    /// **Game Scenes**: Flight
+                    get: is_enabled -> bool,
+                    /// Sets whether use of all the resources are enabled.
+                    ///
+                    /// **Game Scenes**: Flight
+                    set: set_enabled(bool)
+                }
             }
         }
         methods: {
@@ -112,57 +115,64 @@ remote_type!(
     object SpaceCenter.Resource {
         properties: {
             {
-                Name: String,
-                /// Returns the name of the resource.
-                ///
-                /// **Game Scenes**: All
-                get: name
+                Name {
+                    /// Returns the name of the resource.
+                    ///
+                    /// **Game Scenes**: All
+                    get: name -> String
+                }
             }
             {
-                Part: Part,
-                /// Returns the part containing the resource.
-                ///
-                /// **Game Scenes**: All
-                get: part
+                Part {
+                    /// Returns the part containing the resource.
+                    ///
+                    /// **Game Scenes**: All
+                    get: part -> Part
+                }
             }
             {
-                Amount: f32,
-                /// Returns the amount of the resource that is currently stored in the part.
-                ///
-                /// **Game Scenes**: All
-                get: amount
+                Amount {
+                    /// Returns the amount of the resource that is currently stored in the part.
+                    ///
+                    /// **Game Scenes**: All
+                    get: amount -> f32
+                }
             }
             {
-                Max: f32,
-                /// Returns the total amount of the resource that can be stored in the part.
-                ///
-                /// **Game Scenes**: All
-                get: max
+                Max {
+                    /// Returns the total amount of the resource that can be stored in the part.
+                    ///
+                    /// **Game Scenes**: All
+                    get: max -> f32
+                }
             }
             {
-                Density: f32,
-                /// Returns the density of the resource, in kg/l.
-                ///
-                /// **Game Scenes**: All
-                get: density
+                Density {
+                    /// Returns the density of the resource, in kg/l.
+                    ///
+                    /// **Game Scenes**: All
+                    get: density -> f32
+                }
             }
             {
-                FlowMode: ResourceFlowMode,
-                /// Returns the flow mode of the resource.
-                ///
-                /// **Game Scenes**: All
-                get: flow_mode
+                FlowMode {
+                    /// Returns the flow mode of the resource.
+                    ///
+                    /// **Game Scenes**: All
+                    get: flow_mode -> ResourceFlowMode
+                }
             }
             {
-                Enabled: bool,
-                /// Returns whether use of this resource is enabled.
-                ///
-                /// **Game Scenes**: All
-                get: is_enabled,
-                /// Sets whether use of this resource is enabled.
-                ///
-                /// **Game Scenes**: All
-                set: set_enabled
+                Enabled {
+                    /// Returns whether use of this resource is enabled.
+                    ///
+                    /// **Game Scenes**: All
+                    get: is_enabled -> bool,
+                    /// Sets whether use of this resource is enabled.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_enabled(bool)
+                }
             }
         }
     }
@@ -173,18 +183,20 @@ remote_type!(
     object SpaceCenter.ResourceTransfer {
         properties: {
             {
-                Amount: f32,
-                /// Returns the amount of the resource that has been transferred.
-                ///
-                /// **Game Scenes**: All
-                get: amount
+                Amount {
+                    /// Returns the amount of the resource that has been transferred.
+                    ///
+                    /// **Game Scenes**: All
+                    get: amount -> f32
+                }
             }
             {
-                Complete: bool,
-                /// Returns whether the transfer has completed.
-                ///
-                /// **Game Scenes**: All
-                get: complete
+                Complete {
+                    /// Returns whether the transfer has completed.
+                    ///
+                    /// **Game Scenes**: All
+                    get: complete -> bool
+                }
             }
         }
         static_methods: {

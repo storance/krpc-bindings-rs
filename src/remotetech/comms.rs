@@ -8,53 +8,60 @@ remote_type!(
 object RemoteTech.Comms {
     properties: {
         {
-            Vessel: Vessel,
-            /// Returns the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: vessel
+            Vessel {
+                /// Returns the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: vessel -> Vessel
+            }
         }
         {
-            HasLocalControl: bool,
-            /// Returns whether the vessel can be controlled locally.
-            ///
-            /// **Game Scenes**: All
-            get: has_local_control
+            HasLocalControl {
+                /// Returns whether the vessel can be controlled locally.
+                ///
+                /// **Game Scenes**: All
+                get: has_local_control -> bool
+            }
         }
         {
-            HasFlightComputer: bool,
-            /// Returns whether the vessel has a flight computer on board.
-            ///
-            /// **Game Scenes**: All
-            get: has_flight_computer
+            HasFlightComputer {
+                /// Returns whether the vessel has a flight computer on board.
+                ///
+                /// **Game Scenes**: All
+                get: has_flight_computer -> bool
+            }
         }
         {
-            HasConnection: bool,
-            /// Returns whether the vessel has any connection.
-            ///
-            /// **Game Scenes**: All
-            get: has_connection
+            HasConnection {
+                /// Returns whether the vessel has any connection.
+                ///
+                /// **Game Scenes**: All
+                get: has_connection -> bool
+            }
         }
         {
-            HasConnectionToGroundStation: bool,
-            /// Returns whether the vessel has a connection to a ground station.
-            ///
-            /// **Game Scenes**: All
-            get: has_connection_to_ground_station
+            HasConnectionToGroundStation {
+                /// Returns whether the vessel has a connection to a ground station.
+                ///
+                /// **Game Scenes**: All
+                get: has_connection_to_ground_station -> bool
+            }
         }
         {
-            SignalDelay: f64,
-            /// Returns the shortest signal delay to the vessel, in seconds.
-            ///
-            /// **Game Scenes**: All
-            get: signal_display
+            SignalDelay {
+                /// Returns the shortest signal delay to the vessel, in seconds.
+                ///
+                /// **Game Scenes**: All
+                get: signal_display -> f64
+            }
         }
         {
-            Antennas: Vec<Antenna>,
-            /// Returns the antennas for this vessel.
-            ///
-            /// **Game Scenes**: All
-            get: antennas
+            Antennas {
+                /// Returns the antennas for this vessel.
+                ///
+                /// **Game Scenes**: All
+                get: antennas -> Vec<Antenna>
+            }
         }
     }
     methods: {

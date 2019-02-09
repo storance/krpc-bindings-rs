@@ -8,265 +8,295 @@ remote_type!(
 object SpaceCenter.Wheel {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this wheel.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this wheel.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            State: WheelState,
-            /// Returns the current state of the wheel.
-            ///
-            /// **Game Scenes**: All
-            get: state
+            State {
+                /// Returns the current state of the wheel.
+                ///
+                /// **Game Scenes**: All
+                get: state -> WheelState
+            }
         }
         {
-            Radius: f32,
-            /// Returns the radius of the wheel, in meters.
-            ///
-            /// **Game Scenes**: All
-            get: radius
+            Radius {
+                /// Returns the radius of the wheel, in meters.
+                ///
+                /// **Game Scenes**: All
+                get: radius -> f32
+            }
         }
         {
-            Grounded: bool,
-            /// Returns whether the wheel is touching the ground.
-            ///
-            /// **Game Scenes**: All
-            get: is_grounded
+            Grounded {
+                /// Returns whether the wheel is touching the ground.
+                ///
+                /// **Game Scenes**: All
+                get: is_grounded -> bool
+            }
         }
         {
-            HasBrakes: bool,
-            /// Returns whether the wheel has brakes.
-            ///
-            /// **Game Scenes**: All
-            get: has_brakes
+            HasBrakes {
+                /// Returns whether the wheel has brakes.
+                ///
+                /// **Game Scenes**: All
+                get: has_brakes -> bool
+            }
         }
         {
-            Brakes: f32,
-            /// Returns the braking force, as a percentage of maximum, when the brakes are applied.
-            ///
-            /// **Game Scenes**: All
-            get: brakes,
-            /// Sets the braking force, as a percentage of maximum, when the brakes are applied.
-            ///
-            /// **Game Scenes**: All
-            set: set_brakes
+            Brakes {
+                /// Returns the braking force, as a percentage of maximum, when the brakes are applied.
+                ///
+                /// **Game Scenes**: All
+                get: braking_force -> f32,
+                /// Sets the braking force, as a percentage of maximum, when the brakes are applied.
+                ///
+                /// **Game Scenes**: All
+                set: set_braking_force(f32)
+            }
         }
         {
-            AutoFrictionControl: bool,
-            /// Returns whether automatic friction control is enabled.
-            ///
-            /// **Game Scenes**: All
-            get: is_auto_friction_control_enabled,
-            /// Sets whether automatic friction control is enabled.
-            ///
-            /// **Game Scenes**: All
-            set: set_auto_friction_control_enabled
+            AutoFrictionControl {
+                /// Returns whether automatic friction control is enabled.
+                ///
+                /// **Game Scenes**: All
+                get: is_auto_friction_control_enabled -> bool,
+                /// Sets whether automatic friction control is enabled.
+                ///
+                /// **Game Scenes**: All
+                set: set_auto_friction_control_enabled(bool)
+            }
         }
         {
-            ManualFrictionControl: f32,
-            /// Returns the manual friction control value. A value between 0 and 5 inclusive.
-            ///
-            /// **Game Scenes**: All
-            get: manual_friction_control,
-            /// Sets the manual friction control value. Only has an effect if automatic friction
-            /// control is disabled. A value between 0 and 5 inclusive.
-            ///
-            /// **Game Scenes**: All
-            set: set_manual_friction_control
+            ManualFrictionControl {
+                /// Returns the manual friction control value. A value between 0 and 5 inclusive.
+                ///
+                /// **Game Scenes**: All
+                get: manual_friction_control -> f32,
+                /// Sets the manual friction control value. Only has an effect if automatic friction
+                /// control is disabled. A value between 0 and 5 inclusive.
+                ///
+                /// **Game Scenes**: All
+                set: set_manual_friction_control(f32)
+            }
         }
         {
-            Deployable: bool,
-            /// Returns whether the wheel is deployable.
-            ///
-            /// **Game Scenes**: All
-            get: is_deployable
+            Deployable {
+                /// Returns whether the wheel is deployable.
+                ///
+                /// **Game Scenes**: All
+                get: is_deployable -> bool
+            }
         }
         {
-            Deployed: bool,
-            /// Returns whether the wheel is deployed.
-            ///
-            /// **Game Scenes**: All
-            get: is_deployed,
-            /// Sets whether the wheel is deployed.
-            ///
-            /// **Game Scenes**: All
-            set: set_deployed
+            Deployed {
+                /// Returns whether the wheel is deployed.
+                ///
+                /// **Game Scenes**: All
+                get: is_deployed -> bool,
+                /// Sets whether the wheel is deployed.
+                ///
+                /// **Game Scenes**: All
+                set: set_deployed(bool)
+            }
         }
         {
-            MotorEnabled: bool,
-            /// Returns whether the motor is enabled.
-            ///
-            /// **Game Scenes**: All
-            get: is_motor_enabled,
-            /// Sets whether the motor is enabled.
-            ///
-            /// **Game Scenes**: All
-            set: set_motor_enabled
+            MotorEnabled {
+                /// Returns whether the motor is enabled.
+                ///
+                /// **Game Scenes**: All
+                get: is_motor_enabled -> bool,
+                /// Sets whether the motor is enabled.
+                ///
+                /// **Game Scenes**: All
+                set: set_motor_enabled(bool)
+            }
         }
         {
-            MotorInverted: bool,
-            /// Returns whether the motor is inverted.
-            ///
-            /// **Game Scenes**: All
-            get: is_motor_inverted,
-            /// Sets whether the motor is inverted.
-            ///
-            /// **Game Scenes**: All
-            set: set_motor_inverted
+            MotorInverted {
+                /// Returns whether the motor is inverted.
+                ///
+                /// **Game Scenes**: All
+                get: is_motor_inverted -> bool,
+                /// Sets whether the motor is inverted.
+                ///
+                /// **Game Scenes**: All
+                set: set_motor_inverted(bool)
+            }
         }
         {
-            MotorState: MotorState,
-            /// Returns the motor state.
-            ///
-            /// **Game Scenes**: All
-            get: motor_state
+            MotorState {
+                /// Returns the motor state.
+                ///
+                /// **Game Scenes**: All
+                get: motor_state -> MotorState
+            }
         }
         {
-            MotorOutput: f32,
-            /// Returns the output of the motor. This is the torque currently being generated,
-            /// in Newton meters.
-            ///
-            /// **Game Scenes**: All
-            get: motor_output
+            MotorOutput {
+                /// Returns the output of the motor. This is the torque currently being generated,
+                /// in Newton meters.
+                ///
+                /// **Game Scenes**: All
+                get: motor_output -> f32
+            }
         }
         {
-            TractionControlEnabled: bool,
-            /// Returns whether automatic traction control is enabled. A wheel only has traction
-            /// control if it is powered.
-            ///
-            /// **Game Scenes**: All
-            get: is_traction_control_enabled,
-            /// Sets whether automatic traction control is enabled. A wheel only has traction
-            /// control if it is powered.
-            ///
-            /// **Game Scenes**: All
-            set: set_traction_control_enabled
+            TractionControlEnabled {
+                /// Returns whether automatic traction control is enabled. A wheel only has traction
+                /// control if it is powered.
+                ///
+                /// **Game Scenes**: All
+                get: is_traction_control_enabled -> bool,
+                /// Sets whether automatic traction control is enabled. A wheel only has traction
+                /// control if it is powered.
+                ///
+                /// **Game Scenes**: All
+                set: set_traction_control_enabled(bool)
+            }
         }
         {
-            TractionControl: f32,
-            /// Returns the setting for the traction control. A value between 0 and 5 inclusive.
-            ///
-            /// **Game Scenes**: All
-            get: traction_control,
-            /// Sets the setting for the traction control. Only takes effect if the wheel has
-            /// automatic traction control enabled. A value between 0 and 5 inclusive.
-            ///
-            /// **Game Scenes**: All
-            set: set_traction_control
+            TractionControl {
+                /// Returns the setting for the traction control. A value between 0 and 5 inclusive.
+                ///
+                /// **Game Scenes**: All
+                get: traction_control -> f32,
+                /// Sets the setting for the traction control. Only takes effect if the wheel has
+                /// automatic traction control enabled. A value between 0 and 5 inclusive.
+                ///
+                /// **Game Scenes**: All
+                set: set_traction_control(f32)
+            }
         }
         {
-            DriveLimiter: f32,
-            /// Returns the manual setting for the motor limiter. A value between
-            /// 0 and 100 inclusive.
-            ///
-            /// **Game Scenes**: All
-            get: drive_limiter,
-            /// Sets the manual setting for the motor limiter. Only takes effect if the
-            /// wheel has automatic traction control disabled. A value between 0 and 100 inclusive.
-            ///
-            /// **Game Scenes**: All
-            set: set_drive_limiter
+            DriveLimiter {
+                /// Returns the manual setting for the motor limiter. A value between
+                /// 0 and 100 inclusive.
+                ///
+                /// **Game Scenes**: All
+                get: drive_limiter -> f32,
+                /// Sets the manual setting for the motor limiter. Only takes effect if the
+                /// wheel has automatic traction control disabled. A value between 0 and 100 inclusive.
+                ///
+                /// **Game Scenes**: All
+                set: set_drive_limiter(f32)
+            }
         }
         {
-            Steerable: bool,
-            /// Returns whether the wheel has steering.
-            ///
-            /// **Game Scenes**: All
-            get: is_steerable
+            Steerable {
+                /// Returns whether the wheel has steering.
+                ///
+                /// **Game Scenes**: All
+                get: is_steerable -> bool
+            }
         }
         {
-            SteeringEnabled: bool,
-            /// Returns whether the wheel steering is enabled.
-            ///
-            /// **Game Scenes**: All
-            get: is_steering_enabled,
-            /// Sets whether the wheel steering is enabled.
-            ///
-            /// **Game Scenes**: All
-            set: set_steering_enabled
+            SteeringEnabled {
+                /// Returns whether the wheel steering is enabled.
+                ///
+                /// **Game Scenes**: All
+                get: is_steering_enabled -> bool,
+                /// Sets whether the wheel steering is enabled.
+                ///
+                /// **Game Scenes**: All
+                set: set_steering_enabled(bool)
+            }
         }
         {
-            SteeringInverted: bool,
-            /// Returns whether the wheel steering is inverted.
-            ///
-            /// **Game Scenes**: All
-            get: is_steering_inverted,
-            /// Sets whether the wheel steering is inverted.
-            ///
-            /// **Game Scenes**: All
-            set: set_steering_inverted
+            SteeringInverted {
+                /// Returns whether the wheel steering is inverted.
+                ///
+                /// **Game Scenes**: All
+                get: is_steering_inverted -> bool,
+                /// Sets whether the wheel steering is inverted.
+                ///
+                /// **Game Scenes**: All
+                set: set_steering_inverted(bool)
+            }
         }
         {
-            HasSuspension: bool,
-            /// Returns whether the wheel has suspension.
-            ///
-            /// **Game Scenes**: All
-            get: has_suspension
+            HasSuspension {
+                /// Returns whether the wheel has suspension.
+                ///
+                /// **Game Scenes**: All
+                get: has_suspension -> bool
+            }
         }
         {
-            SuspensionSpringStrength: f32,
-            /// Returns the suspension spring strength, as set in the editor.
-            ///
-            /// **Game Scenes**: All
-            get: suspension_spring_strength
+            SuspensionSpringStrength {
+                /// Returns the suspension spring strength, as set in the editor.
+                ///
+                /// **Game Scenes**: All
+                get: suspension_spring_strength -> f32
+            }
         }
         {
-            SuspensionDamperStrength: f32,
-            /// Returns the suspension damper strength, as set in the editor.
-            ///
-            /// **Game Scenes**: All
-            get: suspension_damper_strength
+            SuspensionDamperStrength {
+                /// Returns the suspension damper strength, as set in the editor.
+                ///
+                /// **Game Scenes**: All
+                get: suspension_damper_strength -> f32
+            }
         }
         {
-            Broken: bool,
-            /// Returns whether the wheel is broken.
-            ///
-            /// **Game Scenes**: All
-            get: is_broken
+            Broken {
+                /// Returns whether the wheel is broken.
+                ///
+                /// **Game Scenes**: All
+                get: is_broken -> bool
+            }
         }
         {
-            Repairable: bool,
-            /// Returns whether the wheel is repairable.
-            ///
-            /// **Game Scenes**: All
-            get: is_repairable
+            Repairable {
+                /// Returns whether the wheel is repairable.
+                ///
+                /// **Game Scenes**: All
+                get: is_repairable -> bool
+            }
         }
         {
-            Stress: f32,
-            /// Returns the current stress on the wheel.
-            ///
-            /// **Game Scenes**: All
-            get: stress
+            Stress {
+                /// Returns the current stress on the wheel.
+                ///
+                /// **Game Scenes**: All
+                get: stress -> f32
+            }
         }
         {
-            StressTolerance: f32,
-            /// Returns the stress tolerance of the wheel.
-            ///
-            /// **Game Scenes**: All
-            get: stress_tolerance
+            StressTolerance {
+                /// Returns the stress tolerance of the wheel.
+                ///
+                /// **Game Scenes**: All
+                get: stress_tolerance -> f32
+            }
         }
         {
-            StressPercentage: f32,
-            /// Returns the current stress on the wheel as a percentage of its stress tolerance.
-            ///
-            /// **Game Scenes**: All
-            get: stress_percentage
+            StressPercentage {
+                /// Returns the current stress on the wheel as a percentage of its stress tolerance.
+                ///
+                /// **Game Scenes**: All
+                get: stress_percentage -> f32
+            }
         }
         {
-            Deflection: f32,
-            /// Returns the current deflection of the wheel.
-            ///
-            /// **Game Scenes**: All
-            get: deflection
+            Deflection {
+                /// Returns the current deflection of the wheel.
+                ///
+                /// **Game Scenes**: All
+                get: deflection -> f32
+            }
         }
         {
-            Slip: f32,
-            /// Returns the current slip of the wheel.
-            ///
-            /// **Game Scenes**: All
-            get: slip
+            Slip {
+                /// Returns the current slip of the wheel.
+                ///
+                /// **Game Scenes**: All
+                get: slip -> f32
+            }
         }
     }
 });

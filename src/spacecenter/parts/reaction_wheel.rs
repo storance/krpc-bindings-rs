@@ -7,49 +7,54 @@ remote_type!(
 object SpaceCenter.ReactionWheel {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this reaction wheel.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this reaction wheel.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            Active: bool,
-            /// Returns whether the reaction wheel is active.
-            ///
-            /// **Game Scenes**: All
-            get: is_active,
-            /// Sets whether the reaction wheel is active.
-            ///
-            /// **Game Scenes**: All
-            set: set_active
+            Active {
+                /// Returns whether the reaction wheel is active.
+                ///
+                /// **Game Scenes**: All
+                get: is_active -> bool,
+                /// Sets whether the reaction wheel is active.
+                ///
+                /// **Game Scenes**: All
+                set: set_active(bool)
+            }
         }
         {
-            Broken: bool,
-            /// Returns whether the reaction wheel is broken.
-            ///
-            /// **Game Scenes**: All
-            get: is_broken
+            Broken {
+                /// Returns whether the reaction wheel is broken.
+                ///
+                /// **Game Scenes**: All
+                get: is_broken -> bool
+            }
         }
         {
-            AvailableTorque: (Vector3, Vector3),
-            /// Returns the available torque, in Newton meters, that can be produced by this
-            /// engine, in the positive and negative pitch, roll and yaw axes of the vessel.
-            /// These axes correspond to the coordinate axes of the `Vessel::reference_frame()`.
-            /// Returns zero if the reaction wheel is inactive or broken.
-            ///
-            /// **Game Scenes**: All
-            get: available_torque
+            AvailableTorque {
+                /// Returns the available torque, in Newton meters, that can be produced by this
+                /// engine, in the positive and negative pitch, roll and yaw axes of the vessel.
+                /// These axes correspond to the coordinate axes of the `Vessel::reference_frame()`.
+                /// Returns zero if the reaction wheel is inactive or broken.
+                ///
+                /// **Game Scenes**: All
+                get: available_torque -> (Vector3, Vector3)
+            }
         }
         {
-            MaxTorque: (Vector3, Vector3),
-            /// Returns the maximum torque, in Newton meters, that can be produced by this
-            /// reaction wheel, when it is active, in the positive and negative pitch, roll
-            /// and yaw axes of the vessel.  These axes correspond to the coordinate axes
-            /// of the `Vessel::reference_frame()`.
-            ///
-            /// **Game Scenes**: All
-            get: max_torque
+            MaxTorque {
+                /// Returns the maximum torque, in Newton meters, that can be produced by this
+                /// reaction wheel, when it is active, in the positive and negative pitch, roll
+                /// and yaw axes of the vessel.  These axes correspond to the coordinate axes
+                /// of the `Vessel::reference_frame()`.
+                ///
+                /// **Game Scenes**: All
+                get: max_torque -> (Vector3, Vector3)
+            }
         }
     }
 });

@@ -83,82 +83,89 @@ remote_type!(
 object Drawing.Line {
     properties: {
         {
-            Start: Vector3,
-            /// Returns the start position of the line.
-            ///
-            /// **Game Scenes**: Flight
-            get: start,
-            /// Sets the start position of the line.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_start
+            Start {
+                /// Returns the start position of the line.
+                ///
+                /// **Game Scenes**: Flight
+                get: start -> Vector3,
+                /// Sets the start position of the line.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_start(Vector3)
+            }
         }
         {
-            End: Vector3,
-            /// Returns the end position of the line.
-            ///
-            /// **Game Scenes**: Flight
-            get: end,
-            /// Sets the end position of the line.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_end
+            End {
+                /// Returns the end position of the line.
+                ///
+                /// **Game Scenes**: Flight
+                get: end -> Vector3,
+                /// Sets the end position of the line.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_end(Vector3)
+            }
         }
         {
-            ReferenceFrame: ReferenceFrame,
-            /// Returns the reference frame for the positions of the object.
-            ///
-            /// **Game Scenes**: Flight
-            get: reference_frame,
-            /// Sets the reference frame for the positions of the object.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_reference_frame
+            ReferenceFrame {
+                /// Returns the reference frame for the positions of the object.
+                ///
+                /// **Game Scenes**: Flight
+                get: reference_frame -> ReferenceFrame,
+                /// Sets the reference frame for the positions of the object.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_reference_frame(&ReferenceFrame)
+            }
         }
         {
-            Visible: bool,
-            /// Returns whether the object is visible.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_visible,
-            /// Sets whether the object is visible.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_visible
+            Visible {
+                /// Returns whether the object is visible.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_visible -> bool,
+                /// Sets whether the object is visible.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_visible(bool)
+            }
         }
         {
-            Color: Vector3,
-            /// Returns the color.
-            ///
-            /// **Game Scenes**: Flight
-            get: color,
-            /// Sets the color.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_color
+            Color {
+                /// Returns the color.
+                ///
+                /// **Game Scenes**: Flight
+                get: color -> Vector3,
+                /// Sets the color.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_color(Vector3)
+            }
         }
         {
-            Material: String,
-            /// Returns the material used to render the object.
-            ///
-            /// **Game Scenes**: Flight
-            get: material,
-            /// Sets the material used to render the object. Creates the material from
-            /// a shader with the given name.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_material
+            Material {
+                /// Returns the material used to render the object.
+                ///
+                /// **Game Scenes**: Flight
+                get: material -> String,
+                /// Sets the material used to render the object. Creates the material from
+                /// a shader with the given name.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_material(&str)
+            }
         }
         {
-            Thickness: f32,
-            /// Returns the thickness.
-            ///
-            /// **Game Scenes**: Flight
-            get: thickness,
-            /// Sets the thickness.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_thickness
+            Thickness {
+                /// Returns the thickness.
+                ///
+                /// **Game Scenes**: Flight
+                get: thickness -> f32,
+                /// Sets the thickness.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_thickness(f32)
+            }
         }
     }
     methods: {
@@ -178,71 +185,77 @@ remote_type!(
 object Drawing.Polygon {
     properties: {
         {
-            Vertices: Vec<Vector3>,
-            /// Returns the vertices for the polygon.
-            ///
-            /// **Game Scenes**: Flight
-            get: vertices,
-            /// Sets the vertices for the polygon.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_vertices
+            Vertices {
+                /// Returns the vertices for the polygon.
+                ///
+                /// **Game Scenes**: Flight
+                get: vertices -> Vec<Vector3>,
+                /// Sets the vertices for the polygon.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_vertices(&[Vector3])
+            }
         }
         {
-            ReferenceFrame: ReferenceFrame,
-            /// Returns the reference frame for the positions of the object.
-            ///
-            /// **Game Scenes**: Flight
-            get: reference_frame,
-            /// Sets the reference frame for the positions of the object.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_reference_frame
+            ReferenceFrame {
+                /// Returns the reference frame for the positions of the object.
+                ///
+                /// **Game Scenes**: Flight
+                get: reference_frame -> ReferenceFrame,
+                /// Sets the reference frame for the positions of the object.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_reference_frame(&ReferenceFrame)
+            }
         }
         {
-            Visible: bool,
-            /// Returns whether the object is visible.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_visible,
-            /// Sets whether the object is visible.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_visible
+            Visible {
+                /// Returns whether the object is visible.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_visible -> bool,
+                /// Sets whether the object is visible.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_visible(bool)
+            }
         }
         {
-            Color: Vector3,
-            /// Returns the color.
-            ///
-            /// **Game Scenes**: Flight
-            get: color,
-            /// Sets the color.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_color
+            Color {
+                /// Returns the color.
+                ///
+                /// **Game Scenes**: Flight
+                get: color -> Vector3,
+                /// Sets the color.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_color(Vector3)
+            }
         }
         {
-            Material: String,
-            /// Returns the material used to render the object.
-            ///
-            /// **Game Scenes**: Flight
-            get: material,
-            /// Sets the material used to render the object. Creates the material from
-            /// a shader with the given name.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_material
+            Material {
+                /// Returns the material used to render the object.
+                ///
+                /// **Game Scenes**: Flight
+                get: material -> String,
+                /// Sets the material used to render the object. Creates the material from
+                /// a shader with the given name.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_material(&str)
+            }
         }
         {
-            Thickness: f32,
-            /// Returns the thickness.
-            ///
-            /// **Game Scenes**: Flight
-            get: thickness,
-            /// Sets the thickness.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_thickness
+            Thickness {
+                /// Returns the thickness.
+                ///
+                /// **Game Scenes**: Flight
+                get: thickness -> f32,
+                /// Sets the thickness.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_thickness(f32)
+            }
         }
     }
     methods: {
@@ -262,148 +275,161 @@ remote_type!(
 object Drawing.Text {
     properties: {
         {
-            Position: Vector3,
-            /// Returns the position of the text.
-            ///
-            /// **Game Scenes**: Flight
-            get: position,
-            /// Sets the position of the text.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_position
+            Position {
+                /// Returns the position of the text.
+                ///
+                /// **Game Scenes**: Flight
+                get: position -> Vector3,
+                /// Sets the position of the text.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_position(Vector3)
+            }
         }
         {
-            Rotation: Quaternion,
-            /// Returns the position of the text.
-            ///
-            /// **Game Scenes**: Flight
-            get: rotation,
-            /// Sets the position of the text.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_rotation
+            Rotation {
+                /// Returns the position of the text.
+                ///
+                /// **Game Scenes**: Flight
+                get: rotation -> Quaternion,
+                /// Sets the position of the text.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_rotation(Quaternion)
+            }
         }
         {
-            ReferenceFrame: ReferenceFrame,
-            /// Returns the reference frame for the positions of the object.
-            ///
-            /// **Game Scenes**: Flight
-            get: reference_frame,
-            /// Sets the reference frame for the positions of the object.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_reference_frame
+            ReferenceFrame {
+                /// Returns the reference frame for the positions of the object.
+                ///
+                /// **Game Scenes**: Flight
+                get: reference_frame -> ReferenceFrame,
+                /// Sets the reference frame for the positions of the object.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_reference_frame(&ReferenceFrame)
+            }
         }
         {
-            Visible: bool,
-            /// Returns whether the object is visible.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_visible,
-            /// Sets whether the object is visible.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_visible
+            Visible {
+                /// Returns whether the object is visible.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_visible -> bool,
+                /// Sets whether the object is visible.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_visible(bool)
+            }
         }
         {
-            Content: String,
-            /// Returns the text string.
-            ///
-            /// **Game Scenes**: Flight
-            get: content,
-            /// Sets the text string.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_content
+            Content {
+                /// Returns the text string.
+                ///
+                /// **Game Scenes**: Flight
+                get: content -> String,
+                /// Sets the text string.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_content(&str)
+            }
         }
         {
-            Font: String,
-            /// Returns the name of the font.
-            ///
-            /// **Game Scenes**: Flight
-            get: font,
-            /// Sets the name of the font.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_font
+            Font {
+                /// Returns the name of the font.
+                ///
+                /// **Game Scenes**: Flight
+                get: font -> String,
+                /// Sets the name of the font.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_font(&str)
+            }
         }
         {
-            Size: i32,
-            /// Returns the font size.
-            ///
-            /// **Game Scenes**: Flight
-            get: size,
-            /// Sets the font size.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_size
+            Size {
+                /// Returns the font size.
+                ///
+                /// **Game Scenes**: Flight
+                get: size -> i32,
+                /// Sets the font size.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_size(i32)
+            }
         }
         {
-            CharacterSize: f32,
-            /// Returns the character size.
-            ///
-            /// **Game Scenes**: Flight
-            get: character_size,
-            /// Sets the character size.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_character_size
+            CharacterSize {
+                /// Returns the character size.
+                ///
+                /// **Game Scenes**: Flight
+                get: character_size -> f32,
+                /// Sets the character size.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_character_size(f32)
+            }
         }
         {
-            Style: FontStyle,
-            /// Returns the font style.
-            ///
-            /// **Game Scenes**: Flight
-            get: style,
-            /// Sets the font style.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_style
+            Style {
+                /// Returns the font style.
+                ///
+                /// **Game Scenes**: Flight
+                get: style -> FontStyle,
+                /// Sets the font style.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_style(FontStyle)
+            }
         }
         {
-            Material: String,
-            /// Returns the material used to render the object.
-            ///
-            /// **Game Scenes**: Flight
-            get: material,
-            /// Sets the material used to render the object. Creates the material from
-            /// a shader with the given name.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_material
+            Material {
+                /// Returns the material used to render the object.
+                ///
+                /// **Game Scenes**: Flight
+                get: material -> String,
+                /// Sets the material used to render the object. Creates the material from
+                /// a shader with the given name.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_material(&str)
+            }
         }
         {
-            Alignment: TextAlignment,
-            /// Returns the text alignment.
-            ///
-            /// **Game Scenes**: Flight
-            get: alignment,
-            /// Sets the text alignment.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_alignment
+            Alignment {
+                /// Returns the text alignment.
+                ///
+                /// **Game Scenes**: Flight
+                get: alignment -> TextAlignment,
+                /// Sets the text alignment.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_alignment(TextAlignment)
+            }
         }
         {
-            Anchor: TextAnchor,
-            /// Returns the text anchor.
-            ///
-            /// **Game Scenes**: Flight
-            get: anchor,
-            /// Sets the text anchor.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_anchor
+            Anchor {
+                /// Returns the text anchor.
+                ///
+                /// **Game Scenes**: Flight
+                get: anchor -> TextAnchor,
+                /// Sets the text anchor.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_anchor(TextAnchor)
+            }
         }
         {
-            LineSpacing: f32,
-            /// Returns the line spacing.
-            ///
-            /// **Game Scenes**: All
-            get: line_spacing,
-            /// Sets the line spacing.
-            ///
-            /// **Game Scenes**: All
-            set: set_line_spacing
+            LineSpacing {
+                /// Returns the line spacing.
+                ///
+                /// **Game Scenes**: All
+                get: line_spacing -> f32,
+                /// Sets the line spacing.
+                ///
+                /// **Game Scenes**: All
+                set: set_line_spacing(f32)
+            }
         }
     }
     methods: {

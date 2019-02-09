@@ -11,26 +11,29 @@ remote_type!(
 object SpaceCenter.WaypointManager {
     properties: {
         {
-            Waypoints: Vec<Waypoint>,
-            /// Returns a list of all existing waypoints.
-            ///
-            /// **Game Scenes**: All
-            get: waypoints
+            Waypoints {
+                /// Returns a list of all existing waypoints.
+                ///
+                /// **Game Scenes**: All
+                get: waypoints -> Vec<Waypoint>
+            }
         }
         {
-            Colors: BTreeMap<String, i32>,
-            /// Returns an example map of known color - seed pairs. Any other integers
-            /// may be used as seed.
-            ///
-            /// **Game Scenes**: All
-            get: colors
+            Colors {
+                /// Returns an example map of known color - seed pairs. Any other integers
+                /// may be used as seed.
+                ///
+                /// **Game Scenes**: All
+                get: colors -> BTreeMap<String, i32>
+            }
         }
         {
-            Icons: Vec<String>,
-            /// Returns all available icons (from “GameData/Squad/Contracts/Icons/”).
-            ///
-            /// **Game Scenes**: All
-            get: icons
+            Icons {
+                /// Returns all available icons (from “GameData/Squad/Contracts/Icons/”).
+                ///
+                /// **Game Scenes**: All
+                get: icons -> Vec<String>
+            }
         }
     }
     methods: {
@@ -75,157 +78,172 @@ remote_type!(
 object SpaceCenter.Waypoint {
     properties: {
         {
-            Body: CelestialBody,
-            /// Returns the celestial body the waypoint is attached to.
-            ///
-            /// **Game Scenes**: Flight
-            get: body,
-            /// Sets the celestial body the waypoint is attached to.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_body
+            Body {
+                /// Returns the celestial body the waypoint is attached to.
+                ///
+                /// **Game Scenes**: Flight
+                get: body -> CelestialBody,
+                /// Sets the celestial body the waypoint is attached to.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_body(&CelestialBody)
+            }
         }
         {
-            Name: String,
-            /// Returns the name of the waypoint as it appears on the map and the contract.
-            ///
-            /// **Game Scenes**: Flight
-            get: name,
-            /// Sets the name of the waypoint as it appears on the map and the contract.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_name
+            Name {
+                /// Returns the name of the waypoint as it appears on the map and the contract.
+                ///
+                /// **Game Scenes**: Flight
+                get: name -> String,
+                /// Sets the name of the waypoint as it appears on the map and the contract.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_name(&str)
+            }
         }
         {
-            Color: i32,
-            /// Returns the seed of the icon color. See `WaypointManager::colors()`
-            /// for example colors.
-            ///
-            /// **Game Scenes**: Flight
-            get: color,
-            /// Sets the seed of the icon color. See `WaypointManager::colors()`
-            /// for example colors.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_color
+            Color {
+                /// Returns the seed of the icon color. See `WaypointManager::colors()`
+                /// for example colors.
+                ///
+                /// **Game Scenes**: Flight
+                get: color -> i32,
+                /// Sets the seed of the icon color. See `WaypointManager::colors()`
+                /// for example colors.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_color(i32)
+            }
         }
         {
-            Icon: String,
-            /// Returns the icon of the waypoint.
-            ///
-            /// **Game Scenes**: Flight
-            get: icon,
-            /// Sets the icon of the waypoint.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_icon
+            Icon {
+                /// Returns the icon of the waypoint.
+                ///
+                /// **Game Scenes**: Flight
+                get: icon -> String,
+                /// Sets the icon of the waypoint.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_icon(&str)
+            }
         }
         {
-            Latitude: f64,
-            /// Returns the latitude of the waypoint.
-            ///
-            /// **Game Scenes**: Flight
-            get: latitude,
-            /// Sets the latitude of the waypoint.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_latitude
+            Latitude {
+                /// Returns the latitude of the waypoint.
+                ///
+                /// **Game Scenes**: Flight
+                get: latitude -> f64,
+                /// Sets the latitude of the waypoint.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_latitude(f64)
+            }
         }
         {
-            Longitude: f64,
-            /// Returns the longitude of the waypoint.
-            ///
-            /// **Game Scenes**: Flight
-            get: longitude,
-            /// Sets the longitude of the waypoint.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_longitude
+            Longitude {
+                /// Returns the longitude of the waypoint.
+                ///
+                /// **Game Scenes**: Flight
+                get: longitude -> f64,
+                /// Sets the longitude of the waypoint.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_longitude(f64)
+            }
         }
         {
-            MeanAltitude: f64,
-            /// Returns the altitude of the waypoint above sea level, in meters.
-            ///
-            /// **Game Scenes**: Flight
-            get: mean_altitude,
-            /// Sets the altitude of the waypoint above sea level, in meters.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_mean_altitude
+            MeanAltitude {
+                /// Returns the altitude of the waypoint above sea level, in meters.
+                ///
+                /// **Game Scenes**: Flight
+                get: mean_altitude -> f64,
+                /// Sets the altitude of the waypoint above sea level, in meters.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_mean_altitude(f64)
+            }
         }
         {
-            SurfaceAltitude: f64,
-            /// Returns the altitude of the waypoint above the surface of the body or
-            /// sea level, whichever is closer, in meters.
-            ///
-            /// **Game Scenes**: Flight
-            get: surface_altitude,
-            /// Sets the altitude of the waypoint above the surface of the body or
-            /// sea level, whichever is closer, in meters.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_surface_altitude
+            SurfaceAltitude {
+                /// Returns the altitude of the waypoint above the surface of the body or
+                /// sea level, whichever is closer, in meters.
+                ///
+                /// **Game Scenes**: Flight
+                get: surface_altitude -> f64,
+                /// Sets the altitude of the waypoint above the surface of the body or
+                /// sea level, whichever is closer, in meters.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_surface_altitude(f64)
+            }
         }
         {
-            BedrockAltitude: f64,
-            /// Returns the altitude of the waypoint above the surface of the body, in meters.
-            /// When over water, this is the altitude above the sea floor.
-            ///
-            /// **Game Scenes**: Flight
-            get: bedrock_altitude,
-            /// Sets the altitude of the waypoint above the surface of the body, in meters.
-            /// When over water, this is the altitude above the sea floor.
-            ///
-            /// **Game Scenes**: Flight
-            set: set_bedrock_altitude
+            BedrockAltitude {
+                /// Returns the altitude of the waypoint above the surface of the body, in meters.
+                /// When over water, this is the altitude above the sea floor.
+                ///
+                /// **Game Scenes**: Flight
+                get: bedrock_altitude -> f64,
+                /// Sets the altitude of the waypoint above the surface of the body, in meters.
+                /// When over water, this is the altitude above the sea floor.
+                ///
+                /// **Game Scenes**: Flight
+                set: set_bedrock_altitude(f64)
+            }
         }
         {
-            NearSurface: bool,
-            /// Returns `true` if the waypoint is near to the surface of a body.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_near_surface
+            NearSurface {
+                /// Returns `true` if the waypoint is near to the surface of a body.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_near_surface -> bool
+            }
         }
         {
-            Grounded: bool,
-            /// Returns `true` if the waypoint is attached to the ground.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_grounded
+            Grounded {
+                /// Returns `true` if the waypoint is attached to the ground.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_grounded -> bool
+            }
         }
         {
-            Index: i32,
-            /// Returns the integer index of this waypoint within its cluster of sibling
-            /// waypoints. In other words, when you have a cluster of waypoints called
-            /// “Somewhere Alpha”, “Somewhere Beta” and “Somewhere Gamma”, the alpha site has
-            /// index 0, the beta site has index 1 and the gamma site has index 2.
-            /// When `Waypoint::is_clustered()` is `false`, this is zero.
-            ///
-            /// **Game Scenes**: Flight
-            get: index
+            Index {
+                /// Returns the integer index of this waypoint within its cluster of sibling
+                /// waypoints. In other words, when you have a cluster of waypoints called
+                /// “Somewhere Alpha”, “Somewhere Beta” and “Somewhere Gamma”, the alpha site has
+                /// index 0, the beta site has index 1 and the gamma site has index 2.
+                /// When `Waypoint::is_clustered()` is `false`, this is zero.
+                ///
+                /// **Game Scenes**: Flight
+                get: index -> i32
+            }
         }
         {
-            Clustered: bool,
-            /// Returns `true` if this waypoint is part of a set of clustered waypoints with
-            /// greek letter names appended (Alpha, Beta, Gamma, etc). If true, there is a
-            /// one-to-one correspondence with the greek letter name and the `Waypoint::index()`.
-            ///
-            /// **Game Scenes**: Flight
-            get: is_clustered
+            Clustered {
+                /// Returns `true` if this waypoint is part of a set of clustered waypoints with
+                /// greek letter names appended (Alpha, Beta, Gamma, etc). If true, there is a
+                /// one-to-one correspondence with the greek letter name and the `Waypoint::index()`.
+                ///
+                /// **Game Scenes**: Flight
+                get: is_clustered -> bool
+            }
         }
         {
-            HasContract: bool,
-            /// Returns whether the waypoint belongs to a contract.
-            ///
-            /// **Game Scenes**: Flight
-            get: has_contract
+            HasContract {
+                /// Returns whether the waypoint belongs to a contract.
+                ///
+                /// **Game Scenes**: Flight
+                get: has_contract -> bool
+            }
         }
         {
-            Contract: Option<Contract>,
-            /// Returns the associated contract.
-            ///
-            /// **Game Scenes**: Flight
-            get: contract
+            Contract {
+                /// Returns the associated contract.
+                ///
+                /// **Game Scenes**: Flight
+                get: contract -> Option<Contract>
+            }
         }
     }
     methods: {

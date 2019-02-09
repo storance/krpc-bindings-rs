@@ -7,29 +7,32 @@ remote_type!(
 object SpaceCenter.CargoBay {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this cargo bay.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this cargo bay.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            State: CargoBayState,
-            /// Returns the state of the cargo bay.
-            ///
-            /// **Game Scenes**: All
-            get: state
+            State {
+                /// Returns the state of the cargo bay.
+                ///
+                /// **Game Scenes**: All
+                get: state -> CargoBayState
+            }
         }
         {
-            Open: bool,
-            /// Returns whether the cargo bay is open.
-            ///
-            /// **Game Scenes**: All
-            get: is_open,
-            /// Sets whether the cargo bay is open.
-            ///
-            /// **Game Scenes**: All
-            set: set_open
+            Open {
+                /// Returns whether the cargo bay is open.
+                ///
+                /// **Game Scenes**: All
+                get: is_open -> bool,
+                /// Sets whether the cargo bay is open.
+                ///
+                /// **Game Scenes**: All
+                set: set_open(bool)
+            }
         }
     }
 });

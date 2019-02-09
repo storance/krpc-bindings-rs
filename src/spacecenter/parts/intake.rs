@@ -7,43 +7,48 @@ remote_type!(
 object SpaceCenter.Intake {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this intake.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this intake.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            Open: bool,
-            /// Returns whether the intake is open.
-            ///
-            /// **Game Scenes**: All
-            get: is_open,
-            /// Sets whether the intake is open.
-            ///
-            /// **Game Scenes**: All
-            set: set_open
+            Open {
+                /// Returns whether the intake is open.
+                ///
+                /// **Game Scenes**: All
+                get: is_open -> bool,
+                /// Sets whether the intake is open.
+                ///
+                /// **Game Scenes**: All
+                set: set_open(bool)
+            }
         }
         {
-            Speed: f32,
-            /// Returns the speed of the flow into the intake, in m/s.
-            ///
-            /// **Game Scenes**: All
-            get: speed
+            Speed {
+                /// Returns the speed of the flow into the intake, in m/s.
+                ///
+                /// **Game Scenes**: All
+                get: speed -> f32
+            }
         }
         {
-            Flow: f32,
-            /// Returns the rate of flow into the intake, in units of resource per second.
-            ///
-            /// **Game Scenes**: All
-            get: flow
+            Flow {
+                /// Returns the rate of flow into the intake, in units of resource per second.
+                ///
+                /// **Game Scenes**: All
+                get: flow -> f32
+            }
         }
         {
-            Area: f32,
-            /// Returns the area of the intake’s opening, in square meters.
-            ///
-            /// **Game Scenes**: All
-            get: area
+            Area {
+                /// Returns the area of the intake’s opening, in square meters.
+                ///
+                /// **Game Scenes**: All
+                get: area -> f32
+            }
         }
     }
 });

@@ -7,40 +7,45 @@ remote_type!(
 object SpaceCenter.ResourceConverter {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this resource converter.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this resource converter.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            Count: i32,
-            /// Returns the number of converters in the part.
-            ///
-            /// **Game Scenes**: All
-            get: count
+            Count {
+                /// Returns the number of converters in the part.
+                ///
+                /// **Game Scenes**: All
+                get: count -> i32
+            }
         }
         {
-            OptimumCoreTemperature: f32,
-            /// Returns the core temperature at which the converter will operate with
-            /// peak efficiency, in Kelvin.
-            ///
-            /// **Game Scenes**: All
-            get: optimum_core_temperature
+            OptimumCoreTemperature {
+                /// Returns the core temperature at which the converter will operate with
+                /// peak efficiency, in Kelvin.
+                ///
+                /// **Game Scenes**: All
+                get: optimum_core_temperature -> f32
+            }
         }
         {
-            CoreTemperature: f32,
-            /// Returns the core temperature of the converter, in Kelvin.
-            ///
-            /// **Game Scenes**: All
-            get: core_temperature
+            CoreTemperature {
+                /// Returns the core temperature of the converter, in Kelvin.
+                ///
+                /// **Game Scenes**: All
+                get: core_temperature -> f32
+            }
         }
         {
-            ThermalEfficiency: f32,
-            /// Returns the thermal efficiency of the converter, as a percentage of its maximum.
-            ///
-            /// **Game Scenes**: All
-            get: thermal_efficiency
+            ThermalEfficiency {
+                /// Returns the thermal efficiency of the converter, as a percentage of its maximum.
+                ///
+                /// **Game Scenes**: All
+                get: thermal_efficiency -> f32
+            }
         }
     }
     methods: {

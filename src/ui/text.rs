@@ -7,106 +7,116 @@ remote_type!(
 object UI.Text {
     properties: {
         {
-            RectTransform: RectTransform,
-            /// Returns the rect transform for the text.
-            ///
-            /// **Game Scenes**: All
-            get: rect_transform
+            RectTransform {
+                /// Returns the rect transform for the text.
+                ///
+                /// **Game Scenes**: All
+                get: rect_transform -> RectTransform
+            }
         }
         {
-            Visible: bool,
-            /// Returns whether the UI object is visible.
-            ///
-            /// **Game Scenes**: All
-            get: is_visible,
-            /// Sets whether the UI object is visible.
-            ///
-            /// **Game Scenes**: All
-            set: set_visible
+            Visible {
+                /// Returns whether the UI object is visible.
+                ///
+                /// **Game Scenes**: All
+                get: is_visible -> bool,
+                /// Sets whether the UI object is visible.
+                ///
+                /// **Game Scenes**: All
+                set: set_visible(bool)
+            }
         }
         {
-            Content: String,
-            /// Returns the text string.
-            ///
-            /// **Game Scenes**: All
-            get: content,
-            /// Sets the text string.
-            ///
-            /// **Game Scenes**: All
-            set: set_content
+            Content {
+                /// Returns the text string.
+                ///
+                /// **Game Scenes**: All
+                get: content -> String,
+                /// Sets the text string.
+                ///
+                /// **Game Scenes**: All
+                set: set_content(&str)
+            }
         }
         {
-            Font: String,
-            /// Returns the name of the font.
-            ///
-            /// **Game Scenes**: All
-            get: font,
-            /// Sets the name of the font.
-            ///
-            /// **Game Scenes**: All
-            set: set_font
+            Font {
+                /// Returns the name of the font.
+                ///
+                /// **Game Scenes**: All
+                get: font -> String,
+                /// Sets the name of the font.
+                ///
+                /// **Game Scenes**: All
+                set: set_font(&str)
+            }
         }
         {
-            AvailableFonts: Vec<String>,
-            /// Returns a list of all available fonts.
-            ///
-            /// **Game Scenes**: All
-            get: available_fonts
+            AvailableFonts {
+                /// Returns a list of all available fonts.
+                ///
+                /// **Game Scenes**: All
+                get: available_fonts -> Vec<String>
+            }
         }
         {
-            Size: i32,
-            /// Returns the font size.
-            ///
-            /// **Game Scenes**: All
-            get: size,
-            /// Sets the font size.
-            ///
-            /// **Game Scenes**: All
-            set: set_size
+            Size {
+                /// Returns the font size.
+                ///
+                /// **Game Scenes**: All
+                get: size -> i32,
+                /// Sets the font size.
+                ///
+                /// **Game Scenes**: All
+                set: set_size(i32)
+            }
         }
         {
-            FontStyle: FontStyle,
-            /// Returns the font style.
-            ///
-            /// **Game Scenes**: All
-            get: font_style,
-            /// Sets the font style.
-            ///
-            /// **Game Scenes**: All
-            set: set_font_style
+            FontStyle {
+                /// Returns the font style.
+                ///
+                /// **Game Scenes**: All
+                get: font_style -> FontStyle,
+                /// Sets the font style.
+                ///
+                /// **Game Scenes**: All
+                set: set_font_style(FontStyle)
+            }
         }
         {
-            Color: Vector3,
-            /// Returns the color.
-            ///
-            /// **Game Scenes**: All
-            get: color,
-            /// Sets the color.
-            ///
-            /// **Game Scenes**: All
-            set: set_color
+            Color {
+                /// Returns the color.
+                ///
+                /// **Game Scenes**: All
+                get: color -> Vector3,
+                /// Sets the color.
+                ///
+                /// **Game Scenes**: All
+                set: set_color(Vector3)
+            }
         }
         {
-            Alignment: TextAnchor,
-            /// Returns the text alignment.
-            ///
-            /// **Game Scenes**: All
-            get: alignment,
-            /// Sets the text alignment.
-            ///
-            /// **Game Scenes**: All
-            set: set_alignment
+            Alignment {
+                /// Returns the text alignment.
+                ///
+                /// **Game Scenes**: All
+                get: alignment -> TextAnchor,
+                /// Sets the text alignment.
+                ///
+                /// **Game Scenes**: All
+                set: set_alignment(TextAnchor)
+            }
         }
         {
-            LineSpacing: f32,
-            /// Returns the line spacing.
-            ///
-            /// **Game Scenes**: All
-            get: line_spacing,
-            /// Sets the line spacing.
-            ///
-            /// **Game Scenes**: All
-            set: set_line_spacing
+            LineSpacing {
+                /// Returns the line spacing.
+                ///
+                /// **Game Scenes**: All
+                get: line_spacing -> f32,
+                /// Sets the line spacing.
+                ///
+                /// **Game Scenes**: All
+                set: set_line_spacing(f32)
+            }
         }
     }
     methods: {

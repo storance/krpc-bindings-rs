@@ -7,22 +7,24 @@ remote_type!(
 object UI.Canvas {
     properties: {
         {
-            RectTransform: RectTransform,
-            /// Returns the rect transform for the canvas.
-            ///
-            /// **Game Scenes**: All
-            get: rect_transform
+            RectTransform {
+                /// Returns the rect transform for the canvas.
+                ///
+                /// **Game Scenes**: All
+                get: rect_transform -> RectTransform
+            }
         }
         {
-            Visible: bool,
-            /// Returns whether the UI object is visible.
-            ///
-            /// **Game Scenes**: All
-            get: is_visible,
-            /// Sets whether the UI object is visible.
-            ///
-            /// **Game Scenes**: All
-            set: set_visible
+            Visible {
+                /// Returns whether the UI object is visible.
+                ///
+                /// **Game Scenes**: All
+                get: is_visible -> bool,
+                /// Sets whether the UI object is visible.
+                ///
+                /// **Game Scenes**: All
+                set: set_visible(bool)
+            }
         }
     }
     methods: {

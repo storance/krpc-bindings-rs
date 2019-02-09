@@ -252,10 +252,10 @@ pub(super) struct StreamRaw {
 }
 
 impl StreamRaw {
-    pub(super) fn new(id: u64, started: bool) -> StreamRaw {
+    pub(super) fn new(id: u64) -> StreamRaw {
         StreamRaw {
             id,
-            state: Mutex::new(StreamState::new(started)),
+            state: Mutex::new(StreamState::new()),
             update_cvar: Condvar::new(),
         }
     }
@@ -368,9 +368,9 @@ struct StreamState {
 }
 
 impl StreamState {
-    fn new(started: bool) -> Self {
+    fn new() -> Self {
         StreamState {
-            started,
+            started: false,
             version: 0,
             rate: 0.0,
             value: Err(ResponseError::MissingResult),
@@ -466,9 +466,17 @@ impl StreamManager {
         }
     }
 
-    pub(super) fn register(&self, stream: Arc<StreamRaw>) {
+    pub(super) fn register(&self, id: u64) -> Arc<StreamRaw> {
         let mut active_streams = self.active_streams.lock().unwrap();
-        (*active_streams).insert(stream.id, stream);
+        // Calling add_stream multiple times for the same method will return the same stream id.
+        if let Some(stream) = active_streams.get(&id) {
+            stream.clone()
+        } else {
+            let stream = Arc::new(StreamRaw::new(id));
+            (*active_streams).insert(id, stream.clone());
+
+            stream
+        }
     }
 
     pub(super) fn deregister(&self, stream_id: u64) {

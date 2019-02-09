@@ -7,68 +7,77 @@ remote_type!(
 object SpaceCenter.Experiment {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this experiment.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this experiment.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            Deployed: bool,
-            /// Returns whether the experiment has been deployed.
-            ///
-            /// **Game Scenes**: All
-            get: is_deployed
+            Deployed {
+                /// Returns whether the experiment has been deployed.
+                ///
+                /// **Game Scenes**: All
+                get: is_deployed -> bool
+            }
         }
         {
-            Rerunnable: bool,
-            /// Returns whether the experiment can be re-run.
-            ///
-            /// **Game Scenes**: All
-            get: is_rerunnable
+            Rerunnable {
+                /// Returns whether the experiment can be re-run.
+                ///
+                /// **Game Scenes**: All
+                get: is_rerunnable -> bool
+            }
         }
         {
-            Inoperable: bool,
-            /// Returns whether the experiment is inoperable.
-            ///
-            /// **Game Scenes**: All
-            get: is_inoperable
+            Inoperable {
+                /// Returns whether the experiment is inoperable.
+                ///
+                /// **Game Scenes**: All
+                get: is_inoperable -> bool
+            }
         }
         {
-            HasData: bool,
-            /// Returns whether the experiment contains data.
-            ///
-            /// **Game Scenes**: All
-            get: has_data
+            HasData {
+                /// Returns whether the experiment contains data.
+                ///
+                /// **Game Scenes**: All
+                get: has_data -> bool
+            }
         }
         {
-            Data: Vec<ScienceData>,
-            /// Returns the data contained in this experiment.
-            ///
-            /// **Game Scenes**: All
-            get: data
+            Data {
+                /// Returns the data contained in this experiment.
+                ///
+                /// **Game Scenes**: All
+                get: data -> Vec<ScienceData>
+            }
         }
         {
-            Biome: String,
-            /// Returns the name of the biome the experiment is currently in.
-            ///
-            /// **Game Scenes**: All
-            get: biome
+            Biome {
+                /// Returns the name of the biome the experiment is currently in.
+                ///
+                /// **Game Scenes**: All
+                get: biome -> String
+            }
         }
         {
-            Available: bool,
-            /// Determines if the experiment is available given the current conditions.
-            ///
-            /// **Game Scenes**: All
-            get: is_available
+            Available {
+                /// Determines if the experiment is available given the current conditions.
+                ///
+                /// **Game Scenes**: All
+                get: is_available -> bool
+            }
         }
         {
-            ScienceSubject: Option<ScienceSubject>,
-            /// Containing information on the corresponding specific science result for the
-            /// current conditions. Returns `None` if the experiment is unavailable.
-            ///
-            /// **Game Scenes**: All
-            get: science_subject
+            ScienceSubject {
+                /// Containing information on the corresponding specific science result for the
+                /// current conditions. Returns `None` if the experiment is unavailable.
+                ///
+                /// **Game Scenes**: All
+                get: science_subject -> Option<ScienceSubject>
+            }
         }
     }
     methods: {
@@ -112,25 +121,28 @@ remote_type!(
 object SpaceCenter.ScienceData {
     properties: {
         {
-            DataAmount: f32,
-            /// Returns the data mount.
-            ///
-            /// **Game Scenes**: All
-            get: data_amount
+            DataAmount {
+                /// Returns the data mount.
+                ///
+                /// **Game Scenes**: All
+                get: data_amount -> f32
+            }
         }
         {
-            ScienceValue: f32,
-            /// Returns the science value.
-            ///
-            /// **Game Scenes**: All
-            get: science_value
+            ScienceValue {
+                /// Returns the science value.
+                ///
+                /// **Game Scenes**: All
+                get: science_value -> f32
+            }
         }
         {
-            TransmitValue: f32,
-            /// Returns the transmit value.
-            ///
-            /// **Game Scenes**: All
-            get: transmit_value
+            TransmitValue {
+                /// Returns the transmit value.
+                ///
+                /// **Game Scenes**: All
+                get: transmit_value -> f32
+            }
         }
     }
 });
@@ -140,56 +152,63 @@ remote_type!(
 object SpaceCenter.ScienceSubject {
     properties: {
         {
-            Title: String,
-            /// Returns the title of science subject, displayed in science archives.
-            ///
-            /// **Game Scenes**: All
-            get: title
+            Title {
+                /// Returns the title of science subject, displayed in science archives.
+                ///
+                /// **Game Scenes**: All
+                get: title -> String
+            }
         }
         {
-            IsComplete: bool,
-            /// Returns whether the experiment has been completed.
-            ///
-            /// **Game Scenes**: All
-            get: is_complete
+            IsComplete {
+                /// Returns whether the experiment has been completed.
+                ///
+                /// **Game Scenes**: All
+                get: is_complete -> bool
+            }
         }
         {
-            Science: f32,
-            /// Returns the amount of science already earned from this subject, not updated
-            /// until after transmission/recovery.
-            ///
-            /// **Game Scenes**: All
-            get: science
+            Science {
+                /// Returns the amount of science already earned from this subject, not updated
+                /// until after transmission/recovery.
+                ///
+                /// **Game Scenes**: All
+                get: science -> f32
+            }
         }
         {
-            ScienceCap: f32,
-            /// Returns the total science allowable for this subject.
-            ///
-            /// **Game Scenes**: All
-            get: science_cap
+            ScienceCap {
+                /// Returns the total science allowable for this subject.
+                ///
+                /// **Game Scenes**: All
+                get: science_cap -> f32
+            }
         }
         {
-            DataScale: f32,
-            /// Returns the multiply science value by this to determine data amount in mits.
-            ///
-            /// **Game Scenes**: All
-            get: data_scale
+            DataScale {
+                /// Returns the multiply science value by this to determine data amount in mits.
+                ///
+                /// **Game Scenes**: All
+                get: data_scale -> f32
+            }
         }
         {
-            SubjectValue: f32,
-            /// Returns the multiplier for specific Celestial Body/Experiment
-            /// Situation combination.
-            ///
-            /// **Game Scenes**: All
-            get: subject_value
+            SubjectValue {
+                /// Returns the multiplier for specific Celestial Body/Experiment
+                /// Situation combination.
+                ///
+                /// **Game Scenes**: All
+                get: subject_value -> f32
+            }
         }
         {
-            ScientificValue: f32,
-            /// Returns the diminishing value multiplier for decreasing the science value
-            /// returned from repeated experiments.
-            ///
-            /// **Game Scenes**: All
-            get: scientific_value
+            ScientificValue {
+                /// Returns the diminishing value multiplier for decreasing the science value
+                /// returned from repeated experiments.
+                ///
+                /// **Game Scenes**: All
+                get: scientific_value -> f32
+            }
         }
     }
 });

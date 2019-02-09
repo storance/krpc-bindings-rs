@@ -7,189 +7,210 @@ remote_type!(
 object SpaceCenter.Orbit {
     properties: {
         {
-            Body: CelestialBody,
-            /// Returns the celestial body (e.g. planet or moon) around which the object is orbiting.
-            ///
-            /// **Game Scenes**: All
-            get: body
+            Body {
+                /// Returns the celestial body (e.g. planet or moon) around which the object is orbiting.
+                ///
+                /// **Game Scenes**: All
+                get: body -> CelestialBody
+            }
         }
         {
-            Apoapsis: f64,
-            /// Gets the apoapsis of the orbit, in meters, from the center of mass of the body
-            /// being orbited.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Note
-            /// For the apoapsis altitude reported on the in-game map view, use `apoapsis_altitude()`.
-            get: apoapsis
+            Apoapsis {
+                /// Gets the apoapsis of the orbit, in meters, from the center of mass of the body
+                /// being orbited.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Note
+                /// For the apoapsis altitude reported on the in-game map view, use `apoapsis_altitude()`.
+                get: apoapsis -> f64
+            }
         }
         {
-            Periapsis: f64,
-            /// Gets the periapsis of the orbit, in meters, from the center of mass of the body
-            /// being orbited.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Note
-            /// For the periapsis altitude reported on the in-game map view, use `periapsis_altitude()`.
-            get: periapsis
-        }
-
-        {
-            ApoapsisAltitude: f64,
-            /// The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Note
-            /// This is equal to `apoapsis()` minus the equatorial radius of the body.
-            get: apoapsis_altitude
-        }
-        {
-            PeriapsisAltitude: f64,
-            /// The periapsis of the orbit, in meters, above the sea level of the body being orbited.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Note
-            /// This is equal to `periapsis()` minus the equatorial radius of the body.
-            get: periapsis_altitude
-        }
-        {
-            SemiMajorAxis: f64,
-            /// Returns the semi-major axis of the orbit, in meters.
-            ///
-            /// **Game Scenes**: All
-            get: semi_major_axis
-        }
-        {
-            SemiMinorAxis: f64,
-            /// Returns the semi-minor axis of the orbit, in meters.
-            ///
-            /// **Game Scenes**: All
-            get: semi_minor_axis
-        }
-        {
-            Radius: f64,
-            /// The current radius of the orbit, in meters. This is the distance between
-            /// the center of mass of the object in orbit, and the center of mass of the body
-            /// around which it is orbiting.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Note
-            /// This value will change over time if the orbit is elliptical.
-            get: radius
-        }
-        {
-            Speed: f64,
-            /// The current orbital speed of the object in meters per second.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Note
-            /// This value will change over time if the orbit is elliptical.
-            get: speed
-        }
-        {
-            TimeToApoapsis: f64,
-            /// Returns the time until the object reaches apoapsis, in seconds.
-            ///
-            /// **Game Scenes**: All
-            get: time_to_apoapsis
-        }
-        {
-            TimeToPeriapsis: f64,
-            /// Returns the time until the object reaches periapsis, in seconds.
-            ///
-            /// **Game Scenes**: All
-            get: time_to_periapsis
-        }
-        {
-            Eccentricity: f64,
-            /// Returns the [eccentricity](https://en.wikipedia.org/wiki/Orbital_eccentricity) of
-            /// the orbit.
-            ///
-            /// **Game Scenes**: All
-            get: eccentricity
-        }
-        {
-            Inclination: f64,
-            /// Returns the [inclination](https://en.wikipedia.org/wiki/Orbital_inclination) of
-            /// the orbit, in radians.
-            ///
-            /// **Game Scenes**: All
-            get: inclination
+            Periapsis {
+                /// Gets the periapsis of the orbit, in meters, from the center of mass of the body
+                /// being orbited.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Note
+                /// For the periapsis altitude reported on the in-game map view, use `periapsis_altitude()`.
+                get: periapsis -> f64
+            }
         }
 
         {
-            LongitudeOfAscendingNode: f64,
-            /// Returns the [longitude of the ascending node](https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node),
-            /// in radians.
-            ///
-            /// **Game Scenes**: All
-            get: longitude_of_ascending_node
+            ApoapsisAltitude {
+                /// The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Note
+                /// This is equal to `apoapsis()` minus the equatorial radius of the body.
+                get: apoapsis_altitude -> f64
+            }
         }
         {
-            ArgumentOfPeriapsis: f64,
-            /// Returns the [argument of periapsis](https://en.wikipedia.org/wiki/Argument_of_periapsis),
-            /// in radians.
-            ///
-            /// **Game Scenes**: All
-            get: argument_of_periapsis
+            PeriapsisAltitude {
+                /// The periapsis of the orbit, in meters, above the sea level of the body being orbited.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Note
+                /// This is equal to `periapsis()` minus the equatorial radius of the body.
+                get: periapsis_altitude -> f64
+            }
         }
         {
-            MeanAnomalyAtEpoch: f64,
-            /// Returns the [mean anomaly at epoch](https://en.wikipedia.org/wiki/Mean_anomaly).
-            ///
-            /// **Game Scenes**: All
-            get: mean_anomaly_at_epoch
+            SemiMajorAxis {
+                /// Returns the semi-major axis of the orbit, in meters.
+                ///
+                /// **Game Scenes**: All
+                get: semi_major_axis -> f64
+            }
         }
         {
-            Epoch: f64,
-            /// Returns the time since the epoch (the point at which the
-            /// [mean anomaly at epoch](https://en.wikipedia.org/wiki/Mean_anomaly) was
-            /// measured), in seconds.
-            ///
-            /// **Game Scenes**: All
-            get: epoch
+            SemiMinorAxis {
+                /// Returns the semi-minor axis of the orbit, in meters.
+                ///
+                /// **Game Scenes**: All
+                get: semi_minor_axis -> f64
+            }
         }
         {
-            MeanAnomaly: f64,
-            /// Returns the [mean anomaly](https://en.wikipedia.org/wiki/Mean_anomaly).
-            ///
-            /// **Game Scenes**: All
-            get: mean_anomaly
+            Radius {
+                /// The current radius of the orbit, in meters. This is the distance between
+                /// the center of mass of the object in orbit, and the center of mass of the body
+                /// around which it is orbiting.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Note
+                /// This value will change over time if the orbit is elliptical.
+                get: radius -> f64
+            }
         }
         {
-            EccentricAnomaly: f64,
-            /// Returns the [eccentric anomaly](https://en.wikipedia.org/wiki/Eccentric_anomaly).
-            ///
-            /// **Game Scenes**: All
-            get: eccentric_anomaly
+            Speed {
+                /// The current orbital speed of the object in meters per second.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Note
+                /// This value will change over time if the orbit is elliptical.
+                get: speed -> f64
+            }
         }
         {
-            TrueAnomaly: f64,
-            /// Returns the [true anomaly](https://en.wikipedia.org/wiki/True_anomaly).
-            ///
-            /// **Game Scenes**: All
-            get: true_anomaly
+            TimeToApoapsis {
+                /// Returns the time until the object reaches apoapsis, in seconds.
+                ///
+                /// **Game Scenes**: All
+                get: time_to_apoapsis -> f64
+            }
         }
         {
-            OrbitalSpeed: f64,
-            /// Returns the current orbital speed in meters per second.
-            ///
-            /// **Game Scenes**: All
-            get: orbital_speed
+            TimeToPeriapsis {
+                /// Returns the time until the object reaches periapsis, in seconds.
+                ///
+                /// **Game Scenes**: All
+                get: time_to_periapsis -> f64
+            }
         }
         {
-            TimeToSOIChange: f64,
-            /// Returns the time until the object changes sphere of influence, in seconds or `NaN`
-            /// if the object is not going to change sphere of influence.
-            ///
-            /// **Game Scenes**: All
-            get: time_to_soi_change
+            Eccentricity {
+                /// Returns the [eccentricity](https://en.wikipedia.org/wiki/Orbital_eccentricity) of
+                /// the orbit.
+                ///
+                /// **Game Scenes**: All
+                get: eccentricity -> f64
+            }
+        }
+        {
+            Inclination {
+                /// Returns the [inclination](https://en.wikipedia.org/wiki/Orbital_inclination) of
+                /// the orbit, in radians.
+                ///
+                /// **Game Scenes**: All
+                get: inclination -> f64
+            }
+        }
+        {
+            LongitudeOfAscendingNode {
+                /// Returns the [longitude of the ascending node](https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node),
+                /// in radians.
+                ///
+                /// **Game Scenes**: All
+                get: longitude_of_ascending_node -> f64
+            }
+        }
+        {
+            ArgumentOfPeriapsis {
+                /// Returns the [argument of periapsis](https://en.wikipedia.org/wiki/Argument_of_periapsis),
+                /// in radians.
+                ///
+                /// **Game Scenes**: All
+                get: argument_of_periapsis -> f64
+            }
+        }
+        {
+            MeanAnomalyAtEpoch {
+                /// Returns the [mean anomaly at epoch](https://en.wikipedia.org/wiki/Mean_anomaly).
+                ///
+                /// **Game Scenes**: All
+                get: mean_anomaly_at_epoch -> f64
+            }
+        }
+        {
+            Epoch {
+                /// Returns the time since the epoch (the point at which the
+                /// [mean anomaly at epoch](https://en.wikipedia.org/wiki/Mean_anomaly) was
+                /// measured), in seconds.
+                ///
+                /// **Game Scenes**: All
+                get: epoch -> f64
+            }
+        }
+        {
+            MeanAnomaly {
+                /// Returns the [mean anomaly](https://en.wikipedia.org/wiki/Mean_anomaly).
+                ///
+                /// **Game Scenes**: All
+                get: mean_anomaly -> f64
+            }
+        }
+        {
+            EccentricAnomaly {
+                /// Returns the [eccentric anomaly](https://en.wikipedia.org/wiki/Eccentric_anomaly).
+                ///
+                /// **Game Scenes**: All
+                get: eccentric_anomaly -> f64
+            }
+        }
+        {
+            TrueAnomaly {
+                /// Returns the [true anomaly](https://en.wikipedia.org/wiki/True_anomaly).
+                ///
+                /// **Game Scenes**: All
+                get: true_anomaly -> f64
+            }
+        }
+        {
+            OrbitalSpeed {
+                /// Returns the current orbital speed in meters per second.
+                ///
+                /// **Game Scenes**: All
+                get: orbital_speed -> f64
+            }
+        }
+        {
+            TimeToSOIChange {
+                /// Returns the time until the object changes sphere of influence, in seconds or `NaN`
+                /// if the object is not going to change sphere of influence.
+                ///
+                /// **Game Scenes**: All
+                get: time_to_soi_change -> f64
+            }
         }
     }
     methods: {

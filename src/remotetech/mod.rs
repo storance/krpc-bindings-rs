@@ -43,7 +43,7 @@ service RemoteTech {
             /// a particular vessel.
             ///
             /// **Game Scenes**: All
-            fn comms(vessel: &Vessel) -> Antenna {
+            fn comms(vessel: &Vessel) -> Comms {
                 Comms(vessel)
             }
         }

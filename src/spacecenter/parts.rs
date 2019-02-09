@@ -56,181 +56,205 @@ remote_type!(
 object SpaceCenter.Parts {
     properties: {
         {
-            All: Vec<Part>,
-            /// Returns a list of all of the vessels parts.
-            ///
-            /// **Game Scenes**: All
-            get: all
+            All {
+                /// Returns a list of all of the vessels parts.
+                ///
+                /// **Game Scenes**: All
+                get: all -> Vec<Part>
+            }
         }
         {
-            Root: Part,
-            /// Returns the vessel's root part.
-            ///
-            /// **Game Scenes**: All
-            get: root
+            Root {
+                /// Returns the vessel's root part.
+                ///
+                /// **Game Scenes**: All
+                get: root -> Part
+            }
         }
         {
-            ControllingPart: Part,
-            /// Returns the part from which the vessel is controlled.
-            ///
-            /// **Game Scenes**: All
-            get: controlling_part,
-            /// Sets the part from which the vessel is controlled.
-            ///
-            /// **Game Scenes**: All
-            set: set_controlling_part
+            ControllingPart {
+                /// Returns the part from which the vessel is controlled.
+                ///
+                /// **Game Scenes**: All
+                get: controlling_part -> Part,
+                /// Sets the part from which the vessel is controlled.
+                ///
+                /// **Game Scenes**: All
+                set: set_controlling_part(&Part)
+            }
         }
         {
-            Antennas: Vec<Antenna>,
-            /// Returns a list of all antennas in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: antennas
+            Antennas {
+                /// Returns a list of all antennas in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: antennas -> Vec<Antenna>
+            }
         }
         {
-            CargoBays: Vec<CargoBay>,
-            /// Returns a list of all cargo bays in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: cargo_bays
+            CargoBays {
+                /// Returns a list of all cargo bays in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: cargo_bays -> Vec<CargoBay>
+            }
         }
         {
-            ControlSurfaces: Vec<ControlSurface>,
-            /// Returns a list of all control surfaces in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: control_surfaces
+            ControlSurfaces {
+                /// Returns a list of all control surfaces in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: control_surfaces -> Vec<ControlSurface>
+            }
         }
         {
-            Decouplers: Vec<Decoupler>,
-            /// Returns a list of all decouplers in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: decouplers
+            Decouplers {
+                /// Returns a list of all decouplers in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: decouplers -> Vec<Decoupler>
+            }
         }
         {
-            DockingPorts: Vec<DockingPort>,
-            /// Returns a list of all docking ports in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: docking_ports
+            DockingPorts {
+                /// Returns a list of all docking ports in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: docking_ports -> Vec<DockingPort>
+            }
         }
         {
-            Engines: Vec<Engine>,
-            /// Returns a list of all engines in the vessel.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Note
-            /// This includes any part that generates thrust. This covers many different types
-            /// of engine, including liquid fuel rockets, solid rocket boosters,
-            /// jet engines and RCS thrusters.
-            get: engines
+            Engines {
+                /// Returns a list of all engines in the vessel.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Note
+                /// This includes any part that generates thrust. This covers many different types
+                /// of engine, including liquid fuel rockets, solid rocket boosters,
+                /// jet engines and RCS thrusters.
+                get: engines -> Vec<Engine>
+            }
         }
         {
-            Experiments: Vec<Experiment>,
-            /// Returns a list of all experiments in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: experiments
+            Experiments {
+                /// Returns a list of all experiments in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: experiments -> Vec<Experiment>
+            }
         }
         {
-            Fairings: Vec<Fairing>,
-            /// Returns a list of all fairings in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: fairings
+            Fairings {
+                /// Returns a list of all fairings in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: fairings -> Vec<Fairing>
+            }
         }
         {
-            Intakes: Vec<Intake>,
-            /// Returns a list of all intakes in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: intakes
+            Intakes {
+                /// Returns a list of all intakes in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: intakes -> Vec<Intake>
+            }
         }
         {
-            Legs: Vec<Leg>,
-            /// Returns a list of all landing legs in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: legs
+            Legs {
+                /// Returns a list of all landing legs in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: legs -> Vec<Leg>
+            }
         }
         {
-            LaunchClamps: Vec<LaunchClamp>,
-            /// Returns a list of all launch clamps attached to the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: launch_clamps
+            LaunchClamps {
+                /// Returns a list of all launch clamps attached to the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: launch_clamps ->Vec<LaunchClamp>
+            }
         }
         {
-            Lights: Vec<Light>,
-            /// Returns a list of all lights in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: lights
+            Lights {
+                /// Returns a list of all lights in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: lights -> Vec<Light>
+            }
         }
         {
-            Parachutes: Vec<Parachute>,
-            /// Returns a list of all parachutes in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: parachutes
+            Parachutes {
+                /// Returns a list of all parachutes in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: parachutes -> Vec<Parachute>
+            }
         }
         {
-            Radiators: Vec<Radiator>,
-            /// Returns a list of all radiators in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: radiators
+            Radiators {
+                /// Returns a list of all radiators in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: radiators -> Vec<Radiator>
+            }
         }
         {
-            RCS: Vec<RCS>,
-            /// Returns a list of all RCS blocks/thrusters in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: rcs
+            RCS {
+                /// Returns a list of all RCS blocks/thrusters in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: rcs -> Vec<RCS>
+            }
         }
         {
-            ReactionWheels: Vec<ReactionWheel>,
-            /// Returns a list of all reaction wheels in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: reaction_wheels
+            ReactionWheels {
+                /// Returns a list of all reaction wheels in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: reaction_wheels -> Vec<ReactionWheel>
+            }
         }
         {
-            ResourceConverters: Vec<ResourceConverter>,
-            /// Returns a list of all resource converters in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: resource_converters
+            ResourceConverters {
+                /// Returns a list of all resource converters in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: resource_converters -> Vec<ResourceConverter>
+            }
         }
         {
-            ResourceHarvesters: Vec<ResourceHarvester>,
-            /// Returns a list of all resource harvesters in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: resource_harvesters
+            ResourceHarvesters {
+                /// Returns a list of all resource harvesters in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: resource_harvesters -> Vec<ResourceHarvester>
+            }
         }
         {
-            Sensors: Vec<Sensor>,
-            /// Returns a list of all sensors in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: sensors
+            Sensors {
+                /// Returns a list of all sensors in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: sensors -> Vec<Sensor>
+            }
         }
         {
-            SolarPanels: Vec<SolarPanel>,
-            /// Returns a list of all solar panels in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: solar_panels
+            SolarPanels {
+                /// Returns a list of all solar panels in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: solar_panels -> Vec<SolarPanel>
+            }
         }
         {
-            Wheels: Vec<Wheel>,
-            /// Returns a list of all wheels in the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: wheels
+            Wheels {
+                /// Returns a list of all wheels in the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: wheels -> Vec<Wheel>
+            }
         }
     }
     methods: {
@@ -322,513 +346,575 @@ remote_type!(
 object SpaceCenter.Part {
     properties: {
         {
-            Name: String,
-            /// Returns the internal name of the part, as used in part cfg files.
-            /// For example “Mark1-2Pod”.
-            ///
-            /// **Game Scenes**: All
-            get: name
+            Name {
+                /// Returns the internal name of the part, as used in part cfg files.
+                /// For example “Mark1-2Pod”.
+                ///
+                /// **Game Scenes**: All
+                get: name -> String
+            }
         }
         {
-            Title: String,
-            /// Returns the title of the part, as shown when the part is right clicked in-game.
-            /// For example “Mk1-2 Command Pod”.
-            ///
-            /// **Game Scenes**: All
-            get: title
+            Title {
+                /// Returns the title of the part, as shown when the part is right clicked in-game.
+                /// For example “Mk1-2 Command Pod”.
+                ///
+                /// **Game Scenes**: All
+                get: title -> String
+            }
         }
         {
-            Tag: String,
-            /// Returns the name tag for the part. Can be set to a custom string using
-            /// the in-game user interface.
-            ///
-            /// **Game Scenes**: All
-            get: tag,
-            /// Sets the name tag for the part. Can be set to a custom string using the
-            /// in-game user interface.
-            ///
-            /// **Game Scenes**: All
-            set: set_tag
+            Tag {
+                /// Returns the name tag for the part. Can be set to a custom string using
+                /// the in-game user interface.
+                ///
+                /// **Game Scenes**: All
+                get: tag -> String,
+                /// Sets the name tag for the part. Can be set to a custom string using the
+                /// in-game user interface.
+                ///
+                /// **Game Scenes**: All
+                set: set_tag(&str)
+            }
         }
         {
-            Highlighted: bool,
-            /// Returns whether the part is highlighted.
-            ///
-            /// **Game Scenes**: All
-            get: is_highlighted,
-            /// Sets whether the part is highlighted.
-            ///
-            /// **Game Scenes**: All
-            set: set_highlighted
+            Highlighted {
+                /// Returns whether the part is highlighted.
+                ///
+                /// **Game Scenes**: All
+                get: is_highlighted -> bool,
+                /// Sets whether the part is highlighted.
+                ///
+                /// **Game Scenes**: All
+                set: set_highlighted(bool)
+            }
         }
         {
-            HighlightColor: Vector3,
-            /// Returns the color used to highlight the part, as an RGB triple.
-            ///
-            /// **Game Scenes**: All
-            get: highlight_color,
-            /// Sets the color used to highlight the part, as an RGB triple.
-            ///
-            /// **Game Scenes**: All
-            set: set_highlight_color
+            HighlightColor {
+                /// Returns the color used to highlight the part, as an RGB triple.
+                ///
+                /// **Game Scenes**: All
+                get: highlight_color -> Vector3,
+                /// Sets the color used to highlight the part, as an RGB triple.
+                ///
+                /// **Game Scenes**: All
+                set: set_highlight_color(Vector3)
+            }
         }
         {
-            Cost: f64,
-            /// Returns the cost of the part, in units of funds.
-            ///
-            /// **Game Scenes**: All
-            get: cost
+            Cost {
+                /// Returns the cost of the part, in units of funds.
+                ///
+                /// **Game Scenes**: All
+                get: cost -> f64
+            }
         }
         {
-            Vessel: Vessel,
-            /// Returns the cost of the part, in units of funds.
-            ///
-            /// **Game Scenes**: All
-            get: vessel
+            Vessel {
+                /// Returns the cost of the part, in units of funds.
+                ///
+                /// **Game Scenes**: All
+                get: vessel -> Vessel
+            }
         }
         {
-            Parent: Option<Part>,
-            /// Returns the part's parent or `None` if the part does not have a parent.
-            /// This, in combination with `Part::children()`, can be used to traverse
-            /// the vessels parts tree.
-            ///
-            /// **Game Scenes**: All
-            get: parent
+            Parent {
+                /// Returns the part's parent or `None` if the part does not have a parent.
+                /// This, in combination with `Part::children()`, can be used to traverse
+                /// the vessels parts tree.
+                ///
+                /// **Game Scenes**: All
+                get: parent -> Option<Part>
+            }
         }
         {
-            Children: Vec<Part>,
-            /// Returns the part's children. Returns an empty list if the part has no children.
-            /// This, in combination with `Part::parent()`, can be used to traverse the
-            /// vessels parts tree.
-            ///
-            /// **Game Scenes**: All
-            get: children
+            Children {
+                /// Returns the part's children. Returns an empty list if the part has no children.
+                /// This, in combination with `Part::parent()`, can be used to traverse the
+                /// vessels parts tree.
+                ///
+                /// **Game Scenes**: All
+                get: children -> Vec<Part>
+            }
         }
         {
-            AxiallyAttached: bool,
-            /// Returns whether the part is axially attached to its parent, i.e. on the top
-            /// or bottom of its parent. If the part has no parent, returns `false`.
-            ///
-            /// **Game Scenes**: All
-            get: is_axially_attached
+            AxiallyAttached {
+                /// Returns whether the part is axially attached to its parent, i.e. on the top
+                /// or bottom of its parent. If the part has no parent, returns `false`.
+                ///
+                /// **Game Scenes**: All
+                get: is_axially_attached -> bool
+            }
         }
         {
-            RadiallyAttached: bool,
-            /// Returns whether the part is radially attached to its parent, i.e. on the side
-            /// of its parent. If the part has no parent, returns `false`.
-            ///
-            /// **Game Scenes**: All
-            get: is_radially_attached
+            RadiallyAttached {
+                /// Returns whether the part is radially attached to its parent, i.e. on the side
+                /// of its parent. If the part has no parent, returns `false`.
+                ///
+                /// **Game Scenes**: All
+                get: is_radially_attached -> bool
+            }
         }
         {
-            Stage: i32,
-            /// Returns the stage in which this part will be activated. Returns -1 if the
-            /// part is not activated by staging.
-            ///
-            /// **Game Scenes**: All
-            get: stage
+            Stage {
+                /// Returns the stage in which this part will be activated. Returns -1 if the
+                /// part is not activated by staging.
+                ///
+                /// **Game Scenes**: All
+                get: stage -> i32
+            }
         }
         {
-            DecoupleStage: i32,
-            /// Returns the stage in which this part will be decoupled. Returns -1 if the part is
-            /// never decoupled from the vessel.
-            ///
-            /// **Game Scenes**: All
-            get: decouple_stage
+            DecoupleStage {
+                /// Returns the stage in which this part will be decoupled. Returns -1 if the part is
+                /// never decoupled from the vessel.
+                ///
+                /// **Game Scenes**: All
+                get: decouple_stage -> i32
+            }
         }
         {
-            Massless: bool,
-            /// Returns whether the part is [massless](https://wiki.kerbalspaceprogram.com/wiki/Massless_part).
-            ///
-            /// **Game Scenes**: All
-            get: is_massless
+            Massless {
+                /// Returns whether the part is [massless](https://wiki.kerbalspaceprogram.com/wiki/Massless_part).
+                ///
+                /// **Game Scenes**: All
+                get: is_massless -> bool
+            }
         }
         {
-            Mass: f64,
-            /// Returns the current mass of the part, including resources it contains,
-            /// in kilograms. Returns zero if the part is massless.
-            ///
-            /// **Game Scenes**: All
-            get: mass
+            Mass {
+                /// Returns the current mass of the part, including resources it contains,
+                /// in kilograms. Returns zero if the part is massless.
+                ///
+                /// **Game Scenes**: All
+                get: mass -> f64
+            }
         }
         {
-            DryMass: f64,
-            /// Returns the mass of the part, not including any resources it contains,
-            /// in kilograms. Returns zero if the part is massless.
-            ///
-            /// **Game Scenes**: All
-            get: dry_mass
+            DryMass {
+                /// Returns the mass of the part, not including any resources it contains,
+                /// in kilograms. Returns zero if the part is massless.
+                ///
+                /// **Game Scenes**: All
+                get: dry_mass -> f64
+            }
         }
         {
-            Shielded: bool,
-            /// Returns whether the part is shielded from the exterior of the vessel,
-            /// for example by a fairing.
-            ///
-            /// **Game Scenes**: All
-            get: is_shielded
+            Shielded {
+                /// Returns whether the part is shielded from the exterior of the vessel,
+                /// for example by a fairing.
+                ///
+                /// **Game Scenes**: All
+                get: is_shielded -> bool
+            }
         }
         {
-            DynamicPressure: f64,
-            /// Returns the dynamic pressure acting on the part, in Pascals.
-            ///
-            /// **Game Scenes**: All
-            get: dynamic_pressure
+            DynamicPressure {
+                /// Returns the dynamic pressure acting on the part, in Pascals.
+                ///
+                /// **Game Scenes**: All
+                get: dynamic_pressure -> f64
+            }
         }
         {
-            ImpactTolerance: f64,
-            /// Returns the impact tolerance of the part, in meters per second.
-            ///
-            /// **Game Scenes**: All
-            get: impact_tolerance
+            ImpactTolerance {
+                /// Returns the impact tolerance of the part, in meters per second.
+                ///
+                /// **Game Scenes**: All
+                get: impact_tolerance -> f64
+            }
         }
         {
-            Temperature: f64,
-            /// Returns the temperature of the part, in Kelvin.
-            ///
-            /// **Game Scenes**: All
-            get: temperature
+            Temperature {
+                /// Returns the temperature of the part, in Kelvin.
+                ///
+                /// **Game Scenes**: All
+                get: temperature -> f64
+            }
         }
         {
-            SkinTemperature: f64,
-            /// Returns the temperature of the skin of the part, in Kelvin.
-            ///
-            /// **Game Scenes**: All
-            get: skin_temperature
+            SkinTemperature {
+                /// Returns the temperature of the skin of the part, in Kelvin.
+                ///
+                /// **Game Scenes**: All
+                get: skin_temperature -> f64
+            }
         }
         {
-            MaxTemperature: f64,
-            /// Returns the maximum temperature that the part can survive, in Kelvin.
-            ///
-            /// **Game Scenes**: All
-            get: max_temperature
+            MaxTemperature {
+                /// Returns the maximum temperature that the part can survive, in Kelvin.
+                ///
+                /// **Game Scenes**: All
+                get: max_temperature -> f64
+            }
         }
         {
-            MaxSkinTemperature: f64,
-            /// Returns the maximum temperature that the skin of the part can survive, in Kelvin.
-            ///
-            /// **Game Scenes**: All
-            get: max_skin_temperature
+            MaxSkinTemperature {
+                /// Returns the maximum temperature that the skin of the part can survive, in Kelvin.
+                ///
+                /// **Game Scenes**: All
+                get: max_skin_temperature -> f64
+            }
         }
         {
-            ThermalMass: f32,
-            /// Returns the amount of energy it takes to increase the internal
-            /// temperature of the part, in Joules per Kelvin.
-            ///
-            /// **Game Scenes**: All
-            get: thermal_mass
+            ThermalMass {
+                /// Returns the amount of energy it takes to increase the internal
+                /// temperature of the part, in Joules per Kelvin.
+                ///
+                /// **Game Scenes**: All
+                get: thermal_mass -> f32
+            }
         }
         {
-            ThermalSkinMass: f32,
-            /// Returns the amount of energy it takes to increase the skin temperature of
-            /// the part, in Joules per Kelvin.
-            ///
-            /// **Game Scenes**: All
-            get: thermal_skin_mass
+            ThermalSkinMass {
+                /// Returns the amount of energy it takes to increase the skin temperature of
+                /// the part, in Joules per Kelvin.
+                ///
+                /// **Game Scenes**: All
+                get: thermal_skin_mass -> f32
+            }
         }
         {
-            ThermalResourceMass: f32,
-            /// Returns the amount of energy it takes to increase the temperature of the
-            /// resources contained in the part, in Joules per Kelvin.
-            ///
-            /// **Game Scenes**: All
-            get: thermal_resource_mass
+            ThermalResourceMass {
+                /// Returns the amount of energy it takes to increase the temperature of the
+                /// resources contained in the part, in Joules per Kelvin.
+                ///
+                /// **Game Scenes**: All
+                get: thermal_resource_mass -> f32
+            }
         }
         {
-            ThermalConductionFlux: f32,
-            /// Returns the rate at which heat energy is conducting into or out of the part
-            /// via contact with other parts. Measured in energy per unit time, or power,
-            /// in Watts. A positive value means the part is gaining heat energy, and
-            /// negative means it is losing heat energy.
-            ///
-            /// **Game Scenes**: All
-            get: thermal_conduction_flux
+            ThermalConductionFlux {
+                /// Returns the rate at which heat energy is conducting into or out of the part
+                /// via contact with other parts. Measured in energy per unit time, or power,
+                /// in Watts. A positive value means the part is gaining heat energy, and
+                /// negative means it is losing heat energy.
+                ///
+                /// **Game Scenes**: All
+                get: thermal_conduction_flux -> f32
+            }
         }
         {
-            ThermalConvectionFlux: f32,
-            /// Returns the rate at which heat energy is convecting into or out of the part
-            /// from the surrounding atmosphere. Measured in energy per unit time, or power,
-            /// in Watts. A positive value means the part is gaining heat energy, and negative
-            /// means it is losing heat energy.
-            ///
-            /// **Game Scenes**: All
-            get: thermal_convection_flux
+            ThermalConvectionFlux {
+                /// Returns the rate at which heat energy is convecting into or out of the part
+                /// from the surrounding atmosphere. Measured in energy per unit time, or power,
+                /// in Watts. A positive value means the part is gaining heat energy, and negative
+                /// means it is losing heat energy.
+                ///
+                /// **Game Scenes**: All
+                get: thermal_convection_flux -> f32
+            }
         }
         {
-            ThermalRadiationFlux: f32,
-            /// Returns the ate at which heat energy is radiating into or out of the part from
-            /// the surrounding environment. Measured in energy per unit time, or power, in Watts.
-            /// A positive value means the part is gaining heat energy, and negative means
-            /// it is losing heat energy.
-            ///
-            /// **Game Scenes**: All
-            get: thermal_radiation_flux
+            ThermalRadiationFlux {
+                /// Returns the ate at which heat energy is radiating into or out of the part from
+                /// the surrounding environment. Measured in energy per unit time, or power, in Watts.
+                /// A positive value means the part is gaining heat energy, and negative means
+                /// it is losing heat energy.
+                ///
+                /// **Game Scenes**: All
+                get: thermal_radiation_flux -> f32
+            }
         }
         {
-            ThermalInternalFlux: f32,
-            /// Returns the rate at which heat energy is begin generated by the part. For
-            /// example, some engines generate heat by combusting fuel. Measured in energy
-            /// per unit time, or power, in Watts. A positive value means the part is gaining
-            /// heat energy, and negative means it is losing heat energy.
-            ///
-            /// **Game Scenes**: All
-            get: thermal_internal_flux
+            ThermalInternalFlux {
+                /// Returns the rate at which heat energy is begin generated by the part. For
+                /// example, some engines generate heat by combusting fuel. Measured in energy
+                /// per unit time, or power, in Watts. A positive value means the part is gaining
+                /// heat energy, and negative means it is losing heat energy.
+                ///
+                /// **Game Scenes**: All
+                get: thermal_internal_flux -> f32
+            }
         }
         {
-            ThermalSkinToInternalFlux: f32,
-            /// Returns the rate at which heat energy is transferring between the part’s
-            /// skin and its internals. Measured in energy per unit time, or power, in Watts.
-            /// A positive value means the part’s internals are gaining heat energy, and
-            /// negative means its skin is gaining heat energy.
-            ///
-            /// **Game Scenes**: All
-            get: thermal_skin_to_internal_flux
+            ThermalSkinToInternalFlux {
+                /// Returns the rate at which heat energy is transferring between the part’s
+                /// skin and its internals. Measured in energy per unit time, or power, in Watts.
+                /// A positive value means the part’s internals are gaining heat energy, and
+                /// negative means its skin is gaining heat energy.
+                ///
+                /// **Game Scenes**: All
+                get: thermal_skin_to_internal_flux -> f32
+            }
         }
         {
-            Resources: Resources,
-            /// Returns a `Resources` object for the part.
-            ///
-            /// **Game Scenes**: All
-            get: resources
+            Resources {
+                /// Returns a `Resources` object for the part.
+                ///
+                /// **Game Scenes**: All
+                get: resources -> Resources
+            }
         }
         {
-            Crossfeed: bool,
-            /// Returns whether this part is crossfeed capable.
-            ///
-            /// **Game Scenes**: All
-            get: is_crossfeed_capable
+            Crossfeed {
+                /// Returns whether this part is crossfeed capable.
+                ///
+                /// **Game Scenes**: All
+                get: is_crossfeed_capable -> bool
+            }
         }
         {
-            IsFuelLine: bool,
-            /// Returns whether this part is a fuel line.
-            ///
-            /// **Game Scenes**: All
-            get: is_fuel_line
+            IsFuelLine {
+                /// Returns whether this part is a fuel line.
+                ///
+                /// **Game Scenes**: All
+                get: is_fuel_line -> bool
+            }
         }
         {
-            FuelLinesFrom: Vec<Part>,
-            /// Returns the parts that are connected to this part via fuel lines, where
-            /// the direction of the fuel line is into this part.
-            ///
-            /// **Game Scenes**: All
-            get: fuel_lines_from
+            FuelLinesFrom {
+                /// Returns the parts that are connected to this part via fuel lines, where
+                /// the direction of the fuel line is into this part.
+                ///
+                /// **Game Scenes**: All
+                get: fuel_lines_from -> Vec<Part>
+            }
         }
         {
-            FuelLinesTo: Vec<Part>,
-            /// Returns the parts that are connected to this part via fuel lines, where
-            /// the direction of the fuel line is out of this part.
-            ///
-            /// **Game Scenes**: All
-            get: fuel_lines_to
+            FuelLinesTo {
+                /// Returns the parts that are connected to this part via fuel lines, where
+                /// the direction of the fuel line is out of this part.
+                ///
+                /// **Game Scenes**: All
+                get: fuel_lines_to -> Vec<Part>
+            }
         }
         {
-            Modules: Vec<Module>,
-            /// Returns the modules for this part.
-            ///
-            /// **Game Scenes**: All
-            get: modules
+            Modules {
+                /// Returns the modules for this part.
+                ///
+                /// **Game Scenes**: All
+                get: modules -> Vec<Module>
+            }
         }
         {
-            Antenna: Option<Antenna>,
-            /// Returns an `Antenna` if this part is an antenna, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: antenna
+            Antenna {
+                /// Returns an `Antenna` if this part is an antenna, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: antenna -> Option<Antenna>
+            }
         }
         {
-            CargoBay: Option<CargoBay>,
-            /// Returns a `CargoBay` if this part is a cargo bay, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: cargo_bay
+            CargoBay {
+                /// Returns a `CargoBay` if this part is a cargo bay, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: cargo_bay -> Option<CargoBay>
+            }
         }
         {
-            ControlSurface: Option<ControlSurface>,
-            /// Returns a `ControlSurface` if this part is a control surface, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: control_surface
+            ControlSurface {
+                /// Returns a `ControlSurface` if this part is a control surface, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: control_surface -> Option<ControlSurface>
+            }
         }
         {
-            Decoupler: Option<Decoupler>,
-            /// Returns a `Decoupler` if this part is a decoupler, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: decoupler
+            Decoupler {
+                /// Returns a `Decoupler` if this part is a decoupler, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: decoupler -> Option<Decoupler>
+            }
         }
         {
-            DockingPort: Option<DockingPort>,
-            /// Returns a `DockingPort` if this part is a docking port, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: docking_port
+            DockingPort {
+                /// Returns a `DockingPort` if this part is a docking port, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: docking_port -> Option<DockingPort>
+            }
         }
         {
-            Engine: Option<Engine>,
-            /// Returns an `Engine` if this part is an engine, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: engine
+            Engine {
+                /// Returns an `Engine` if this part is an engine, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: engine -> Option<Engine>
+            }
         }
         {
-            Experiment: Option<Experiment>,
-            /// Returns an `Experiment` if this part is an experiment, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: experiment
+            Experiment {
+                /// Returns an `Experiment` if this part is an experiment, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: experiment -> Option<Experiment>
+            }
         }
         {
-            Fairing: Option<Fairing>,
-            /// Returns a `Fairing` if this part is a fairing, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: fairing
+            Fairing {
+                /// Returns a `Fairing` if this part is a fairing, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: fairing -> Option<Fairing>
+            }
         }
         {
-            Intake: Option<Intake>,
-            /// Returns an `Intake` if this part is an intake, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: intake
+            Intake {
+                /// Returns an `Intake` if this part is an intake, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: intake -> Option<Intake>
+            }
         }
         {
-            Leg: Option<Leg>,
-            /// Returns a `Leg` if this part is a landing leg, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: leg
+            Leg {
+                /// Returns a `Leg` if this part is a landing leg, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: leg -> Option<Leg>
+            }
         }
         {
-            LaunchClamp: Option<LaunchClamp>,
-            /// Returns a `LaunchClamp` if this part is a launch clamp, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: launch_clamp
+            LaunchClamp {
+                /// Returns a `LaunchClamp` if this part is a launch clamp, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: launch_clamp -> Option<LaunchClamp>
+            }
         }
         {
-            Light: Option<Light>,
-            /// Returns a `Light` if this part is a light, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: light
+            Light {
+                /// Returns a `Light` if this part is a light, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: light -> Option<Light>
+            }
         }
         {
-            Parachute: Option<Parachute>,
-            /// Returns a `Parachute` if this part is an parachute, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: parachute
+            Parachute {
+                /// Returns a `Parachute` if this part is an parachute, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: parachute -> Option<Parachute>
+            }
         }
         {
-            Radiator: Option<Radiator>,
-            /// Returns a `Radiator` if this part is a radiator, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: radiator
+            Radiator {
+                /// Returns a `Radiator` if this part is a radiator, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: radiator -> Option<Radiator>
+            }
         }
         {
-            RCS: Option<RCS>,
-            /// Returns an `RCS` if this part is an rcs block or thruster, otherwise `None`..
-            ///
-            /// **Game Scenes**: All
-            get: rcs
+            RCS {
+                /// Returns an `RCS` if this part is an rcs block or thruster, otherwise `None`..
+                ///
+                /// **Game Scenes**: All
+                get: rcs -> Option<RCS>
+            }
         }
         {
-            ReactionWheel: Option<ReactionWheel>,
-            /// Returns a `ReactionWheel` if this part is a reaction wheel, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: reaction_wheel
+            ReactionWheel {
+                /// Returns a `ReactionWheel` if this part is a reaction wheel, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: reaction_wheel -> Option<ReactionWheel>
+            }
         }
         {
-            ResourceConverter: Option<ResourceConverter>,
-            /// Returns a `ResourceConverter` if this part is a resource converter, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: resource_converter
+            ResourceConverter {
+                /// Returns a `ResourceConverter` if this part is a resource converter, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: resource_converter -> Option<ResourceConverter>
+            }
         }
         {
-            ResourceHarvester: Option<ResourceHarvester>,
-            /// Returns a `ResourceHarvester` if this part is a resource harvester, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: resource_harvester
+            ResourceHarvester {
+                /// Returns a `ResourceHarvester` if this part is a resource harvester, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: resource_harvester -> Option<ResourceHarvester>
+            }
         }
         {
-            Sensor: Option<Sensor>,
-            /// Returns a `Sensor` if this part is a sensor, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: sensor
+            Sensor {
+                /// Returns a `Sensor` if this part is a sensor, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: sensor -> Option<Sensor>
+            }
         }
         {
-            SolarPanel: Option<SolarPanel>,
-            /// Returns a `SolarPanel` if this part is a solar panel, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: solar_panel
+            SolarPanel {
+                /// Returns a `SolarPanel` if this part is a solar panel, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: solar_panel -> Option<SolarPanel>
+            }
         }
         {
-            Wheel: Option<Wheel>,
-            /// Returns a `Wheel` if this part is a wheel, otherwise `None`.
-            ///
-            /// **Game Scenes**: All
-            get: wheel
+            Wheel {
+                /// Returns a `Wheel` if this part is a wheel, otherwise `None`.
+                ///
+                /// **Game Scenes**: All
+                get: wheel -> Option<Wheel>
+            }
         }
         {
-            MomentOfInertia: Vector3,
-            /// Returns the moment of inertia of the part in kg.m2 around its center of mass in
-            /// the parts reference frame (`ReferenceFrame`).
-            ///
-            /// **Game Scenes**: All
-            get: moment_of_inertia
+            MomentOfInertia {
+                /// Returns the moment of inertia of the part in kg.m2 around its center of mass in
+                /// the parts reference frame (`ReferenceFrame`).
+                ///
+                /// **Game Scenes**: All
+                get: moment_of_inertia -> Vector3
+            }
         }
         {
-            InertiaTensor: Vec<f64>,
-            /// Returns the inertia tensor of the part in the parts reference frame
-            /// (`ReferenceFrame`). Returns the 3x3 matrix as a list of elements,
-            /// in row-major order.
-            ///
-            /// **Game Scenes**: All
-            get: inertia_tensor
+            InertiaTensor {
+                /// Returns the inertia tensor of the part in the parts reference frame
+                /// (`ReferenceFrame`). Returns the 3x3 matrix as a list of elements,
+                /// in row-major order.
+                ///
+                /// **Game Scenes**: All
+                get: inertia_tensor -> Vec<f64>
+            }
         }
         {
-            ReferenceFrame: ReferenceFrame,
-            /// Returns the reference frame that is fixed relative to this part, and centered
-            /// on a fixed position within the part, defined by the parts model.
-            ///
-            /// * The origin is at the position of the part, as returned by
-            /// `Part::position()`.
-            /// * The axes rotate with the part.
-            /// * The x, y and z axis directions depend on the design of the part.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// ![ Reference Frame](https://krpc.github.io/krpc/_images/part.png)
-            /// *Mk1 Command Pod reference frame origin and axes*
-            ///
-            /// # Note
-            /// For docking port parts, this reference frame is not necessarily equivalent to
-            /// the reference frame for the docking port, returned by
-            /// `DockingPort::reference_frame()`.
-            get: reference_frame
+            ReferenceFrame {
+                /// Returns the reference frame that is fixed relative to this part, and centered
+                /// on a fixed position within the part, defined by the parts model.
+                ///
+                /// * The origin is at the position of the part, as returned by
+                /// `Part::position()`.
+                /// * The axes rotate with the part.
+                /// * The x, y and z axis directions depend on the design of the part.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// ![ Reference Frame](https://krpc.github.io/krpc/_images/part.png)
+                /// *Mk1 Command Pod reference frame origin and axes*
+                ///
+                /// # Note
+                /// For docking port parts, this reference frame is not necessarily equivalent to
+                /// the reference frame for the docking port, returned by
+                /// `DockingPort::reference_frame()`.
+                get: reference_frame -> ReferenceFrame
+            }
         }
         {
-            CenterOfMassReferenceFrame: ReferenceFrame,
-            /// Returns the reference frame that is fixed relative to this part, and
-            /// centered on its center of mass.
-            ///
-            /// * The origin is at the center of mass of the part, as returned by
-            /// `Part::center_of_mass()`.
-            /// * The axes rotate with the part.
-            /// * The x, y and z axis directions depend on the design of the part.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Note
-            /// For docking port parts, this reference frame is not necessarily equivalent to
-            /// the reference frame for the docking port, returned by
-            /// `DockingPort::reference_frame()`.
-            get: center_of_mass_reference_frame
+            CenterOfMassReferenceFrame {
+                /// Returns the reference frame that is fixed relative to this part, and
+                /// centered on its center of mass.
+                ///
+                /// * The origin is at the center of mass of the part, as returned by
+                /// `Part::center_of_mass()`.
+                /// * The axes rotate with the part.
+                /// * The x, y and z axis directions depend on the design of the part.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Note
+                /// For docking port parts, this reference frame is not necessarily equivalent to
+                /// the reference frame for the docking port, returned by
+                /// `DockingPort::reference_frame()`.
+                get: center_of_mass_reference_frame -> ReferenceFrame
+            }
         }
     }
     methods: {
@@ -974,51 +1060,55 @@ remote_type!(
 object SpaceCenter.Force {
     properties: {
         {
-            Part: Part,
-            /// Returns the part that this force is applied to.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part that this force is applied to.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            ForceVector: Vector3,
-            /// Returns the force vector, in Newtons.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Returns
-            /// A vector pointing in the direction that the force acts, with its magnitude
-            /// equal to the strength of the force in Newtons.
-            get: force_vector,
-            /// Sets the force vector, in Newtons.
-            ///
-            /// **Game Scenes**: All
-            set: set_force_vector
+            ForceVector {
+                /// Returns the force vector, in Newtons.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Returns
+                /// A vector pointing in the direction that the force acts, with its magnitude
+                /// equal to the strength of the force in Newtons.
+                get: force_vector -> Vector3,
+                /// Sets the force vector, in Newtons.
+                ///
+                /// **Game Scenes**: All
+                set: set_force_vector(Vector3)
+            }
         }
         {
-            Position: Vector3,
-            /// Returns the position at which the force acts, in reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Returns
-            /// The position as a vector.
-            get: position,
-            /// Sets the position at which the force acts, in reference frame `ReferenceFrame`.
-            ///
-            /// **Game Scenes**: All
-            set: set_positiion
+            Position {
+                /// Returns the position at which the force acts, in reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Returns
+                /// The position as a vector.
+                get: position -> Vector3,
+                /// Sets the position at which the force acts, in reference frame `ReferenceFrame`.
+                ///
+                /// **Game Scenes**: All
+                set: set_positiion(Vector3)
+            }
         }
         {
-            ReferenceFrame: ReferenceFrame,
-            /// Returns the reference frame of the force vector and position.
-            ///
-            /// **Game Scenes**: All
-            get: reference_frame,
-            /// Sets the reference frame of the force vector and position.
-            ///
-            /// **Game Scenes**: All
-            set: set_reference_frame
+            ReferenceFrame {
+                /// Returns the reference frame of the force vector and position.
+                ///
+                /// **Game Scenes**: All
+                get: reference_frame -> ReferenceFrame,
+                /// Sets the reference frame of the force vector and position.
+                ///
+                /// **Game Scenes**: All
+                set: set_reference_frame(&ReferenceFrame)
+            }
         }
     }
     methods: {

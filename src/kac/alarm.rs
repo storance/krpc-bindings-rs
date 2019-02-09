@@ -8,128 +8,140 @@ remote_type!(
     object KerbalAlarmClock.Alarm {
         properties: {
             {
-                Action: AlarmAction,
-                /// Returns the action that the alarm triggers.
-                ///
-                /// **Game Scenes**: All
-                get: action,
-                /// Sets the action that the alarm triggers.
-                ///
-                /// **Game Scenes**: All
-                set: set_action
+                Action {
+                    /// Returns the action that the alarm triggers.
+                    ///
+                    /// **Game Scenes**: All
+                    get: action -> AlarmAction,
+                    /// Sets the action that the alarm triggers.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_action(AlarmAction)
+                }
             }
             {
-                Margin: f64,
-                /// Returns the number of seconds before the event that the alarm will fire.
-                ///
-                /// **Game Scenes**: All
-                get: margin,
-                /// Sets the number of seconds before the event that the alarm will fire.
-                ///
-                /// **Game Scenes**: All
-                set: set_margin
+                Margin {
+                    /// Returns the number of seconds before the event that the alarm will fire.
+                    ///
+                    /// **Game Scenes**: All
+                    get: margin -> f64,
+                    /// Sets the number of seconds before the event that the alarm will fire.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_margin(f64)
+                }
             }
             {
-                Time: f64,
-                /// Returns the time at which the alarm will fire.
-                ///
-                /// **Game Scenes**: All
-                get: time,
-                /// Sets the time at which the alarm will fire.
-                ///
-                /// **Game Scenes**: All
-                set: set_time
+                Time {
+                    /// Returns the time at which the alarm will fire.
+                    ///
+                    /// **Game Scenes**: All
+                    get: time -> f64,
+                    /// Sets the time at which the alarm will fire.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_time(f64)
+                }
             }
             {
-                Type: AlarmType,
-                /// Returns the type of the alarm.
-                ///
-                /// **Game Scenes**: All
-                get: alarm_type,
-                /// Sets the type of the alarm.
-                ///
-                /// **Game Scenes**: All
-                set: set_alarm_type
+                Type {
+                    /// Returns the type of the alarm.
+                    ///
+                    /// **Game Scenes**: All
+                    get: alarm_type -> AlarmType,
+                    /// Sets the type of the alarm.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_alarm_type(AlarmType)
+                }
             }
             {
-                ID: String,
-                /// Returns the unique identifier for the alarm.
-                ///
-                /// **Game Scenes**: All
-                get: alarm_id
+                ID {
+                    /// Returns the unique identifier for the alarm.
+                    ///
+                    /// **Game Scenes**: All
+                    get: alarm_id -> String
+                }
             }
             {
-                Name: String,
-                /// Returns the short name of the alarm.
-                ///
-                /// **Game Scenes**: All
-                get: name,
-                /// Sets the short name of the alarm.
-                ///
-                /// **Game Scenes**: All
-                set: set_name
+                Name {
+                    /// Returns the short name of the alarm.
+                    ///
+                    /// **Game Scenes**: All
+                    get: name -> String,
+                    /// Sets the short name of the alarm.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_name(&str)
+                }
             }
             {
-                Notes: String,
-                /// Returns the long description of the alarm.
-                ///
-                /// **Game Scenes**: All
-                get: notes,
-                /// Sets the long description of the alarm.
-                ///
-                /// **Game Scenes**: All
-                set: set_notes
+                Notes {
+                    /// Returns the long description of the alarm.
+                    ///
+                    /// **Game Scenes**: All
+                    get: notes -> String,
+                    /// Sets the long description of the alarm.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_notes(&str)
+                }
             }
             {
-                Remaining: f64,
-                /// Returns the number of seconds until the alarm will fire.
-                ///
-                /// **Game Scenes**: All
-                get: remaining
+                Remaining {
+                    /// Returns the number of seconds until the alarm will fire.
+                    ///
+                    /// **Game Scenes**: All
+                    get: remaining -> f64
+                }
             }
             {
-                Repeat: bool,
-                /// Returns whether the alarm will be repeated after it has fired.
-                ///
-                /// **Game Scenes**: All
-                get: is_repeating,
-                /// Sets the whether the alarm will be repeated after it has fired.
-                ///
-                /// **Game Scenes**: All
-                set: set_repeating
+                Repeat {
+                    /// Returns whether the alarm will be repeated after it has fired.
+                    ///
+                    /// **Game Scenes**: All
+                    get: is_repeating -> bool,
+                    /// Sets the whether the alarm will be repeated after it has fired.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_repeating(bool)
+                }
             }
             {
-                RepeatPeriod: f64,
-                /// Returns the time delay to automatically create an alarm after it has fired.
-                ///
-                /// **Game Scenes**: All
-                get: repeat_period,
-                /// Sets the time delay to automatically create an alarm after it has fired.
-                ///
-                /// **Game Scenes**: All
-                set: set_repeat_period
+                RepeatPeriod {
+                    /// Returns the time delay to automatically create an alarm after it has fired.
+                    ///
+                    /// **Game Scenes**: All
+                    get: repeat_period -> f64,
+                    /// Sets the time delay to automatically create an alarm after it has fired.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_repeat_period(f64)
+                }
             }
             {
-                TransferOriginBody: Option<CelestialBody>,
-                /// Returns the celestial body the vessel is departing from.
-                ///
-                /// **Game Scenes**: All
-                get: transfer_origin_body,
-                /// Sets the celestial body the vessel is departing from.
-                ///
-                /// **Game Scenes**: All
-                set: set_transfer_origin_body
+                TransferOriginBody {
+                    /// Returns the celestial body the vessel is departing from.
+                    ///
+                    /// **Game Scenes**: All
+                    get: transfer_origin_body -> Option<CelestialBody>,
+                    /// Sets the celestial body the vessel is departing from.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_transfer_origin_body(Option<&CelestialBody>)
+                }
             }
             {
-                TransferTargetBody: Option<CelestialBody>,
-                /// Returns the celestial body the vessel is arriving at.
-                ///
-                /// **Game Scenes**: All
-                get: transfer_target_body,
-                /// Sets the celestial body the vessel is arriving at.
-                ///
-                /// **Game Scenes**: All
-                set: set_transfer_target_body
+                TransferTargetBody {
+                    /// Returns the celestial body the vessel is arriving at.
+                    ///
+                    /// **Game Scenes**: All
+                    get: transfer_target_body -> Option<CelestialBody>,
+                    /// Sets the celestial body the vessel is arriving at.
+                    ///
+                    /// **Game Scenes**: All
+                    set: set_transfer_target_body(Option<&CelestialBody>)
+                }
             }
         }
         methods: {

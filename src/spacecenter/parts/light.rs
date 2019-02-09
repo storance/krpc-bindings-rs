@@ -7,40 +7,44 @@ remote_type!(
 object SpaceCenter.Light {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this light.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this light.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            Active: bool,
-            /// Returns whether the light is switched on.
-            ///
-            /// **Game Scenes**: All
-            get: is_active,
-            /// Sets whether the light is switched on.
-            ///
-            /// **Game Scenes**: All
-            set: set_active
+            Active {
+                /// Returns whether the light is switched on.
+                ///
+                /// **Game Scenes**: All
+                get: is_active -> bool,
+                /// Sets whether the light is switched on.
+                ///
+                /// **Game Scenes**: All
+                set: set_active(bool)
+            }
         }
         {
-            Color: (f32, f32, f32),
-            /// Returns the color of the light, as an RGB triple.
-            ///
-            /// **Game Scenes**: All
-            get: color,
-            /// Sets the color of the light, as an RGB triple.
-            ///
-            /// **Game Scenes**: All
-            set: set_color
+            Color {
+                /// Returns the color of the light, as an RGB triple.
+                ///
+                /// **Game Scenes**: All
+                get: color -> (f32, f32, f32),
+                /// Sets the color of the light, as an RGB triple.
+                ///
+                /// **Game Scenes**: All
+                set: set_color((f32, f32, f32))
+            }
         }
         {
-            PowerUsage: f32,
-            /// Returns the current power usage, in units of charge per second.
-            ///
-            /// **Game Scenes**: All
-            get: power_usage
+            PowerUsage {
+                /// Returns the current power usage, in units of charge per second.
+                ///
+                /// **Game Scenes**: All
+                get: power_usage -> f32
+            }
         }
     }
 });

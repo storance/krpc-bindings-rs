@@ -7,40 +7,44 @@ remote_type!(
 object SpaceCenter.Radiator {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this radiator.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this radiator.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            Deployable: bool,
-            /// Returns whether the radiator is deployable.
-            ///
-            /// **Game Scenes**: All
-            get: is_deployable
+            Deployable {
+                /// Returns whether the radiator is deployable.
+                ///
+                /// **Game Scenes**: All
+                get: is_deployable -> bool
+            }
         }
         {
-            Deployed: bool,
-            /// Returns whether the radiator is extended.  Returns `true` if the radiator is
-            /// not deployable.
-            ///
-            /// **Game Scenes**: All
-            get: is_deployed,
-            /// Sets whether the radiator is extended.
-            ///
-            /// **Game Scenes**: All
-            set: set_deployed
+            Deployed {
+                /// Returns whether the radiator is extended.  Returns `true` if the radiator is
+                /// not deployable.
+                ///
+                /// **Game Scenes**: All
+                get: is_deployed -> bool,
+                /// Sets whether the radiator is extended.
+                ///
+                /// **Game Scenes**: All
+                set: set_deployed(bool)
+            }
         }
         {
-            State: RadiatorState,
-            /// Returns the current state of the radiator.
-            ///
-            /// **Game Scenes**: All
-            ///
-            /// # Note
-            /// A fixed radiator is always `RadiatorState::Extended`.
-            get: state
+            State {
+                /// Returns the current state of the radiator.
+                ///
+                /// **Game Scenes**: All
+                ///
+                /// # Note
+                /// A fixed radiator is always `RadiatorState::Extended`.
+                get: state -> RadiatorState
+            }
         }
     }
 });

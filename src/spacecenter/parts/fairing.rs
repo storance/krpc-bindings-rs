@@ -7,18 +7,20 @@ remote_type!(
 object SpaceCenter.Fairing {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this fairing.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this fairing.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            Jettisoned: bool,
-            /// Returns whether the fairing has been jettisoned.
-            ///
-            /// **Game Scenes**: All
-            get: is_jettisoned
+            Jettisoned {
+                /// Returns whether the fairing has been jettisoned.
+                ///
+                /// **Game Scenes**: All
+                get: is_jettisoned -> bool
+            }
         }
     }
     methods: {

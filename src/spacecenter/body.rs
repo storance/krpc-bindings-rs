@@ -9,182 +9,203 @@ remote_type!(
     object SpaceCenter.CelestialBody {
         properties: {
             {
-                Name: String,
-                /// Returns the name of the body.
-                ///
-                /// **Game Scenes**: All
-                get: name
+                Name {
+                    /// Returns the name of the body.
+                    ///
+                    /// **Game Scenes**: All
+                    get: name -> String
+                }
             }
             {
-                Satellites: Vec<CelestialBody>,
-                /// Returns a list of celestial bodies that are in orbit around this celestial body.
-                ///
-                /// **Game Scenes**: All
-                get: satellites
+                Satellites {
+                    /// Returns a list of celestial bodies that are in orbit around this celestial body.
+                    ///
+                    /// **Game Scenes**: All
+                    get: satellites -> Vec<CelestialBody>
+                }
             }
             {
-                Orbit: Orbit,
-                /// Returns the orbit of the body.
-                ///
-                /// **Game Scenes**: All
-                get: orbit
+                Orbit {
+                    /// Returns the orbit of the body.
+                    ///
+                    /// **Game Scenes**: All
+                    get: orbit -> Orbit
+                }
             }
             {
-                Mass: f32,
-                /// Returns the mass of the body, in kilograms.
-                ///
-                /// **Game Scenes**: All
-                get: mass
+                Mass {
+                    /// Returns the mass of the body, in kilograms.
+                    ///
+                    /// **Game Scenes**: All
+                    get: mass -> f32
+                }
             }
             {
-                GravitationalParameter: f32,
-                /// Returns the [standard gravitational parameter](https://en.wikipedia.org/wiki/Standard_gravitational_parameter)
-                /// of the body in m<sup>3</sup>/s<sup>2</sup>.
-                ///
-                /// **Game Scenes**: All
-                get: gravitational_parameter
+                GravitationalParameter {
+                    /// Returns the [standard gravitational parameter](https://en.wikipedia.org/wiki/Standard_gravitational_parameter)
+                    /// of the body in m<sup>3</sup>/s<sup>2</sup>.
+                    ///
+                    /// **Game Scenes**: All
+                    get: gravitational_parameter -> f32
+                }
             }
             {
-                SurfaceGravity: f32,
-                /// Returns the acceleration due to gravity at sea level (mean altitude) on the
-                /// body, in m/s<sup>2</sup>.
-                ///
-                /// **Game Scenes**: All
-                get: surface_gravity
+                SurfaceGravity {
+                    /// Returns the acceleration due to gravity at sea level (mean altitude) on the
+                    /// body, in m/s<sup>2</sup>.
+                    ///
+                    /// **Game Scenes**: All
+                    get: surface_gravity -> f32
+                }
             }
             {
-                RotationalPeriod: f32,
-                /// Returns the sidereal rotational period of the body, in seconds.
-                ///
-                /// **Game Scenes**: All
-                get: rotational_period
+                RotationalPeriod {
+                    /// Returns the sidereal rotational period of the body, in seconds.
+                    ///
+                    /// **Game Scenes**: All
+                    get: rotational_period -> f32
+                }
             }
             {
-                RotationalSpeed: f32,
-                /// Returns the rotational speed of the body, in radians per second.
-                ///
-                /// **Game Scenes**: All
-                get: rotational_speed
+                RotationalSpeed {
+                    /// Returns the rotational speed of the body, in radians per second.
+                    ///
+                    /// **Game Scenes**: All
+                    get: rotational_speed -> f32
+                }
             }
             {
-                RotationalAngle: f32,
-                /// Returns the current rotation angle of the body, in radians.
-                ///
-                /// **Game Scenes**: All
-                get: rotational_angle
+                RotationalAngle {
+                    /// Returns the current rotation angle of the body, in radians.
+                    ///
+                    /// **Game Scenes**: All
+                    get: rotational_angle -> f32
+                }
             }
             {
-                InitialRotation: f32,
-                /// Returns the initial rotation angle of the body (at UT 0), in radians.
-                ///
-                /// **Game Scenes**: All
-                get: initial_rotation
+                InitialRotation {
+                    /// Returns the initial rotation angle of the body (at UT 0), in radians.
+                    ///
+                    /// **Game Scenes**: All
+                    get: initial_rotation -> f32
+                }
             }
             {
-                EquatorialRadius: f32,
-                /// Returns the equatorial radius of the body, in meters.
-                ///
-                /// **Game Scenes**: All
-                get: equatorial_radius
+                EquatorialRadius {
+                    /// Returns the equatorial radius of the body, in meters.
+                    ///
+                    /// **Game Scenes**: All
+                    get: equatorial_radius -> f32
+                }
             }
             {
-                SphereOfInfluence: f32,
-                /// Returns the radius of the sphere of influence of the body, in meters.
-                ///
-                /// **Game Scenes**: All
-                get: sphere_of_influence
+                SphereOfInfluence {
+                    /// Returns the radius of the sphere of influence of the body, in meters.
+                    ///
+                    /// **Game Scenes**: All
+                    get: sphere_of_influence -> f32
+                }
             }
             {
-                HasAtmosphere: bool,
-                /// Returns `true` if the body has an atmosphere.
-                ///
-                /// **Game Scenes**: All
-                get: has_atmosphere
+                HasAtmosphere {
+                    /// Returns `true` if the body has an atmosphere.
+                    ///
+                    /// **Game Scenes**: All
+                    get: has_atmosphere -> bool
+                }
             }
             {
-                AtmosphereDepth: f32,
-                /// Returns the depth of the atmosphere, in meters.
-                ///
-                /// **Game Scenes**: All
-                get: atmosphere_depth
+                AtmosphereDepth {
+                    /// Returns the depth of the atmosphere, in meters.
+                    ///
+                    /// **Game Scenes**: All
+                    get: atmosphere_depth -> f32
+                }
             }
             {
-                Biomes: HashSet<String>,
-                /// Returns the biomes present on this body.
-                ///
-                /// **Game Scenes**: All
-                get: biomes
+                Biomes {
+                    /// Returns the biomes present on this body.
+                    ///
+                    /// **Game Scenes**: All
+                    get: biomes -> HashSet<String>
+                }
             }
             {
-                FlyingHighAltitudeThreshold: f32,
-                /// Returns the altitude, in meters, above which a vessel is considered to be
-                /// flying “high” when doing science.
-                ///
-                /// **Game Scenes**: All
-                get: flying_high_altitude_threshold
+                FlyingHighAltitudeThreshold {
+                    /// Returns the altitude, in meters, above which a vessel is considered to be
+                    /// flying “high” when doing science.
+                    ///
+                    /// **Game Scenes**: All
+                    get: flying_high_altitude_threshold -> f32
+                }
             }
             {
-                SpaceHighAltitudeThreshold: f32,
-                /// Returns the altitude, in meters, above which a vessel is considered to be
-                /// in “high” space when doing science.
-                ///
-                /// **Game Scenes**: All
-                get: space_high_altitude_threshold
+                SpaceHighAltitudeThreshold {
+                    /// Returns the altitude, in meters, above which a vessel is considered to be
+                    /// in “high” space when doing science.
+                    ///
+                    /// **Game Scenes**: All
+                    get: space_high_altitude_threshold -> f32
+                }
             }
             {
-                ReferenceFrame: ReferenceFrame,
-                /// Returns the reference frame that is fixed relative to the celestial body.
-                ///
-                /// * The origin is at the center of the body.
-                /// * The axes rotate with the body.
-                /// * The x-axis points from the center of the body towards the intersection of the prime
-                /// meridian and equator (the position at 0° longitude, 0° latitude).
-                /// * The y-axis points from the center of the body towards the north pole.
-                /// * The z-axis points from the center of the body towards the equator at 90°E longitude.
-                ///
-                /// **Game Scenes**: All
-                ///
-                /// ![Reference frame](https://krpc.github.io/krpc/_images/celestial-body.png)
-                ///
-                /// *Celestial body reference frame origin and axes. The equator is shown in
-                /// blue, and the prime meridian in red.*
-                get: reference_frame
+                ReferenceFrame {
+                    /// Returns the reference frame that is fixed relative to the celestial body.
+                    ///
+                    /// * The origin is at the center of the body.
+                    /// * The axes rotate with the body.
+                    /// * The x-axis points from the center of the body towards the intersection of the prime
+                    /// meridian and equator (the position at 0° longitude, 0° latitude).
+                    /// * The y-axis points from the center of the body towards the north pole.
+                    /// * The z-axis points from the center of the body towards the equator at 90°E longitude.
+                    ///
+                    /// **Game Scenes**: All
+                    ///
+                    /// ![Reference frame](https://krpc.github.io/krpc/_images/celestial-body.png)
+                    ///
+                    /// *Celestial body reference frame origin and axes. The equator is shown in
+                    /// blue, and the prime meridian in red.*
+                    get: reference_frame -> ReferenceFrame
+                }
             }
             {
-                NonRotatingReferenceFrame: ReferenceFrame,
-                /// Returns the reference frame that is fixed relative to this celestial body,
-                /// and orientated in a fixed direction (it does not rotate with the body).
-                ///
-                /// * The origin is at the center of the body.
-                /// * The axes do not rotate.
-                /// * The x-axis points in an arbitrary direction through the equator.
-                /// * The y-axis points from the center of the body towards the north pole.
-                /// * The z-axis points in an arbitrary direction through the equator.
-                ///
-                /// **Game Scenes**: All
-                get: non_rotating_reference_frame
+                NonRotatingReferenceFrame {
+                    /// Returns the reference frame that is fixed relative to this celestial body,
+                    /// and orientated in a fixed direction (it does not rotate with the body).
+                    ///
+                    /// * The origin is at the center of the body.
+                    /// * The axes do not rotate.
+                    /// * The x-axis points in an arbitrary direction through the equator.
+                    /// * The y-axis points from the center of the body towards the north pole.
+                    /// * The z-axis points in an arbitrary direction through the equator.
+                    ///
+                    /// **Game Scenes**: All
+                    get: non_rotating_reference_frame -> ReferenceFrame
+                }
             }
             {
-                OrbitalReferenceFrame: ReferenceFrame,
-                /// Returns the reference frame that is fixed relative to this celestial body,
-                /// but orientated with the body’s orbital prograde/normal/radial directions.
-                ///
-                /// * The origin is at the center of the body.
-                /// * The axes rotate with the orbital prograde/normal/radial directions.
-                /// * The x-axis points in the orbital anti-radial direction.
-                /// * The y-axis points in the orbital prograde direction.
-                /// * The z-axis points in the orbital normal direction.
-                ///
-                /// **Game Scenes**: All
-                get: orbital_reference_frame
+                OrbitalReferenceFrame {
+                    /// Returns the reference frame that is fixed relative to this celestial body,
+                    /// but orientated with the body’s orbital prograde/normal/radial directions.
+                    ///
+                    /// * The origin is at the center of the body.
+                    /// * The axes rotate with the orbital prograde/normal/radial directions.
+                    /// * The x-axis points in the orbital anti-radial direction.
+                    /// * The y-axis points in the orbital prograde direction.
+                    /// * The z-axis points in the orbital normal direction.
+                    ///
+                    /// **Game Scenes**: All
+                    get: orbital_reference_frame -> ReferenceFrame
+                }
             }
             {
-                HasAtmosphericOxygen: bool,
-                /// Returns `true` if there is oxygen in the atmosphere, required for
-                /// air-breathing engines.
-                ///
-                /// **Game Scenes**: All
-                get: has_atmospheric_oxygen
+                HasAtmosphericOxygen {
+                    /// Returns `true` if there is oxygen in the atmosphere, required for
+                    /// air-breathing engines.
+                    ///
+                    /// **Game Scenes**: All
+                    get: has_atmospheric_oxygen -> bool
+                }
             }
         }
         methods: {

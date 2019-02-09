@@ -7,29 +7,32 @@ remote_type!(
 object SpaceCenter.Sensor {
     properties: {
         {
-            Part: Part,
-            /// Returns the part object for this sensor.
-            ///
-            /// **Game Scenes**: All
-            get: part
+            Part {
+                /// Returns the part object for this sensor.
+                ///
+                /// **Game Scenes**: All
+                get: part -> Part
+            }
         }
         {
-            Active: bool,
-            /// Returns whether the sensor is active.
-            ///
-            /// **Game Scenes**: All
-            get: is_active,
-            /// Sets whether the sensor is active.
-            ///
-            /// **Game Scenes**: All
-            set: set_active
+            Active {
+                /// Returns whether the sensor is active.
+                ///
+                /// **Game Scenes**: All
+                get: is_active -> bool,
+                /// Sets whether the sensor is active.
+                ///
+                /// **Game Scenes**: All
+                set: set_active(bool)
+            }
         }
         {
-            Value: String,
-            /// Returns the current value of the sensor.
-            ///
-            /// **Game Scenes**: All
-            get: value
+            Value {
+                /// Returns the current value of the sensor.
+                ///
+                /// **Game Scenes**: All
+                get: value -> String
+            }
         }
     }
 });
