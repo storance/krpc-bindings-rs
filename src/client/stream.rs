@@ -93,7 +93,7 @@ impl<'a> Event<'a> {
     }
 
     /// Returns whether the backing stream has been started.
-    pub fn started(&self) -> bool {
+    pub fn is_started(&self) -> bool {
         self.stream.started()
     }
 
@@ -140,7 +140,7 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
     }
 
     /// Returns whether or not the stream has started.
-    pub fn started(&self) -> bool {
+    pub fn is_started(&self) -> bool {
         self.value.started()
     }
 
@@ -323,7 +323,7 @@ impl StreamRaw {
         map(bytes, state.version)
     }
 
-    fn started(&self) -> bool {
+    fn is_started(&self) -> bool {
         let state = self.state.lock().unwrap();
 
         state.started
