@@ -188,10 +188,16 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
     /// received value for this stream can still be obtained by calling `value()`.
     pub fn remove(&mut self) -> KrpcResult<()> {
         if !self.removed {
-            let args = vec![self.id().encode()?];
-            self.connection.invoke("KRPC", "RemoveStream", &args)?;
+            // There could be multiple copies of this stream out there, so only do the remove
+            // once there are two or fewer copies of the raw stream value left.
+            // One copy is the stream manager, and the other copy is ourself.
+            if Arc::strong_count(&self.value) <= 2 {
+                let args = vec![self.id().encode()?];
+                self.connection.invoke("KRPC", "RemoveStream", &args)?;
 
-            self.connection.deregister_stream(self.id());
+                self.connection.deregister_stream(self.id());
+            }
+
             self.removed = true;
         }
 
