@@ -42,7 +42,7 @@ impl<'a> Event<'a> {
     /// * `triggered` - If `true`, waits until the event is triggered; otherwise, wait until
     /// it's not triggered.
     pub fn wait(&self, triggered: bool) -> KrpcResult<()> {
-        if !self.stream.started() {
+        if !self.stream.is_started() {
             self.stream.start()?;
         }
 
@@ -63,7 +63,7 @@ impl<'a> Event<'a> {
     /// # Returns
     /// Returns `true` if the event matches the desired triggered state; `false` if it timed-out.
     pub fn wait_timeout(&self, triggered: bool, dur: Duration) -> KrpcResult<bool> {
-        if !self.stream.started() {
+        if !self.stream.is_started() {
             self.stream.start()?;
         }
 
@@ -94,7 +94,7 @@ impl<'a> Event<'a> {
 
     /// Returns whether the backing stream has been started.
     pub fn is_started(&self) -> bool {
-        self.stream.started()
+        self.stream.is_started()
     }
 
     /// Removes the backing stream so it no longer receives updates from the KRPC server.
@@ -130,7 +130,7 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
     /// Returns the current value for the stream.  If the stream is not started, this will
     /// start it and wait for the stream to be updated.
     pub fn value(&self) -> KrpcResult<T> {
-        if !self.value.started() {
+        if !self.value.is_started() {
             self.start()?;
             self.wait()?;
         }
@@ -141,13 +141,13 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
 
     /// Returns whether or not the stream has started.
     pub fn is_started(&self) -> bool {
-        self.value.started()
+        self.value.is_started()
     }
 
     /// Starts this stream value if it hs not already been started.  This will cause the stream
     /// to start receiving updates from the KRPC server.
     pub fn start(&self) -> KrpcResult<()> {
-        if self.started() {
+        if self.is_started() {
             return Ok(());
         }
 
@@ -168,7 +168,7 @@ impl<'a, T: Decode<'a>> Stream<'a, T> {
     /// # Arguments
     /// * `rate` - The new update in hertz.
     pub fn set_rate(&self, rate: f32) -> KrpcResult<()> {
-        if !self.started() {
+        if !self.is_started() {
             return Err(Error::from(StreamError::NotStarted));
         }
 
