@@ -173,6 +173,14 @@ remote_type!(
                 }
             }
             {
+                UT {
+                    /// Returns the current universal time in seconds.
+                    ///
+                    /// **Game Scenes**: All
+                    get: ut -> f64
+                }
+            }
+            {
                 G {
                     /// Returns the value of the gravitational constant G in N(m/kg)<sup>2</sup>.
                     ///
